@@ -36,8 +36,9 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ParallelotopeDomain(), "Parallelotope", "This is a native Scala implementation of parallelotopes. It is " +
       "not safe and should not be used."),
     ParameterValue(SumIntParallelotopeDomain(), "BoxDouble + Parallelotope", "Sum of boxes and parallelotopes."),
-    ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers.")
-  )
+    ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers."),
+    ParameterValue(SignDomain, "Sign Domain", "UniPD")
+    )
   val default = values.last
 
   // Load objects PPLUIInitializer and PPLMacroUIInitializer if available

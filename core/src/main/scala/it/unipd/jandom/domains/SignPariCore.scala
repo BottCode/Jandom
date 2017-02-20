@@ -6,7 +6,9 @@ case object Even extends Parity;
 case object Top extends Parity;
 case object Bottom extends Parity;
 
-
+/**
+  * This class models the
+  */
 class Pari {
    def toParity(n : Int) : Parity = {
      if(n % 2 == 1)
@@ -47,6 +49,9 @@ class Pari {
        
      }
    }
-   
+
+  def main(args: Array[String]): Unit = {
+      div (Top,Top);
+  }
    
 }

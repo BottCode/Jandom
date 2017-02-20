@@ -35,7 +35,8 @@ case object SignBottom extends Sign;
  */
 object SignDomain extends NumericalDomain {
 
-  case class Property private[SignDomain] (val dimension: Int, val sign : Array[Sign]) extends NumericalProperty[Property] {
+  case class Property private[SignDomain] (val sign : Array[Sign]) extends NumericalProperty[Property] {
+    val dimension = sign.length;
     require(dimension >= 0)
 
     type Domain = SignDomain.type
@@ -49,7 +50,7 @@ object SignDomain extends NumericalDomain {
     def widening(that: Property) = this
 
 
-
+    /* Compute an upper bound of two abstract properties. */
     def union(that: Property) : Property = {
       require(dimension == that.dimension)
       val newSign = (this.sign, that.sign).zipped.map(
@@ -61,61 +62,138 @@ object SignDomain extends NumericalDomain {
           case (a, b) => if(a == b) a else SignTop
         }
       )
-      new Property(dimension, newSign)
+      new Property(newSign)
     }
 
 
 
     def narrowing(that: Property) = this
-    def intersection(that: Property) = this
-    def nonDeterministicAssignment(n: Int) = this
-    
-    
+
+
+    /**
+      * @inheritdoc
+      * @note @inheritdoc
+      */
+     /*Compute an upper approximation of the greatest lower bound of two abstract properties.*/
+    def intersection(that: Property) : Property = {
+      require(dimension == that.dimension)
+      val newSign = (this.sign, that.sign).zipped.map(
+        (s: Sign, t:Sign) => (s,t) match {
+          case (SignTop, a) => a
+          case (a, SignTop) => a
+          case (_, SignBottom) => SignBottom
+          case (SignBottom, _) => SignBottom
+          case (a, b) => if(a == b) a else SignBottom
+        }
+      )
+      new Property(newSign)
+    }
+
+
+    /**
+      * @inheritdoc
+      * @note @inheritdoc
+      * @throws $ILLEGAL
+      */
+    def nonDeterministicAssignment(n: Int): Property = Property(sign.updated(n, SignTop))
+
+
     private def signSum(s: Sign, t: Sign) : Sign = {
+      println("signSum called ");
       (s,t) match {
         case (SignBottom, _) => SignBottom
         case (_, SignBottom) => SignBottom
-        case (_, SignTop) => SignTop
         case (SignTop, _) => SignTop
-        case (Plus, Minus) => SignTop
-        case (Minus, Plus) => SignTop
+        case (_, SignTop) => SignTop
+        case (a, Zero) => a
+        case (Zero, a) => a
         case (Plus, Plus) => Plus
         case (Minus, Minus) => Minus
         case _ => SignTop
       }
     }
-    
-    private def manOf[T: Manifest](t: T): Manifest[T] = manifest[T]
-    
-    /**
-      * Linear assignment xn := lf
-     */
-    private def linearEvaluation(lf: LinearForm): Sign = {
 
-      val known = lf.known.toInt;
-      println("ciao " + manOf(known) + " READ " + known)
-      var ret : Sign = SignTop;
-      if(known > 0) 
-        ret = Plus
-      else if(known < 0)
-        ret = Minus
+
+    /*
+     * Converts a number to its sign (alpha)
+     */
+    private def toSign(num : Int): Sign = {
+      if(num > 0)
+        Plus
+      else if(num < 0)
+        Minus
       else
-        ret = Zero
-      println(ret)
-      ret
+        Zero
     }
-    
-    
+
+    private def toSign(num : Double): Sign = {
+      if(num > 0)
+        Plus
+      else if(num < 0)
+        Minus
+      else //Ignoring precision for now!
+        Zero
+    }
+
+
+
+    /**
+      * Compute the minimum and maximum value of a linear form in a box.
+      * @param lf a linear form
+      * @return a tuple with two components: the first component is the least value, the second component is the greatest value
+      * of the linear form over the box.
+      */
+    private def linearEvaluation(lf: LinearForm): Sign = {
+      val known = lf.known.toDouble
+      val homcoeffs = lf.homcoeffs.map (_.toDouble).toArray
+      linearEvaluation(known, homcoeffs)
+    }
+
+    /**
+      * Compute the minimum and maximum value of a linear form in a box.
+      * @param known the known term of a linear form
+      * @param the homogeneous coefficients of a linear form
+      * @return a tuple with two components: the first component is the least value, the second component is the greatest value
+      * of the linear form over the box.
+      */
+    private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Sign = {
+      require(homcoeffs.length <= dimension)
+      var s: Sign = toSign(known);
+      for (i <- homcoeffs.indices) {
+        val toAdd: Sign = SignTop;
+        if (homcoeffs(i) > 0) {
+          val t: Sign = sign(i);
+          s = signSum(s, t)
+        }
+        else if (homcoeffs(i) < 0) {
+          val t: Sign = sign(i) match {
+            case Minus => Plus
+            case Plus => Minus
+            case a => a //Zero, Top, Bottom are not changed!
+          }
+          s = signSum(s, t)
+        }
+
+      }
+      s
+    }
+
+
+
+
+
+
     def linearAssignment(n: Int, lf: LinearForm) : Property = {
+      require(n < sign.length && n >= 0 && lf.dimension <= dimension)
+
       val s : Sign = linearEvaluation(lf)
-      
-      val p =  Property(n, sign.updated(n, s))
-      println(sign)
-      println("OK")
-      this
-    }/* {
-      new Property(n, sign.updated(n, linearEvaluation(lf)))
-    }*/
+      new Property(sign.updated(n, s))
+    }
+
+
+    /** @inheritdoc
+       * @param lf
+      */
     def linearInequality(lf: LinearForm) = this
     def linearDisequality(lf: LinearForm) = this
 
@@ -139,19 +217,21 @@ object SignDomain extends NumericalDomain {
 
     def constraints = List()
 
-    def isPolyhedral = true
+    def isPolyhedral = false
 
     /**
      * @inheritdoc
-     * This is a complete operator for boxes.
+     * Add new variable maintaining the current values
      * @note @inheritdoc
      * @throws $ILLEGAL
      */
-    def addVariable: Property =
-      if (isEmpty)
-        SignDomain.this.bottom(dimension + 1)
-      else
-        SignDomain.this.top(dimension + 1)
+    def addVariable: Property = {
+      println(s"Adding variable at the ${dimension} position")
+      var newSign = new Array[Sign](sign.length + 1)
+      Array.copy(sign, 0, newSign, 0, sign.length)
+      newSign(sign.length) = SignTop
+      new Property(newSign)
+    }
     /**
      * @inheritdoc
      * This is a complete operator for boxes.
@@ -160,10 +240,13 @@ object SignDomain extends NumericalDomain {
      */
     def delVariable(n: Int): Property = {
       require(n < sign.length && n >= 0)
-      val newSign = new Array[Sign](dimension - 1)
-      Array.copy(sign, 0, newSign, 0, n) 
-      Array.copy(sign, n + 1, newSign, n, dimension - n - 1)
-      new Property(newSign.length, newSign)
+      println(s"Deleting variable at ${n} position")
+      val newSign = new Array[Sign](sign.length - 1)
+      /*Copy the first n-1 elements */
+      Array.copy(sign, 0, newSign, 0, n)
+      /* Copy the remaining elements */
+      Array.copy(sign, n + 1, newSign, n, sign.length - n - 1)
+      new Property(newSign)
     }
 
  
@@ -192,11 +275,11 @@ object SignDomain extends NumericalDomain {
       else {
         val bounds = for (i <- 0 until dimension) yield {
           val h = sign(i) match {
-            case SignTop => "T"
-            case SignBottom => "Bottom"
-            case Plus => "+"
-            case Minus => "-"
-            case Zero => "0"
+            case SignTop => "TOP"
+            case SignBottom => "BOTTOM"
+            case Plus => "POSITIVE"
+            case Minus => "NEGATIVE"
+            case Zero => "ZERO"
           }
           s"${vars(i)} = ${h}"
         }
@@ -206,9 +289,10 @@ object SignDomain extends NumericalDomain {
   }
 
 
+
   val widenings = Seq(
     WideningDescription("default", "The trivial widening which just returns top.", Box.right[Property]))
 
-  def top(n: Int) = new Property(n, Array.fill(n)(SignTop))
-  def bottom(n: Int) = Property(n, Array.fill(n)(SignBottom))
+  def top(n: Int) = new Property(Array.fill(n)(SignTop))
+  def bottom(n: Int) = Property(Array.fill(n)(SignBottom))
 }

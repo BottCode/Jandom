@@ -65,12 +65,11 @@ class main  {
       case (SignTop, _) => SignTop
       case (SignZero, SignTop) => SignZero
       case (_, SignTop) => SignTop
-      case (a, b) => if(a == b) SignPlus else SignMinus
+      case (a, b) => if (a == b) SignPlus else SignMinus
     }
   }
-  
-  
-  
+
+
   
   def main(args : Array[String]) : Unit = {
     println(sum(toSign(10), toSign(11)))

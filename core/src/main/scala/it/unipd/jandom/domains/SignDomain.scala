@@ -21,6 +21,7 @@ package it.unich.jandom.domains.numerical
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unich.scalafix.Box
+import spire.math.Rational
 
 trait Sign;
 case object Plus extends Sign;
@@ -28,6 +29,7 @@ case object Minus extends Sign;
 case object Zero extends Sign;
 case object SignTop extends Sign;
 case object SignBottom extends Sign;
+
 
 /**
  * The most abstract numerical domain. It has a single top element for each dimension.
@@ -81,8 +83,8 @@ object SignDomain extends NumericalDomain {
         (s: Sign, t:Sign) => (s,t) match {
           case (SignTop, a) => a
           case (a, SignTop) => a
-          case (_, SignBottom) => SignBottom
-          case (SignBottom, _) => SignBottom
+          case (_, SignBottom) => SignBottom //Check it
+          case (SignBottom, _) => SignBottom //check it
           case (a, b) => if(a == b) a else SignBottom
         }
       )
@@ -160,7 +162,7 @@ object SignDomain extends NumericalDomain {
       require(homcoeffs.length <= dimension)
       var s: Sign = toSign(known);
       for (i <- homcoeffs.indices) {
-        val toAdd: Sign = SignTop;
+
         if (homcoeffs(i) > 0) {
           val t: Sign = sign(i);
           s = signSum(s, t)
@@ -173,7 +175,6 @@ object SignDomain extends NumericalDomain {
           }
           s = signSum(s, t)
         }
-
       }
       s
     }
@@ -249,8 +250,42 @@ object SignDomain extends NumericalDomain {
       new Property(newSign)
     }
 
- 
-    def mapVariables(rho: Seq[Int]) = this
+
+    /* Ad hoc override */
+    def mult(s: Sign, t : Sign) : Sign = {
+      (s,t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (_, Zero) => Zero
+        case (Zero, _) => Zero
+        case (SignTop, _) => SignTop
+        case (_, SignTop) => SignTop
+        case (a, b) => if(a == b) Plus else Minus
+
+      }
+    }
+
+
+
+
+
+
+
+
+
+    /* Done in complete analogy to the BoxDoubleDomain */
+    def mapVariables(rho: Seq[Int]) = {
+      require(rho.length == dimension)
+      val newdim = rho.count(_ >= 0)
+      require(rho forall { i => i >= -1 && i < newdim })
+      // we do not check injectivity
+      val newSign = new Array[Sign](newdim);
+
+      for ((newi, i) <- rho.zipWithIndex; if newi >= 0) {
+        newSign(newi) = sign(i);
+      }
+      new Property(newSign)
+    }
 
     def isEmpty = false
     def isTop = sign.forall( x =>  x match {

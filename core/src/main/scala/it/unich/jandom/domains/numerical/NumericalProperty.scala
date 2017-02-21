@@ -170,6 +170,7 @@ trait NumericalProperty[Property <: NumericalProperty[Property]] extends Dimensi
    * @note $NOTEN
    */
   def variableMul(n: Int = dimension - 2, m: Int = dimension - 1) = {
+    println("Multiplication")
     frequency(LinearForm.v(n)) match {
       case Some(c) => linearAssignment(n, LinearForm.sparse(Rational.zero, m -> c))
       case None => frequency(LinearForm.v(m)) match {

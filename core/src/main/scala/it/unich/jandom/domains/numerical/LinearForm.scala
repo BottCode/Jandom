@@ -57,7 +57,7 @@ trait LinearForm {
   def isConstant: Boolean
 
   /**
-   * Returns thether the linear form is the zero constant
+   * Returns whether the linear form is the zero constant
    */
   def isZero: Boolean
 

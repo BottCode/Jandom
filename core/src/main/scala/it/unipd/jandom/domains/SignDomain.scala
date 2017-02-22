@@ -32,8 +32,8 @@ case object SignBottom extends Sign;
 
 
 /**
- * The most abstract numerical domain. It has a single top element for each dimension.
- * @author Gianluca Amato <gamato@unich.it>
+  * Sign domain
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
  */
 object SignDomain extends NumericalDomain {
 
@@ -54,7 +54,9 @@ object SignDomain extends NumericalDomain {
 
     /* Compute an upper bound of two abstract properties. */
     def union(that: Property) : Property = {
+      println("Union called");
       require(dimension == that.dimension)
+
       val newSign = (this.sign, that.sign).zipped.map(
         (s, t) => (s,t) match {
           case (SignTop, _) => SignTop
@@ -64,7 +66,8 @@ object SignDomain extends NumericalDomain {
           case (a, b) => if(a == b) a else SignTop
         }
       )
-      new Property(newSign)
+      val p = new Property(newSign)
+      p
     }
 
 
@@ -78,18 +81,21 @@ object SignDomain extends NumericalDomain {
       */
      /*Compute an upper approximation of the greatest lower bound of two abstract properties.*/
     def intersection(that: Property) : Property = {
-      require(dimension == that.dimension)
-      val newSign = (this.sign, that.sign).zipped.map(
+       println("Intersetion called");
+       require(dimension == that.dimension)
+       val newSign = (this.sign, that.sign).zipped.map(
         (s: Sign, t:Sign) => (s,t) match {
           case (SignTop, a) => a
           case (a, SignTop) => a
-          case (_, SignBottom) => SignBottom //Check it
-          case (SignBottom, _) => SignBottom //check it
+          case (_, SignBottom) => SignBottom
+          case (SignBottom, _) => SignBottom
           case (a, b) => if(a == b) a else SignBottom
         }
       )
-      new Property(newSign)
-    }
+
+
+       Property(newSign)
+     }
 
 
     /**
@@ -195,8 +201,26 @@ object SignDomain extends NumericalDomain {
     /** @inheritdoc
        * @param lf
       */
-    def linearInequality(lf: LinearForm) = this
-    def linearDisequality(lf: LinearForm) = this
+    def linearInequality(lf: LinearForm) = {
+      val s : Sign = linearEvaluation(lf)
+      s match {
+        case Plus => bottom
+        case SignTop => top //IS this the best correct approximation???? //TODO Maybe we can improve this result Case Top????
+        case SignBottom => bottom //TODO Check it
+        case _ => this
+      }
+    }
+
+    def linearDisequality(lf: LinearForm) = {
+      val s : Sign = linearEvaluation(lf)
+      s match {
+        case Plus => this
+        case Minus => this
+        case Zero => bottom
+        case SignTop => top //Todo check
+        case SignBottom => bottom //TODO check it
+      }
+    }
 
     def minimize(lf: LinearForm) =
       if (lf.homcoeffs.exists(!_.isZero))
@@ -251,19 +275,7 @@ object SignDomain extends NumericalDomain {
     }
 
 
-    /* Ad hoc override */
-    def mult(s: Sign, t : Sign) : Sign = {
-      (s,t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (_, Zero) => Zero
-        case (Zero, _) => Zero
-        case (SignTop, _) => SignTop
-        case (_, SignTop) => SignTop
-        case (a, b) => if(a == b) Plus else Minus
 
-      }
-    }
 
 
 
@@ -321,7 +333,101 @@ object SignDomain extends NumericalDomain {
         bounds.mkString("[ ", " , ", " ]")
       }
     }
+
+
+
+
+    /* PROTOTYPE */
+    /* Ad hoc override */
+    def mult(s: Sign, t : Sign) : Sign = {
+      (s,t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (_, Zero) => Zero
+        case (Zero, _) => Zero
+        case (SignTop, _) => SignTop
+        case (_, SignTop) => SignTop
+        case (a, b) => if(a == b) Plus else Minus
+
+      }
+    }
+
+    def division(s : Sign, t : Sign) : Sign = {
+      (s, t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (_, Zero) => SignBottom
+        case (SignTop, _) => SignTop
+        case (Zero, SignTop) => Zero
+        case (_, SignTop) => SignTop
+        case (a, b) => if (a == b) Plus else Minus
+      }
+    }
+
+    def inverse(s: Sign) : Sign = {
+      s match {
+        case Plus => Minus
+        case Minus => Plus
+        case a => a
+      }
+    }
+    /** JAVA CONVENTION for mod/remainder sign is to take as result
+      * the sign  of the dividend
+      * @param s
+      * @param t
+      * @return
+      */
+    def remainder(s : Sign, t : Sign) : Sign = {
+      (s,t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (a, _) => a
+      }
+    }
+
+
+    /**
+      * Assignments of the kind `vn = vn * vm`.  The standard implementation determines
+      * whether `vn` or `vm` is a constant, and use linearAssignment in such a case.
+      * Otherwise, it resorts to a non deterministic assignment.
+      * @note $NOTEN
+      */
+    override def variableMul(n: Int, m: Int) = {
+      println("Multiplication")
+      sign(n) = mult(sign(n), sign(m));
+      this
+    }
+
+    override def variableDiv(n : Int, m : Int) = {
+      println("Division")
+      sign(n) = division(sign(n), sign(m))
+      this
+    }
+
+     /**
+       * @inheritdoc
+       * @note @inheritdoc
+      */
+    override def variableNeg(n: Int = dimension - 1) = {
+      sign(n) = inverse(sign(n))
+      this
+    }
+
+
+    /**
+      * @inheritdoc
+      * @note @inheritdoc
+      */
+    override def variableRem(n: Int = dimension - 2, m: Int = dimension - 1) = {
+      sign(n) = remainder(sign(n), sign(m))
+      this
+    }
+
+
+
   }
+
+
 
 
 

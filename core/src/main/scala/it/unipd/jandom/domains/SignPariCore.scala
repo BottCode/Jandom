@@ -50,8 +50,5 @@ class Pari {
      }
    }
 
-  def main(args: Array[String]): Unit = {
-      div (Top,Top);
-  }
-   
+
 }

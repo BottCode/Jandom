@@ -69,11 +69,29 @@ class main  {
     }
   }
 
+  /** JAVA CONVENTION for mod/remainder sign is to take as result
+    * the sign  of the dividend
+    * @param s
+    * @param t
+    * @return
+    */
+  def remainder(s : Sign, t : Sign) : Sign = {
+    (s,t) match {
+      case (SignBottom, _) => SignBottom
+      case (_, SignBottom) => SignBottom
+      case (a, _) => a
+    }
+  }
+
+  /*** XOR DISCLAIMER: If we do not distinguish between >= 0, and > 0 then
+    * we take top because
+    * 10 ^ 10 = 0
+    * 10 ^ 11 = 1
+    * therefore with + + we obtain top
+    */
 
   
-  def main(args : Array[String]) : Unit = {
-    println(sum(toSign(10), toSign(11)))
-  }
+
   
 }
 }

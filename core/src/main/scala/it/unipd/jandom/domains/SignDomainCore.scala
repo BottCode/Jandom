@@ -1,76 +1,76 @@
 package sign.main
-import scala.io._
 
 
 object SignFunctions extends App {
 
-trait Sign;
-case object SignPlus extends Sign;
-case object SignMinus extends Sign;
-case object SignZero extends Sign;
-case object SignTop extends Sign;
-case object SignBottom extends Sign;
+  trait Sign
+  case object Plus extends Sign
+  case object Minus extends Sign
+  case object Zero extends Sign
+  case object SignTop extends Sign
+  case object SignBottom extends Sign
 
 class main  {
   def toSign(n : Int) : Sign = {
     if(n < 0)
-      SignMinus
+      Minus
     else if(n == 0)
-      SignZero
+      Zero
     else
-      SignPlus
+      Plus
   }
-  
+
   def sum(s: Sign, t : Sign) : Sign = {
     (s,t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
-      case (a, SignZero) => a
-      case (SignZero, a) => a
-      case (SignPlus, SignPlus) => SignPlus
-      case (SignMinus, SignMinus) => SignMinus
+      case (a, Zero) => a
+      case (Zero, a) => a
+      case (Plus, Plus) => Plus
+      case (Minus, Minus) => Minus
       case _ => SignTop
-      
+
     }
   }
-  
+
   def mult(s: Sign, t : Sign) : Sign = {
     (s,t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
-      case (_, SignZero) => SignZero
-      case (SignZero, _) => SignZero
+      case (_, Zero) => Zero
+      case (Zero, _) => Zero
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
-      case (a, b) => if(a == b) SignPlus else SignMinus
-      
+      case (a, b) => if(a == b) Plus else Minus
+
     }
   }
-  
+
   def inverse(s: Sign) : Sign = {
     s match {
-      case SignPlus => SignMinus
-      case SignMinus => SignPlus
-      case a => a 
+      case Plus => Minus
+      case Minus => Plus
+      case a => a
     }
   }
-  
+
   def division(s : Sign, t : Sign) : Sign = {
     (s, t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
-      case (_, SignZero) => SignBottom
+      case (_, Zero) => SignBottom
       case (SignTop, _) => SignTop
-      case (SignZero, SignTop) => SignZero
+      case (Zero, SignTop) => Zero
       case (_, SignTop) => SignTop
-      case (a, b) => if (a == b) SignPlus else SignMinus
+      case (a, b) => if (a == b) Plus else Minus
     }
   }
 
   /** JAVA CONVENTION for mod/remainder sign is to take as result
     * the sign  of the dividend
+ *
     * @param s
     * @param t
     * @return

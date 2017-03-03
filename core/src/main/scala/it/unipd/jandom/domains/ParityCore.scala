@@ -1,10 +1,10 @@
 package sign
 
-trait Parity;
-case object Odd extends Parity;
-case object Even extends Parity;
-case object Top extends Parity;
-case object Bottom extends Parity;
+trait Parity
+case object Odd extends Parity
+case object Even extends Parity
+case object Top extends Parity
+case object Bottom extends Parity
 
 /**
   * This class models the

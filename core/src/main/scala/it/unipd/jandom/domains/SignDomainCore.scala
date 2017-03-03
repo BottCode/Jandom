@@ -90,6 +90,15 @@ object SignFunctions {
     }
   }
 
+  def lub(s : Sign, t : Sign) = {
+    (s,t) match {
+      case (SignTop, _) => SignTop
+      case (_, SignTop) => SignTop
+      case (SignBottom, a) => a
+      case (a, SignBottom) => a
+      case (a, b) => if(a == b) a else SignTop
+  }
+
   /*** XOR DISCLAIMER: If we do not distinguish between >= 0, and > 0 then
     * we take top because
     * 10 ^ 10 = 0

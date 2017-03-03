@@ -52,15 +52,7 @@ object SignDomain extends NumericalDomain {
       println("Union called")
       require(dimension == that.dimension)
 
-      val newSign = (this.sign, that.sign).zipped.map(
-        (s, t) => (s,t) match {
-          case (SignTop, _) => SignTop
-          case (_, SignTop) => SignTop
-          case (SignBottom, a) => a
-          case (a, SignBottom) => a
-          case (a, b) => if(a == b) a else SignTop
-        }
-      )
+      val newSign = (this.sign, that.sign).zipped.map( lub(_, _) )
       val p = new Property(newSign)
       p
     }

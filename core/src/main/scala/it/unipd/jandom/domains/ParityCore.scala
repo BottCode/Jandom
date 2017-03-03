@@ -19,7 +19,7 @@ class ParityCore {
 
    def toParity(n : Double) : Parity = {
     val rounded = n.floor
-    if(!rounded.equals(n)) Top
+    if(!rounded.equals(n)) return Top
     val roundedInt = rounded.toInt
      if(roundedInt % 2 == 1)
        Odd

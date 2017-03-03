@@ -90,8 +90,5 @@ class main  {
     * therefore with + + we obtain top
     */
 
-  
-
-  
-}
-}
+} // end class main
+} // end object SignFunctions

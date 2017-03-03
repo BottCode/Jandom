@@ -1,7 +1,7 @@
 package sign.main
 
 
-object SignFunctions extends App {
+object SignFunctions {
 
   trait Sign
   case object Plus extends Sign
@@ -10,7 +10,6 @@ object SignFunctions extends App {
   case object SignTop extends Sign
   case object SignBottom extends Sign
 
-class main  {
   def toSign(n : Int) : Sign = {
     if(n < 0)
       Minus
@@ -20,7 +19,9 @@ class main  {
       Plus
   }
 
-  def sum(s: Sign, t : Sign) : Sign = {
+
+  def sum(s: Sign, t: Sign) : Sign = {
+    println("sum called ")
     (s,t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
@@ -31,7 +32,6 @@ class main  {
       case (Plus, Plus) => Plus
       case (Minus, Minus) => Minus
       case _ => SignTop
-
     }
   }
 
@@ -90,5 +90,4 @@ class main  {
     * therefore with + + we obtain top
     */
 
-} // end class main
 } // end object SignFunctions

@@ -101,22 +101,6 @@ object SignDomain extends NumericalDomain {
     def nonDeterministicAssignment(n: Int): Property = Property(sign.updated(n, SignTop))
 
 
-    private def signSum(s: Sign, t: Sign) : Sign = {
-      println("signSum called ")
-      (s,t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (SignTop, _) => SignTop
-        case (_, SignTop) => SignTop
-        case (a, Zero) => a
-        case (Zero, a) => a
-        case (Plus, Plus) => Plus
-        case (Minus, Minus) => Minus
-        case _ => SignTop
-      }
-    }
-
-
     /*
      * Converts a number to its sign (alpha)
      */
@@ -165,7 +149,7 @@ object SignDomain extends NumericalDomain {
 
         if (homcoeffs(i) > 0) {
           val t: Sign = sign(i)
-          s = signSum(s, t)
+          s = sum(s, t)
         }
         else if (homcoeffs(i) < 0) {
           val t: Sign = sign(i) match {
@@ -173,7 +157,7 @@ object SignDomain extends NumericalDomain {
             case Plus => Minus
             case a => a //Zero, Top, Bottom are not changed!
           }
-          s = signSum(s, t)
+          s = sum(s, t)
         }
       }
       s

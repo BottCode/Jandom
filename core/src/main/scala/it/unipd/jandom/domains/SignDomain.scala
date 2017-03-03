@@ -50,8 +50,8 @@ object SignDomain extends NumericalDomain {
       println("Widening called")
       println(s"This: $this")
       println(s"That: $that")
-      println("Widening: " + top)
-      top
+      println("Widening: " + this)
+      this
     }
 
 
@@ -72,8 +72,8 @@ object SignDomain extends NumericalDomain {
       println("Narrowing called")
       println(s"This: $this")
       println(s"That: $that")
-      println("Narrowing: " + top)
-      top
+      println("Narrowing: " + this)
+      this
     }
 
 
@@ -88,10 +88,8 @@ object SignDomain extends NumericalDomain {
       val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
       println(s"This: $this")
       println(s"That: $that")
-      //println("Glb: " + new Property(newSign))
-      // new Property(newSign)
-      println("Glb: " + top)
-      top
+      println("Glb: " + new Property(newSign))
+      new Property(newSign)
      }
 
 
@@ -222,6 +220,7 @@ object SignDomain extends NumericalDomain {
     def delVariable(n: Int): Property = {
       require(n < sign.length && n >= 0)
       println(s"Deleting variable at ${n} position")
+      println(s"This: $this")
       if(sign.init.forall(x => x.equals(SignBottom)))
         return new Property(Array.fill[Sign](sign.length - 1)(SignTop))
       val newSign = new Array[Sign](sign.length - 1)

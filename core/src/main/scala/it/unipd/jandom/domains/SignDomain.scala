@@ -314,25 +314,6 @@ object SignDomain extends NumericalDomain {
 
 
 
-    def division(s : Sign, t : Sign) : Sign = {
-      (s, t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (_, Zero) => SignBottom
-        case (SignTop, _) => SignTop
-        case (Zero, SignTop) => Zero
-        case (_, SignTop) => SignTop
-        case (a, b) => if (a == b) Plus else Minus
-      }
-    }
-
-    def inverse(s: Sign) : Sign = {
-      s match {
-        case Plus => Minus
-        case Minus => Plus
-        case a => a
-      }
-    }
     /** JAVA CONVENTION for mod/remainder sign is to take as result
       * the sign  of the dividend
       * @param s

@@ -111,6 +111,8 @@ object SignFunctions {
       }
     }
 
+
+
   /*** XOR DISCLAIMER: If we do not distinguish between >= 0, and > 0 then
     * we take top because
     * 10 ^ 10 = 0

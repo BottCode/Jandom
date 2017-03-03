@@ -44,6 +44,8 @@ object SignDomain extends NumericalDomain {
       case other: Property if dimension == other.dimension => Some(0)
       case _ => None
     }
+
+    //TODO: Add widening implementation
     def widening(that: Property) = this
 
 
@@ -51,14 +53,12 @@ object SignDomain extends NumericalDomain {
     def union(that: Property) : Property = {
       println("Union called")
       require(dimension == that.dimension)
-
       val newSign = (this.sign, that.sign).zipped.map( lub(_, _) )
-      val p = new Property(newSign)
-      p
+      new Property(newSign)
     }
 
 
-
+    //TODO: Add narrowing implementation
     def narrowing(that: Property) = this
 
 
@@ -68,12 +68,9 @@ object SignDomain extends NumericalDomain {
       */
      /*Compute an upper approximation of the greatest lower bound of two abstract properties.*/
     def intersection(that: Property) : Property = {
-       println("Intersetion called")
        require(dimension == that.dimension)
        val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
-
-
-       Property(newSign)
+       new Property(newSign)
      }
 
 
@@ -114,25 +111,15 @@ object SignDomain extends NumericalDomain {
           s = sum(s, t)
         }
         else if (homcoeffs(i) < 0) {
-          val t: Sign = sign(i) match {
-            case Minus => Plus
-            case Plus => Minus
-            case a => a //Zero, Top, Bottom are not changed!
-          }
+          val t: Sign = inverse(sign(i))
           s = sum(s, t)
         }
       }
       s
     }
 
-
-
-
-
-
     def linearAssignment(n: Int, lf: LinearForm) : Property = {
       require(n < sign.length && n >= 0 && lf.dimension <= dimension)
-
       val s : Sign = linearEvaluation(lf)
       new Property(sign.updated(n, s))
     }
@@ -151,14 +138,18 @@ object SignDomain extends NumericalDomain {
       }
     }
 
+    /**
+      * @inheritdoc
+      * @param lf
+      */
     def linearDisequality(lf: LinearForm) = {
       val s : Sign = linearEvaluation(lf)
       s match {
         case Plus => this
         case Minus => this
         case Zero => bottom
-        case SignTop => top //Todo check
-        case SignBottom => bottom //TODO check it
+        case SignTop => top //lub(Plus, Minus)
+        case SignBottom => bottom
       }
     }
 
@@ -215,16 +206,6 @@ object SignDomain extends NumericalDomain {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     /* Done in complete analogy to the BoxDoubleDomain */
     def mapVariables(rho: Seq[Int]) = {
       require(rho.length == dimension)
@@ -248,7 +229,9 @@ object SignDomain extends NumericalDomain {
       case SignBottom => true
       case _ => false
     })
+
     def bottom = SignDomain.bottom(sign.length)
+
     def top = SignDomain.top(sign.length)
     
      /**
@@ -318,12 +301,9 @@ object SignDomain extends NumericalDomain {
   }
 
 
-
-
-
   val widenings = Seq(
     WideningDescription("default", "The trivial widening which just returns top.", Box.right[Property]))
 
   def top(n: Int) = new Property(Array.fill(n)(SignTop))
-  def bottom(n: Int) = Property(Array.fill(n)(SignBottom))
+  def bottom(n: Int) = new Property(Array.fill(n)(SignBottom))
 }

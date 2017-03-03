@@ -19,6 +19,15 @@ object SignFunctions {
       Plus
   }
 
+  def toSign(num : Double): Sign = {
+    if(num > 0)
+      Plus
+    else if(num < 0)
+      Minus
+    else //Ignoring precision for now!
+      Zero
+  }
+
 
   def sum(s: Sign, t: Sign) : Sign = {
     println("sum called ")

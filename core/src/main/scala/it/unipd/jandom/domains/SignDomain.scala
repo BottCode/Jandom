@@ -101,28 +101,6 @@ object SignDomain extends NumericalDomain {
     def nonDeterministicAssignment(n: Int): Property = Property(sign.updated(n, SignTop))
 
 
-    /*
-     * Converts a number to its sign (alpha)
-     */
-    private def toSign(num : Int): Sign = {
-      if(num > 0)
-        Plus
-      else if(num < 0)
-        Minus
-      else
-        Zero
-    }
-
-    private def toSign(num : Double): Sign = {
-      if(num > 0)
-        Plus
-      else if(num < 0)
-        Minus
-      else //Ignoring precision for now!
-        Zero
-    }
-
-
 
     /**
       * Compute the minimum and maximum value of a linear form in a box.

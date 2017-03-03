@@ -314,22 +314,6 @@ object SignDomain extends NumericalDomain {
 
 
 
-
-    /* PROTOTYPE */
-    /* Ad hoc override */
-    def mult(s: Sign, t : Sign) : Sign = {
-      (s,t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (_, Zero) => Zero
-        case (Zero, _) => Zero
-        case (SignTop, _) => SignTop
-        case (_, SignTop) => SignTop
-        case (a, b) => if(a == b) Plus else Minus
-
-      }
-    }
-
     def division(s : Sign, t : Sign) : Sign = {
       (s, t) match {
         case (SignBottom, _) => SignBottom

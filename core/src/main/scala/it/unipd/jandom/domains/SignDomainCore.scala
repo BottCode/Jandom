@@ -44,7 +44,6 @@ object SignFunctions {
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
       case (a, b) => if(a == b) Plus else Minus
-
     }
   }
 

@@ -46,7 +46,13 @@ object SignDomain extends NumericalDomain {
     }
 
     //TODO: Add widening implementation
-    def widening(that: Property) = this
+    def widening(that: Property) = {
+      println("Widening called")
+      println(s"This: $this")
+      println(s"That: $that")
+      println("Widening: " + top)
+      top
+    }
 
 
     /* Compute an upper bound of two abstract properties. */
@@ -54,12 +60,21 @@ object SignDomain extends NumericalDomain {
       println("Union called")
       require(dimension == that.dimension)
       val newSign = (this.sign, that.sign).zipped.map( lub(_, _) )
+      println(s"This: $this")
+      println(s"That: $that")
+      println("Lub: " + new Property(newSign))
       new Property(newSign)
     }
 
 
     //TODO: Add narrowing implementation
-    def narrowing(that: Property) = this
+    def narrowing(that: Property) = {
+      println("Narrowing called")
+      println(s"This: $this")
+      println(s"That: $that")
+      println("Narrowing: " + top)
+      top
+    }
 
 
     /**
@@ -68,9 +83,15 @@ object SignDomain extends NumericalDomain {
       */
      /*Compute an upper approximation of the greatest lower bound of two abstract properties.*/
     def intersection(that: Property) : Property = {
-       require(dimension == that.dimension)
-       val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
-       new Property(newSign)
+      println("Intersection called")
+      require(dimension == that.dimension)
+      val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
+      println(s"This: $this")
+      println(s"That: $that")
+      //println("Glb: " + new Property(newSign))
+      // new Property(newSign)
+      println("Glb: " + top)
+      top
      }
 
 
@@ -120,7 +141,11 @@ object SignDomain extends NumericalDomain {
 
     def linearAssignment(n: Int, lf: LinearForm) : Property = {
       require(n < sign.length && n >= 0 && lf.dimension <= dimension)
+      println(s"Assigning... $this \nwith linear form: $lf \nand number n: $n")
+      if(sign.init.forall(x => x.equals(SignBottom)))
+        return this
       val s : Sign = linearEvaluation(lf)
+      println("Generated: " + new Property(sign.updated(n, s)))
       new Property(sign.updated(n, s))
     }
 
@@ -183,7 +208,7 @@ object SignDomain extends NumericalDomain {
      */
     def addVariable: Property = {
       println(s"Adding variable at the ${dimension} position")
-      var newSign = new Array[Sign](sign.length + 1)
+      val newSign = new Array[Sign](sign.length + 1)
       Array.copy(sign, 0, newSign, 0, sign.length)
       newSign(sign.length) = SignTop
       new Property(newSign)
@@ -197,10 +222,12 @@ object SignDomain extends NumericalDomain {
     def delVariable(n: Int): Property = {
       require(n < sign.length && n >= 0)
       println(s"Deleting variable at ${n} position")
+      if(sign.init.forall(x => x.equals(SignBottom)))
+        return new Property(Array.fill[Sign](sign.length - 1)(SignTop))
       val newSign = new Array[Sign](sign.length - 1)
-      /*Copy the first n-1 elements */
+      // Copy the first n-1 elements
       Array.copy(sign, 0, newSign, 0, n)
-      /* Copy the remaining elements */
+      // Copy the remaining elements
       Array.copy(sign, n + 1, newSign, n, sign.length - n - 1)
       new Property(newSign)
     }

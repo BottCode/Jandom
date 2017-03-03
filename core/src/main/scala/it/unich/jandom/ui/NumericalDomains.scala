@@ -20,6 +20,7 @@ package it.unich.jandom.ui
 import scala.collection.mutable.Buffer
 import scala.util.Try
 import it.unich.jandom.domains.numerical._
+import sign.main.SignDomain
 
 /**
  * The ParameterEnumeration for numerical domains.

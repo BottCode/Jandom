@@ -70,15 +70,7 @@ object SignDomain extends NumericalDomain {
     def intersection(that: Property) : Property = {
        println("Intersetion called")
        require(dimension == that.dimension)
-       val newSign = (this.sign, that.sign).zipped.map(
-        (s: Sign, t:Sign) => (s,t) match {
-          case (SignTop, a) => a
-          case (a, SignTop) => a
-          case (_, SignBottom) => SignBottom
-          case (SignBottom, _) => SignBottom
-          case (a, b) => if(a == b) a else SignBottom
-        }
-      )
+       val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
 
 
        Property(newSign)

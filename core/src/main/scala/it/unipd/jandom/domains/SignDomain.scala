@@ -314,21 +314,6 @@ object SignDomain extends NumericalDomain {
 
 
 
-    /** JAVA CONVENTION for mod/remainder sign is to take as result
-      * the sign  of the dividend
-      * @param s
-      * @param t
-      * @return
-      */
-    def remainder(s : Sign, t : Sign) : Sign = {
-      (s,t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (a, _) => a
-      }
-    }
-
-
     /**
       * Assignments of the kind `vn = vn * vm`.  The standard implementation determines
       * whether `vn` or `vm` is a constant, and use linearAssignment in such a case.

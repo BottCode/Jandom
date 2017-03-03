@@ -69,7 +69,6 @@ object SignFunctions {
 
   /** JAVA CONVENTION for mod/remainder sign is to take as result
     * the sign  of the dividend
- *
     * @param s
     * @param t
     * @return

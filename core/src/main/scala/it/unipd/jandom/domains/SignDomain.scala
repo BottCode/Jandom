@@ -16,19 +16,12 @@
  * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package it.unich.jandom.domains.numerical
+package sign.main
 
 import it.unich.jandom.domains.WideningDescription
+import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unich.scalafix.Box
-import spire.math.Rational
-
-trait Sign;
-case object Plus extends Sign;
-case object Minus extends Sign;
-case object Zero extends Sign;
-case object SignTop extends Sign;
-case object SignBottom extends Sign;
 
 
 /**
@@ -37,8 +30,10 @@ case object SignBottom extends Sign;
  */
 object SignDomain extends NumericalDomain {
 
+  import sign.main.SignFunctions._
+
   case class Property private[SignDomain] (val sign : Array[Sign]) extends NumericalProperty[Property] {
-    val dimension = sign.length;
+    val dimension = sign.length
     require(dimension >= 0)
 
     type Domain = SignDomain.type
@@ -54,7 +49,7 @@ object SignDomain extends NumericalDomain {
 
     /* Compute an upper bound of two abstract properties. */
     def union(that: Property) : Property = {
-      println("Union called");
+      println("Union called")
       require(dimension == that.dimension)
 
       val newSign = (this.sign, that.sign).zipped.map(
@@ -81,7 +76,7 @@ object SignDomain extends NumericalDomain {
       */
      /*Compute an upper approximation of the greatest lower bound of two abstract properties.*/
     def intersection(that: Property) : Property = {
-       println("Intersetion called");
+       println("Intersetion called")
        require(dimension == that.dimension)
        val newSign = (this.sign, that.sign).zipped.map(
         (s: Sign, t:Sign) => (s,t) match {
@@ -107,7 +102,7 @@ object SignDomain extends NumericalDomain {
 
 
     private def signSum(s: Sign, t: Sign) : Sign = {
-      println("signSum called ");
+      println("signSum called ")
       (s,t) match {
         case (SignBottom, _) => SignBottom
         case (_, SignBottom) => SignBottom
@@ -160,17 +155,16 @@ object SignDomain extends NumericalDomain {
     /**
       * Compute the minimum and maximum value of a linear form in a box.
       * @param known the known term of a linear form
-      * @param the homogeneous coefficients of a linear form
       * @return a tuple with two components: the first component is the least value, the second component is the greatest value
       * of the linear form over the box.
       */
     private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Sign = {
       require(homcoeffs.length <= dimension)
-      var s: Sign = toSign(known);
+      var s: Sign = toSign(known)
       for (i <- homcoeffs.indices) {
 
         if (homcoeffs(i) > 0) {
-          val t: Sign = sign(i);
+          val t: Sign = sign(i)
           s = signSum(s, t)
         }
         else if (homcoeffs(i) < 0) {
@@ -291,10 +285,10 @@ object SignDomain extends NumericalDomain {
       val newdim = rho.count(_ >= 0)
       require(rho forall { i => i >= -1 && i < newdim })
       // we do not check injectivity
-      val newSign = new Array[Sign](newdim);
+      val newSign = new Array[Sign](newdim)
 
       for ((newi, i) <- rho.zipWithIndex; if newi >= 0) {
-        newSign(newi) = sign(i);
+        newSign(newi) = sign(i)
       }
       new Property(newSign)
     }

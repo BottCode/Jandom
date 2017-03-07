@@ -26,13 +26,14 @@ import it.unich.scalafix.Box
 
 /**
   * Sign domain
+  *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
  */
 object SignDomain extends NumericalDomain {
 
   import sign.main.SignFunctions._
 
-  case class Property private[SignDomain] (val sign : Array[Sign]) extends NumericalProperty[Property] {
+  case class Property private[SignDomain] (val sign : Array[Sign], val unreachable: Boolean) extends NumericalProperty[Property] {
     val dimension = sign.length
     require(dimension >= 0)
 
@@ -62,8 +63,8 @@ object SignDomain extends NumericalDomain {
       val newSign = (this.sign, that.sign).zipped.map( lub(_, _) )
       println(s"This: $this")
       println(s"That: $that")
-      println("Lub: " + new Property(newSign))
-      new Property(newSign)
+      println("Lub: " + new Property(newSign, unreachable && that.unreachable))
+      new Property(newSign, unreachable && that.unreachable)
     }
 
 
@@ -88,8 +89,8 @@ object SignDomain extends NumericalDomain {
       val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
       println(s"This: $this")
       println(s"That: $that")
-      println("Glb: " + new Property(newSign))
-      new Property(newSign)
+      println("Glb: " + SignDomain.this(newSign))
+      SignDomain.this(newSign)
      }
 
 
@@ -98,12 +99,17 @@ object SignDomain extends NumericalDomain {
       * @note @inheritdoc
       * @throws $ILLEGAL
       */
-    def nonDeterministicAssignment(n: Int): Property = Property(sign.updated(n, SignTop))
+    def nonDeterministicAssignment(n: Int): Property = {
+      if(unreachable)
+        return this
+      new Property(sign.updated(n, SignTop), false)
+    }
 
 
 
     /**
       * Compute the minimum and maximum value of a linear form in a box.
+      *
       * @param lf a linear form
       * @return a tuple with two components: the first component is the least value, the second component is the greatest value
       * of the linear form over the box.
@@ -116,6 +122,7 @@ object SignDomain extends NumericalDomain {
 
     /**
       * Compute the minimum and maximum value of a linear form in a box.
+      *
       * @param known the known term of a linear form
       * @return a tuple with two components: the first component is the least value, the second component is the greatest value
       * of the linear form over the box.
@@ -123,8 +130,8 @@ object SignDomain extends NumericalDomain {
     private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Sign = {
       require(homcoeffs.length <= dimension)
       var s: Sign = toSign(known)
+      if (unreachable && homcoeffs.exists { _ != 0 }) return SignTop
       for (i <- homcoeffs.indices) {
-
         if (homcoeffs(i) > 0) {
           val t: Sign = sign(i)
           s = sum(s, t)
@@ -137,14 +144,14 @@ object SignDomain extends NumericalDomain {
       s
     }
 
-    def linearAssignment(n: Int, lf: LinearForm) : Property = {
-      require(n < sign.length && n >= 0 && lf.dimension <= dimension)
-      println(s"Assigning... $this \nwith linear form: $lf \nand number n: $n")
-      if(sign.init.forall(x => x.equals(SignBottom)))
+    def linearAssignment(pos: Int, lf: LinearForm) : Property = {
+      require(pos < sign.length && pos >= 0 && lf.dimension <= dimension)
+      println(s"Assigning... $this \nwith linear form: $lf \nand number n: $pos")
+      if(unreachable)
         return this
       val s : Sign = linearEvaluation(lf)
-      println("Generated: " + new Property(sign.updated(n, s)))
-      new Property(sign.updated(n, s))
+      println("Generated: " + new Property(sign.updated(pos, s), false))
+      new Property(sign.updated(pos, s), false)
     }
 
 
@@ -166,6 +173,8 @@ object SignDomain extends NumericalDomain {
       * @param lf
       */
     def linearDisequality(lf: LinearForm) = {
+      /*if (isEmpty)
+        return this*/
       val s : Sign = linearEvaluation(lf)
       s match {
         case Plus => this
@@ -206,10 +215,12 @@ object SignDomain extends NumericalDomain {
      */
     def addVariable: Property = {
       println(s"Adding variable at the ${dimension} position")
+      if (unreachable)
+        return SignDomain.this.bottom(dimension + 1)
       val newSign = new Array[Sign](sign.length + 1)
       Array.copy(sign, 0, newSign, 0, sign.length)
       newSign(sign.length) = SignTop
-      new Property(newSign)
+      SignDomain.this(newSign)
     }
     /**
      * @inheritdoc
@@ -217,18 +228,16 @@ object SignDomain extends NumericalDomain {
      * @note @inheritdoc
      * @throws $ILLEGAL
      */
-    def delVariable(n: Int): Property = {
-      require(n < sign.length && n >= 0)
-      println(s"Deleting variable at ${n} position")
+    def delVariable(pos: Int): Property = {
+      require(pos < sign.length && pos >= 0)
+      println(s"Deleting variable at ${pos} position")
       println(s"This: $this")
-      if(sign.init.forall(x => x.equals(SignBottom)))
-        return new Property(Array.fill[Sign](sign.length - 1)(SignTop))
       val newSign = new Array[Sign](sign.length - 1)
-      // Copy the first n-1 elements
-      Array.copy(sign, 0, newSign, 0, n)
+      // Copy the first pos-1 elements
+      Array.copy(sign, 0, newSign, 0, pos)
       // Copy the remaining elements
-      Array.copy(sign, n + 1, newSign, n, sign.length - n - 1)
-      new Property(newSign)
+      Array.copy(sign, pos + 1, newSign, pos, sign.length - pos - 1)
+      new Property(newSign, unreachable)
     }
 
 
@@ -243,10 +252,10 @@ object SignDomain extends NumericalDomain {
       for ((newi, i) <- rho.zipWithIndex; if newi >= 0) {
         newSign(newi) = sign(i)
       }
-      new Property(newSign)
+      new Property(newSign, unreachable)
     }
 
-    def isEmpty = false
+    def isEmpty = unreachable
     def isTop = sign.forall( x =>  x match {
       case SignTop => true
       case _ => false
@@ -259,14 +268,14 @@ object SignDomain extends NumericalDomain {
     def bottom = SignDomain.bottom(sign.length)
 
     def top = SignDomain.top(sign.length)
-    
+
      /**
      * @inheritdoc
      * @throws $ILLEGAL
      */
     def mkString(vars: Seq[String]): String = {
       require(vars.length >= dimension)
-      if (isEmpty)
+      if (unreachable)
         "empty"
       else {
         val bounds = for (i <- 0 until dimension) yield {
@@ -289,6 +298,7 @@ object SignDomain extends NumericalDomain {
       * Assignments of the kind `vn = vn * vm`.  The standard implementation determines
       * whether `vn` or `vm` is a constant, and use linearAssignment in such a case.
       * Otherwise, it resorts to a non deterministic assignment.
+      *
       * @note $NOTEN
       */
     override def variableMul(n: Int, m: Int) = {
@@ -326,10 +336,13 @@ object SignDomain extends NumericalDomain {
 
   }
 
+  def apply(signsArray : Array[Sign]): Property = {
+    new Property(signsArray, signsArray.forall(s => s.equals(SignBottom)))
+  }
 
   val widenings = Seq(
     WideningDescription("default", "The trivial widening which just returns top.", Box.right[Property]))
 
-  def top(n: Int) = new Property(Array.fill(n)(SignTop))
-  def bottom(n: Int) = new Property(Array.fill(n)(SignBottom))
+  def top(n: Int) = new Property(Array.fill(n)(SignTop), false)
+  def bottom(n: Int) = new Property(Array.fill(n)(SignBottom), true)
 }

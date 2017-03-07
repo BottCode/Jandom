@@ -42,7 +42,37 @@ object SignDomain extends NumericalDomain {
     def domain = SignDomain
 
     def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = other match {
-      case other: Property if dimension == other.dimension => Some(0)
+
+      case other: Property =>
+        require(dimension == other.dimension)
+        (isEmpty, other.isEmpty) match {
+          case (true, true) => Option(0)
+          case (false, true) => Option(1)
+          case (true, false) => Option(-1)
+          case (false, false) =>
+            val signPairs = (this.sign, other.sign).zipped
+            val comparisonList = signPairs.map((s, t) => compare(s, t))
+
+            if (comparisonList.forall(s => s match {
+              case Some(i) => if (i == 0) true else false
+              case None => false
+            }))
+              Option(0)
+
+            else if (comparisonList.forall(s => s match {
+              case Some(i) => if (i == 1) true else false
+              case None => false
+            }))
+              Option(1)
+            else if (comparisonList.forall(s => s match {
+              case Some(i) => if (i == 1) true else false
+              case None => false
+            }))
+              Option(-1)
+            else
+              Option.empty
+        }
+
       case _ => None
     }
 

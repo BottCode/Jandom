@@ -111,6 +111,23 @@ object SignFunctions {
       }
     }
 
+  /**
+    *
+    * @param s
+    * @param t
+    * @return
+    */
+    def compare(s: Sign, t:Sign): Option[Int] = {
+      (s, t) match {
+        case (SignTop, SignTop) => Option(0)
+        case (SignTop, _) => Option(1)
+        case (_, SignTop) => Option(-1)
+        case (SignBottom, SignBottom) => Option(0)
+        case (SignBottom, _) => Option(-1)
+        case (_, SignBottom) => Option(1)
+        case (a, b) => if (a == b) Option(0) else Option.empty
+      }
+    }
 
 
   /*** XOR DISCLAIMER: If we do not distinguish between >= 0, and > 0 then

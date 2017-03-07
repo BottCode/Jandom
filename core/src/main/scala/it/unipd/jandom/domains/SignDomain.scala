@@ -158,8 +158,10 @@ object SignDomain extends NumericalDomain {
     /** @inheritdoc
        * @param lf
       */
-    def linearInequality(lf: LinearForm) = {
+    def linearInequality(lf: LinearForm) : Property = {
       val s : Sign = linearEvaluation(lf)
+      if (isEmpty)
+        return this
       s match {
         case Plus => bottom
         case SignTop => top //IS this the best correct approximation???? //TODO Maybe we can improve this result Case Top????
@@ -172,9 +174,9 @@ object SignDomain extends NumericalDomain {
       * @inheritdoc
       * @param lf
       */
-    def linearDisequality(lf: LinearForm) = {
-      /*if (isEmpty)
-        return this*/
+    def linearDisequality(lf: LinearForm) : Property = {
+      if (isEmpty)
+        return this
       val s : Sign = linearEvaluation(lf)
       s match {
         case Plus => this
@@ -217,11 +219,9 @@ object SignDomain extends NumericalDomain {
       println(s"Adding variable at the ${dimension} position")
       if (unreachable)
         return SignDomain.this.bottom(dimension + 1)
-      val newSign = new Array[Sign](sign.length + 1)
-      Array.copy(sign, 0, newSign, 0, sign.length)
-      newSign(sign.length) = SignTop
-      SignDomain.this(newSign)
+      SignDomain.this(sign :+ SignTop)
     }
+
     /**
      * @inheritdoc
      * This is a complete operator for boxes.
@@ -232,6 +232,8 @@ object SignDomain extends NumericalDomain {
       require(pos < sign.length && pos >= 0)
       println(s"Deleting variable at ${pos} position")
       println(s"This: $this")
+      /*if(sign.init.forall(s => s.equals(SignBottom)))
+        return new Property(Array.fill[Sign](sign.length - 1)(SignTop), false)*/
       val newSign = new Array[Sign](sign.length - 1)
       // Copy the first pos-1 elements
       Array.copy(sign, 0, newSign, 0, pos)
@@ -256,17 +258,11 @@ object SignDomain extends NumericalDomain {
     }
 
     def isEmpty = unreachable
-    def isTop = sign.forall( x =>  x match {
-      case SignTop => true
-      case _ => false
-    })
-    def isBottom = sign.forall(x => x match {
-      case SignBottom => true
-      case _ => false
-    })
+
+    def isTop = !isEmpty && sign.forall(s => s.equals(SignTop))
+    def isBottom = isEmpty
 
     def bottom = SignDomain.bottom(sign.length)
-
     def top = SignDomain.top(sign.length)
 
      /**

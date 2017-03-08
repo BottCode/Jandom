@@ -28,11 +28,12 @@ import spire.math.Rational
 /**
   * Sign domain
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  *           Stefano Munari <stefano.munari@studenti.unipd.it>
  */
 object SignDomain extends NumericalDomain {
 
-  import it.unipd.jandom.domains.SignFunctions._
+  import it.unipd.jandom.domains.SignDomainCore._
 
   case class Property private[SignDomain] (sign : Array[Sign], unreachable: Boolean) extends NumericalProperty[Property] {
     val dimension: Int = sign.length
@@ -41,6 +42,8 @@ object SignDomain extends NumericalDomain {
     type Domain = SignDomain.type
 
     def domain = SignDomain
+
+
 
     def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = other match {
 

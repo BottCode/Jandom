@@ -1,7 +1,7 @@
 package it.unipd.jandom.domains
 
 
-object SignFunctions {
+object SignDomainCore {
 
   trait Sign
   case object Plus extends Sign
@@ -78,11 +78,7 @@ object SignFunctions {
 
   /** JAVA CONVENTION for mod/remainder sign is to take as result
     * the sign  of the dividend
-    *
-    * @param s
-    * @param t
-    * @return
-    */
+   */
   def remainder(s : Sign, t : Sign) : Sign = {
     (s,t) match {
       case (SignBottom, _) => SignBottom
@@ -91,7 +87,7 @@ object SignFunctions {
     }
   }
 
-  def lub(s : Sign, t : Sign) = {
+  def lub(s : Sign, t : Sign) : Sign = {
     (s, t) match {
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
@@ -101,7 +97,7 @@ object SignFunctions {
     }
   }
 
-    def glb(s : Sign, t : Sign) = {
+    def glb(s : Sign, t : Sign) : Sign = {
       (s,t) match {
         case (SignTop, a) => a
         case (a, SignTop) => a
@@ -111,12 +107,7 @@ object SignFunctions {
       }
     }
 
-  /**
-    *
-    * @param s
-    * @param t
-    * @return
-    */
+
     def compare(s: Sign, t:Sign): Option[Int] = {
       (s, t) match {
         case (SignTop, SignTop) => Option(0)
@@ -128,6 +119,7 @@ object SignFunctions {
         case (a, b) => if (a.equals(b)) Option(0) else Option.empty
       }
     }
+
 
 
   /*** XOR DISCLAIMER: If we do not distinguish between >= 0, and > 0 then

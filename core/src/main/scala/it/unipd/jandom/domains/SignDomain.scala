@@ -16,7 +16,7 @@
  * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package sign.main
+package it.unipd.jandom.domains
 
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
@@ -32,7 +32,7 @@ import spire.math.Rational
  */
 object SignDomain extends NumericalDomain {
 
-  import sign.main.SignFunctions._
+  import it.unipd.jandom.domains.SignFunctions._
 
   case class Property private[SignDomain] (sign : Array[Sign], unreachable: Boolean) extends NumericalProperty[Property] {
     val dimension: Int = sign.length
@@ -91,7 +91,7 @@ object SignDomain extends NumericalDomain {
     def union(that: Property) : Property = {
       println("Union called")
       require(dimension == that.dimension)
-      val newSign = (this.sign, that.sign).zipped.map( lub(_, _) )
+      val newSign = (this.sign, that.sign).zipped.map( lub )
       println(s"This: $this")
       println(s"That: $that")
       println("Lub: " + Property(newSign, unreachable && that.unreachable))
@@ -117,7 +117,7 @@ object SignDomain extends NumericalDomain {
     def intersection(that: Property) : Property = {
       println("Intersection called")
       require(dimension == that.dimension)
-      val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
+      val newSign = (this.sign, that.sign).zipped.map( glb )
       /*println(s"This: $this")
       println(s"That: $that")
       println("Glb: " + SignDomain.this(newSign))*/

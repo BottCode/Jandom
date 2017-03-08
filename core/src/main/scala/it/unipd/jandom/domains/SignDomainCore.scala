@@ -1,4 +1,4 @@
-package sign.main
+package it.unipd.jandom.domains
 
 
 object SignFunctions {

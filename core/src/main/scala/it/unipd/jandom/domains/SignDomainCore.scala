@@ -70,11 +70,12 @@ object SignDomainCore {
       case (_, SignBottom) => SignBottom
       case (_, Zero) => SignBottom
       case (SignTop, _) => SignTop
-      case (Zero, SignTop) => Zero
+      case (Zero, _) => Zero
       case (_, SignTop) => SignTop
       case (a, b) => if (a == b) Plus else Minus
     }
   }
+  
 
   /** JAVA CONVENTION for mod/remainder sign is to take as result
     * the sign  of the dividend

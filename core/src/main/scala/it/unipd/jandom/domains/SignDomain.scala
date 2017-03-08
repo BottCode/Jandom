@@ -55,7 +55,7 @@ object SignDomain extends NumericalDomain {
           case (true, false) => Option(-1)
           case (false, false) =>
             val signPairs = (this.sign, other.sign).zipped
-            val comparisonList = signPairs.map((s, t) => compare(s, t))
+            val comparisonList = signPairs.map(compare)
 
             if (comparisonList.forall {
               case Some(i) => if (i == 0) true else false

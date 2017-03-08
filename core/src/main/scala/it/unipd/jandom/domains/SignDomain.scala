@@ -69,7 +69,7 @@ object SignDomain extends NumericalDomain {
             })
               Option(1)
             else if (comparisonList.forall {
-              case Some(i) => if (i == 1) true else false
+              case Some(i) => if (i == -1) true else false
               case None => false
             })
               Option(-1)

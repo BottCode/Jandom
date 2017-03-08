@@ -125,7 +125,7 @@ object SignFunctions {
         case (SignBottom, SignBottom) => Option(0)
         case (SignBottom, _) => Option(-1)
         case (_, SignBottom) => Option(1)
-        case (a, b) => if (a == b) Option(0) else Option.empty
+        case (a, b) => if (a.equals(b)) Option(0) else Option.empty
       }
     }
 

@@ -21,7 +21,6 @@ package it.unipd.jandom.domains
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
-import it.unich.scalafix.Box
 import spire.math.Rational
 
 
@@ -83,10 +82,11 @@ object SignDomain extends NumericalDomain {
     //TODO: Add widening implementation
     def widening(that: Property): Property = {
       println("Widening called")
-      println(s"This: $this")
-      println(s"That: $that")
+      println(s"This: $this ${this.isEmpty}")
+      println(s"That: $that ${that.isEmpty}")
       println("Widening: " + this)
-      this
+      Property((this.sign, that.sign).zipped.map(lub), this.isEmpty && that.isEmpty)
+
     }
 
 
@@ -370,8 +370,10 @@ object SignDomain extends NumericalDomain {
     Property(signsArray, signsArray.forall(s => s.equals(SignBottom)))
   }
 
-  val widenings = Seq(
-    WideningDescription("default", "The trivial widening which just returns top.", Box.right[Property]))
+
+  val widenings = Seq(WideningDescription.default[Property])
+
+
 
   def top(n: Int) = Property(Array.fill(n)(SignTop), unreachable = false)
   def bottom(n: Int) = Property(Array.fill(n)(SignBottom), unreachable = true)

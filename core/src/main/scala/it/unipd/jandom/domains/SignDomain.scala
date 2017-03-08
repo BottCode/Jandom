@@ -22,6 +22,7 @@ import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unich.scalafix.Box
+import spire.math.Rational
 
 
 /**
@@ -33,8 +34,8 @@ object SignDomain extends NumericalDomain {
 
   import sign.main.SignFunctions._
 
-  case class Property private[SignDomain] (val sign : Array[Sign], val unreachable: Boolean) extends NumericalProperty[Property] {
-    val dimension = sign.length
+  case class Property private[SignDomain] (sign : Array[Sign], unreachable: Boolean) extends NumericalProperty[Property] {
+    val dimension: Int = sign.length
     require(dimension >= 0)
 
     type Domain = SignDomain.type
@@ -53,21 +54,21 @@ object SignDomain extends NumericalDomain {
             val signPairs = (this.sign, other.sign).zipped
             val comparisonList = signPairs.map((s, t) => compare(s, t))
 
-            if (comparisonList.forall(s => s match {
+            if (comparisonList.forall {
               case Some(i) => if (i == 0) true else false
               case None => false
-            }))
+            })
               Option(0)
 
-            else if (comparisonList.forall(s => s match {
+            else if (comparisonList.forall {
               case Some(i) => if (i == 1) true else false
               case None => false
-            }))
+            })
               Option(1)
-            else if (comparisonList.forall(s => s match {
+            else if (comparisonList.forall {
               case Some(i) => if (i == 1) true else false
               case None => false
-            }))
+            })
               Option(-1)
             else
               Option.empty
@@ -77,7 +78,7 @@ object SignDomain extends NumericalDomain {
     }
 
     //TODO: Add widening implementation
-    def widening(that: Property) = {
+    def widening(that: Property): Property = {
       println("Widening called")
       println(s"This: $this")
       println(s"That: $that")
@@ -93,13 +94,13 @@ object SignDomain extends NumericalDomain {
       val newSign = (this.sign, that.sign).zipped.map( lub(_, _) )
       println(s"This: $this")
       println(s"That: $that")
-      println("Lub: " + new Property(newSign, unreachable && that.unreachable))
-      new Property(newSign, unreachable && that.unreachable)
+      println("Lub: " + Property(newSign, unreachable && that.unreachable))
+      Property(newSign, unreachable && that.unreachable)
     }
 
 
     //TODO: Add narrowing implementation
-    def narrowing(that: Property) = {
+    def narrowing(that: Property): Property = {
       println("Narrowing called")
       println(s"This: $this")
       println(s"That: $that")
@@ -117,9 +118,9 @@ object SignDomain extends NumericalDomain {
       println("Intersection called")
       require(dimension == that.dimension)
       val newSign = (this.sign, that.sign).zipped.map( glb(_, _) )
-      println(s"This: $this")
+      /*println(s"This: $this")
       println(s"That: $that")
-      println("Glb: " + SignDomain.this(newSign))
+      println("Glb: " + SignDomain.this(newSign))*/
       SignDomain.this(newSign)
      }
 
@@ -127,12 +128,12 @@ object SignDomain extends NumericalDomain {
     /**
       * @inheritdoc
       * @note @inheritdoc
-      * @throws $ILLEGAL
+      // * @throws IllegalArgumentException
       */
     def nonDeterministicAssignment(n: Int): Property = {
       if(unreachable)
         return this
-      new Property(sign.updated(n, SignTop), false)
+      Property(sign.updated(n, SignTop), unreachable = false)
     }
 
 
@@ -180,13 +181,13 @@ object SignDomain extends NumericalDomain {
       if(unreachable)
         return this
       val s : Sign = linearEvaluation(lf)
-      println("Generated: " + new Property(sign.updated(pos, s), false))
-      new Property(sign.updated(pos, s), false)
+      println("Generated: " + Property(sign.updated(pos, s), unreachable = false))
+      Property(sign.updated(pos, s), unreachable = false)
     }
 
 
     /** @inheritdoc
-       * @param lf
+       * @param lf expression that gets evaluated for the linear inequality
       */
     def linearInequality(lf: LinearForm) : Property = {
       val s : Sign = linearEvaluation(lf)
@@ -202,7 +203,7 @@ object SignDomain extends NumericalDomain {
 
     /**
       * @inheritdoc
-      * @param lf
+      * @param lf expression that gets evaluated for the linear disequality
       */
     def linearDisequality(lf: LinearForm) : Property = {
       if (isEmpty)
@@ -217,19 +218,19 @@ object SignDomain extends NumericalDomain {
       }
     }
 
-    def minimize(lf: LinearForm) =
+    def minimize(lf: LinearForm): RationalExt =
       if (lf.homcoeffs.exists(!_.isZero))
         RationalExt.NegativeInfinity
       else
         RationalExt(lf.known)
 
-    def maximize(lf: LinearForm) =
+    def maximize(lf: LinearForm): RationalExt =
       if (lf.homcoeffs.exists(!_.isZero))
         RationalExt.PositiveInfinity
       else
         RationalExt(lf.known)
 
-    def frequency(lf: LinearForm) =
+    def frequency(lf: LinearForm): Option[Rational] =
       if (lf.homcoeffs.exists(!_.isZero))
         Option.empty
       else
@@ -243,10 +244,10 @@ object SignDomain extends NumericalDomain {
      * @inheritdoc
      * Add new variable maintaining the current values
      * @note @inheritdoc
-     * @throws $ILLEGAL
+     // * @throws IllegalArgumentException
      */
-    def addVariable: Property = {
-      println(s"Adding variable at the ${dimension} position")
+    def addVariable(): Property = {
+      println(s"Adding variable at the $dimension position")
       if (unreachable)
         return SignDomain.this.bottom(dimension + 1)
       SignDomain.this(sign :+ SignTop)
@@ -256,11 +257,11 @@ object SignDomain extends NumericalDomain {
      * @inheritdoc
      * This is a complete operator for boxes.
      * @note @inheritdoc
-     * @throws $ILLEGAL
+     // * @throws IllegalArgumentException
      */
     def delVariable(pos: Int): Property = {
       require(pos < sign.length && pos >= 0)
-      println(s"Deleting variable at ${pos} position")
+      println(s"Deleting variable at $pos position")
       println(s"This: $this")
       /*if(sign.init.forall(s => s.equals(SignBottom)))
         return new Property(Array.fill[Sign](sign.length - 1)(SignTop), false)*/
@@ -269,12 +270,12 @@ object SignDomain extends NumericalDomain {
       Array.copy(sign, 0, newSign, 0, pos)
       // Copy the remaining elements
       Array.copy(sign, pos + 1, newSign, pos, sign.length - pos - 1)
-      new Property(newSign, unreachable)
+      Property(newSign, unreachable)
     }
 
 
     /* Done in complete analogy to the BoxDoubleDomain */
-    def mapVariables(rho: Seq[Int]) = {
+    def mapVariables(rho: Seq[Int]): Property = {
       require(rho.length == dimension)
       val newdim = rho.count(_ >= 0)
       require(rho forall { i => i >= -1 && i < newdim })
@@ -284,20 +285,20 @@ object SignDomain extends NumericalDomain {
       for ((newi, i) <- rho.zipWithIndex; if newi >= 0) {
         newSign(newi) = sign(i)
       }
-      new Property(newSign, unreachable)
+      Property(newSign, unreachable)
     }
 
-    def isEmpty = unreachable
+    def isEmpty: Boolean = unreachable
 
-    def isTop = !isEmpty && sign.forall(s => s.equals(SignTop))
-    def isBottom = isEmpty
+    def isTop: Boolean = !isEmpty && sign.forall(s => s.equals(SignTop))
+    def isBottom: Boolean = isEmpty
 
-    def bottom = SignDomain.bottom(sign.length)
-    def top = SignDomain.top(sign.length)
+    def bottom: Property = SignDomain.bottom(sign.length)
+    def top: Property = SignDomain.top(sign.length)
 
      /**
      * @inheritdoc
-     * @throws $ILLEGAL
+     // * @throws IllegalArgumentException
      */
     def mkString(vars: Seq[String]): String = {
       require(vars.length >= dimension)
@@ -312,7 +313,7 @@ object SignDomain extends NumericalDomain {
             case Minus => "NEGATIVE"
             case Zero => "ZERO"
           }
-          s"${vars(i)} = ${h}"
+          s"${vars(i)} = $h"
         }
         bounds.mkString("[ ", " , ", " ]")
       }
@@ -327,13 +328,13 @@ object SignDomain extends NumericalDomain {
       *
       * @note $NOTEN
       */
-    override def variableMul(n: Int, m: Int) = {
+    override def variableMul(n: Int, m: Int): Property = {
       println("Multiplication")
-      sign(n) = mult(sign(n), sign(m));
+      sign(n) = mult(sign(n), sign(m))
       this
     }
 
-    override def variableDiv(n : Int, m : Int) = {
+    override def variableDiv(n : Int, m : Int): Property = {
       println("Division")
       sign(n) = division(sign(n), sign(m))
       this
@@ -343,7 +344,7 @@ object SignDomain extends NumericalDomain {
        * @inheritdoc
        * @note @inheritdoc
       */
-    override def variableNeg(n: Int = dimension - 1) = {
+    override def variableNeg(n: Int = dimension - 1): Property = {
       sign(n) = inverse(sign(n))
       this
     }
@@ -353,7 +354,7 @@ object SignDomain extends NumericalDomain {
       * @inheritdoc
       * @note @inheritdoc
       */
-    override def variableRem(n: Int = dimension - 2, m: Int = dimension - 1) = {
+    override def variableRem(n: Int = dimension - 2, m: Int = dimension - 1): Property = {
       sign(n) = remainder(sign(n), sign(m))
       this
     }
@@ -363,12 +364,12 @@ object SignDomain extends NumericalDomain {
   }
 
   def apply(signsArray : Array[Sign]): Property = {
-    new Property(signsArray, signsArray.forall(s => s.equals(SignBottom)))
+    Property(signsArray, signsArray.forall(s => s.equals(SignBottom)))
   }
 
   val widenings = Seq(
     WideningDescription("default", "The trivial widening which just returns top.", Box.right[Property]))
 
-  def top(n: Int) = new Property(Array.fill(n)(SignTop), false)
-  def bottom(n: Int) = new Property(Array.fill(n)(SignBottom), true)
+  def top(n: Int) = Property(Array.fill(n)(SignTop), unreachable = false)
+  def bottom(n: Int) = Property(Array.fill(n)(SignBottom), unreachable = true)
 }

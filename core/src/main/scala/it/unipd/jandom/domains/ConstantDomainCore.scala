@@ -37,4 +37,16 @@ object ConstantDomainCore {
       case (a, b) => a * b
     }
   }
+
+  def division(x : Constant, y : Constant) : Constant = {
+    (x, y) match {
+      case (ConstantBottom, _) => ConstantBottom
+      case (_, ConstantBottom) => ConstantBottom
+      case (_, Constant(0)) => ConstantBottom
+      case (ConstantTop, _) => ConstantTop
+      case (_, ConstantTop) => ConstantTop
+      case (a, b) => a/b
+    }
+  }
+
 }

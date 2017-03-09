@@ -266,8 +266,6 @@ object SignDomain extends NumericalDomain {
       require(pos < sign.length && pos >= 0)
       println(s"Deleting variable at $pos position")
       println(s"This: $this")
-      /*if(sign.init.forall(s => s.equals(SignBottom)))
-        return new Property(Array.fill[Sign](sign.length - 1)(SignTop), false)*/
       val newSign = new Array[Sign](sign.length - 1)
       // Copy the first pos-1 elements
       Array.copy(sign, 0, newSign, 0, pos)

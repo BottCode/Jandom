@@ -9,8 +9,15 @@ object ParityDomainCore {
   case object ParityBottom extends Parity
 
 
-  def toParity(t : Int) : Parity = {
+  def toParity(t : Int) : Parity =
     if(t % 2 == 0)
+      Even
+    else
+      Odd
+
+  def toParity(n : Double) : Parity = {
+    if (n != n.floor) return ParityTop
+    if (n.toInt % 2 == 0)
       Even
     else
       Odd

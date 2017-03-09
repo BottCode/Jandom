@@ -293,7 +293,7 @@ object SignDomain extends NumericalDomain {
 
     def isEmpty: Boolean = unreachable
 
-    def isTop: Boolean = !isEmpty && sign.forall(s => s.equals(SignTop))
+    def isTop: Boolean = !isEmpty && sign.forall( _.equals(SignTop))
     def isBottom: Boolean = isEmpty
 
     def bottom: Property = SignDomain.bottom(sign.length)

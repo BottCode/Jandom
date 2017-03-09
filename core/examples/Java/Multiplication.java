@@ -9,4 +9,10 @@ public class Multiplication {
     	a = -a;
     	int c = -100 * + a;
     }
+
+    static void lbhg() {
+        int a = 0;
+        while(a <= 0)
+            a = 1;
+    }
 }

@@ -21,8 +21,7 @@ package it.unipd.jandom.domains.numerical
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
-import it.unipd.jandom.domains.ParityDomainCore._
-import it.unipd.jandom.domains.numerical.ParityDomainCore._
+import ParityDomainCore._
 import spire.math.Rational
 
 import scala.math.PartiallyOrdered

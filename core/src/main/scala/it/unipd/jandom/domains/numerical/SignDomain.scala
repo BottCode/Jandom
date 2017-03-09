@@ -16,7 +16,7 @@
  * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package it.unipd.jandom.domains
+package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
@@ -32,9 +32,9 @@ import spire.math.Rational
  */
 object SignDomain extends NumericalDomain {
 
-  import it.unipd.jandom.domains.SignDomainCore._
+  import SignDomainCore._
 
-  case class Property private[SignDomain] (sign : Array[Sign], unreachable: Boolean) extends NumericalProperty[Property] {
+  case class Property private[SignDomain](sign : Array[Sign], unreachable: Boolean) extends NumericalProperty[Property] {
     val dimension: Int = sign.length
     require(dimension >= 0)
 

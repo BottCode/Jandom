@@ -16,12 +16,13 @@
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-package it.unipd.jandom.domains
+package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.ParityDomainCore._
+import it.unipd.jandom.domains.numerical.ParityDomainCore._
 import spire.math.Rational
 
 import scala.math.PartiallyOrdered
@@ -30,7 +31,7 @@ object ParityDomain extends NumericalDomain {
 
   def apply(parities: Array[Parity]): Property = Property(parities, parities.forall(p => p.equals(ParityBottom)))
 
-  case class Property private[ParityDomain] (parity : Array[Parity], unreachable: Boolean) extends NumericalProperty[Property] {
+  case class Property private[ParityDomain](parity : Array[Parity], unreachable: Boolean) extends NumericalProperty[Property] {
 
     override type Domain = ParityDomain.type
 

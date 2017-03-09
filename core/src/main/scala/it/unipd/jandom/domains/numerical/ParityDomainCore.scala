@@ -1,5 +1,4 @@
-package it.unipd.jandom.domains
-
+package it.unipd.jandom.domains.numerical
 
 object ParityDomainCore {
   trait Parity

@@ -16,6 +16,17 @@ object ConstantDomainCore {
 
   def toConstant(num : Double) : Constant = Constant(num)
 
+
+  def lub(x : Constant, y : Constant) : Constant = {
+    (x, y) match {
+      case (ConstantTop, _) => ConstantTop
+      case (_, ConstantTop) => ConstantTop
+      case (ConstantBottom, a) => a
+      case (a, ConstantBottom) => a
+      case (a, b) => if(a == b) a else ConstantTop
+    }
+  }
+
   def sum(x : Constant, y : Constant) : Constant = {
     (x,y) match {
       case (ConstantBottom, _) => ConstantBottom

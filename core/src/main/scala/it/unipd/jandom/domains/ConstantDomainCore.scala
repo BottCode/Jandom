@@ -7,6 +7,7 @@ package it.unipd.jandom.domains
   *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
 object ConstantDomainCore {
+
   trait Constant
   case class Constant (num : Numeric) extends Constant
   case object ConstantTop extends Constant
@@ -70,4 +71,20 @@ object ConstantDomainCore {
     }
   }
 
+  /**
+    * @return Option(0) : x == y
+    *         Option(1) : x > y
+    *         Option(-1) : x < y
+    */
+  def compare(x : Constant, y : Constant) : Option[Int] = {
+      (x, y) match {
+      case (ConstantTop, ConstantTop) => Option(0)
+      case (ConstantTop, _) => Option(1)
+      case (_, ConstantTop) => Option(-1)
+      case (ConstantBottom, ConstantBottom) => Option(0)
+      case (ConstantBottom, _) => Option(-1)
+      case (_, ConstantBottom) => Option(1)
+      case (a, b) => if(a.equals(b)) Option(0) else Option.empty
+    }
+  }
 }

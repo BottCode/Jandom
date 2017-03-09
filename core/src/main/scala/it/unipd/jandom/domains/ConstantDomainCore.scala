@@ -51,7 +51,7 @@ object ConstantDomainCore {
       case (_, ConstantBottom) => ConstantBottom
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (a, b) => a+b
+      case (Constant(a), Constant(b)) => Constant(a+b)
     }
   }
 
@@ -63,7 +63,7 @@ object ConstantDomainCore {
       case (_, Constant(0)) => y
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (a, b) => a * b
+      case (Constant(a), Constant(b)) => Constant(a*b)
     }
   }
 
@@ -74,23 +74,9 @@ object ConstantDomainCore {
       case (_, Constant(0)) => ConstantBottom
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (a, b) => a/b
+      case (Constant(a), Constant(b)) => Constant(a/b)
     }
   }
-
-  /**
-    * @note Java convention : the sign of the result is the sign of the dividend
-    */
-  def remainder(x : Constant, y : Constant) : Constant = {
-      (x, y) match {
-        case (ConstantBottom, _) => ConstantBottom
-        case (_, ConstantBottom) => ConstantBottom
-        case (_, ConstantTop) => ConstantTop
-        case (_, Constant(0)) => ConstantBottom
-        case (ConstantTop, _) => ConstantTop
-        case (a, b) => a % b
-      }
-    }
 
   /**
     * @return Option(0) : x == y

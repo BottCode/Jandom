@@ -27,6 +27,16 @@ object ConstantDomainCore {
     }
   }
 
+  def glb(x : Constant, y : Constant) : Constant = {
+    (x, y) match {
+      case (ConstantBottom, _) => ConstantBottom
+      case (_, ConstantBottom) => ConstantBottom
+      case (ConstantTop, a) => a
+      case (a, ConstantTop) => a
+      case (a, b) => if(a == b) a else ConstantBottom
+    }
+  }
+
   def sum(x : Constant, y : Constant) : Constant = {
     (x,y) match {
       case (ConstantBottom, _) => ConstantBottom

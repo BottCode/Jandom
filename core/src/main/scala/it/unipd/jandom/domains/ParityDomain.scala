@@ -22,7 +22,6 @@ import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.ParityDomainCore._
-import it.unipd.jandom.domains.SignDomain.Property
 import spire.math.Rational
 
 import scala.math.PartiallyOrdered
@@ -36,10 +35,7 @@ object ParityDomain extends NumericalDomain {
     override type Domain = ParityDomain.type
 
     /**
-      * Non deterministic assignment (also called `forget` operator).
-      *
-      * @note $NOTEN
-      * @param n the variable to which non-deterministic assignment should be applied.
+      * @inheritdoc
       */
     override def nonDeterministicAssignment(n: Int): Property = {
       if (unreachable)
@@ -49,11 +45,7 @@ object ParityDomain extends NumericalDomain {
 
 
     /**
-      * Compute the minimum and maximum value of a linear form in a box.
-      *
-      * @param lf a linear form
-      * @return a tuple with two components: the first component is the least value, the second component is the greatest value
-      *         of the linear form over the box.
+      * @inheritdoc
       */
     private def linearEvaluation(lf: LinearForm): Parity = {
       val known = lf.known.toDouble
@@ -62,11 +54,7 @@ object ParityDomain extends NumericalDomain {
     }
 
     /**
-      * Compute the minimum and maximum value of a linear form in a box.
-      *
-      * @param known the known term of a linear form
-      * @return a tuple with two components: the first component is the least value, the second component is the greatest value
-      *         of the linear form over the box.
+      * @inheritdoc
       */
     private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Parity = {
       require(homcoeffs.length <= dimension)
@@ -88,12 +76,7 @@ object ParityDomain extends NumericalDomain {
     }
 
     /**
-      * Linear assignment `xn := lf`.
-      *
-      * @todo $TODOGEN
-      * @param pos the index of the variable to be assigned.
-      * @param lf  the linear form determining the assignment.
-      * @note $NOTEN
+      * @inheritdoc
       */
     override def linearAssignment(pos: Int, lf: LinearForm): Property = {
       require(pos < parity.length && pos >= 0 && lf.dimension <= dimension)
@@ -104,7 +87,7 @@ object ParityDomain extends NumericalDomain {
     }
 
     /**
-      * Intersection with `lf != 0`.
+      * @inheritdoc
       */
     override def linearDisequality(lf: LinearForm): Property = {
       if (unreachable)
@@ -119,25 +102,22 @@ object ParityDomain extends NumericalDomain {
     }
 
     /**
-      * Intersection with the half-plane `lf <= 0`.
+      * @inheritdoc
       */
     override def linearInequality(lf: LinearForm): Property = linearDisequality(lf)
 
     /**
-      * Returns whether the `constraints` methods returns an exact representation of the
-      * property.
+      * @inheritdoc
       */
     override def isPolyhedral: Boolean = false
 
     /**
-      * Returns a set of constraints which are bounding hyperplanes for the property.
-      * The constraints may be redundant. Moreover, they exactly describe the property
-      * only when `isPolyhedral` is true.
+      * @inheritdoc
       */
     override def constraints: Seq[LinearForm] = List()
 
     /**
-      * Add a new variable.
+      * @inheritdoc
       */
     override def addVariable(): Property =
       if (unreachable)
@@ -146,10 +126,7 @@ object ParityDomain extends NumericalDomain {
         ParityDomain.this(parity :+ ParityTop)
 
     /**
-      * Remove the variable `v`, appropriately projecting the property.
-      *
-      * @param pos index of the variable to remove
-      * @note `v` should be between 0 and `dimension`-1
+      * @inheritdoc
       */
     override def delVariable(pos: Int): Property = {
       require(pos < parity.length && pos >= 0)
@@ -162,10 +139,7 @@ object ParityDomain extends NumericalDomain {
     }
 
     /**
-      * Map variables according to a partial injective function.
-      *
-      * @param rho partial injective function. Each dimension `i` is mapped to `rho(i)`. If `rho(i)` is
-      *            `-1`, then dimension i is removed
+      * @inheritdoc
       */
     def mapVariables(rho: Seq[Int]): Property =  {
       require(rho.length == dimension)
@@ -180,7 +154,7 @@ object ParityDomain extends NumericalDomain {
     }
 
     /**
-      * Returns the bottom property on the same fiber as `this`.
+      * @inheritdoc
       */
     def bottom: Property = ParityDomain.bottom(parity.length)
 

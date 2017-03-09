@@ -38,7 +38,8 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
       "not safe and should not be used."),
     ParameterValue(SumIntParallelotopeDomain(), "BoxDouble + Parallelotope", "Sum of boxes and parallelotopes."),
     ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers."),
-    ParameterValue(SignDomain, "Sign Domain", "UniPD")
+    ParameterValue(SignDomain, "Sign Domain", "UniPD"),
+    ParameterValue(ParityDomain, "Parity Domain", "UniPD")
     )
   val default = values.last
 

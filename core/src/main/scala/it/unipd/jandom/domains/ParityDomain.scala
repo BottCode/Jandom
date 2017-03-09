@@ -58,21 +58,12 @@ object ParityDomain extends NumericalDomain {
       */
     private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Parity = {
       require(homcoeffs.length <= dimension)
-      val s: Parity = ParityTop
-      /* TODO: Add implementation
-      var s: Parity = toParity(known)
       if (unreachable && homcoeffs.exists { _ != 0 }) return ParityTop
-      for (i <- homcoeffs.indices) {
-        if (homcoeffs(i) > 0) {
-          val t : Parity = parity(i)
-          s = sum(s, t)
-        }
-        else if (homcoeffs(i) < 0) {
-          val t : Parity = inverse(parity(i))
-          s = sum(s, t)
-        }
-      }*/
-      s
+      var p: Parity = ParityTop
+      for (i <- homcoeffs.indices)
+        if (homcoeffs(i) != 0)
+          p = sum(p, parity(i))
+      p
     }
 
     /**

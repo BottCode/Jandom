@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %% "scala-parser-combinators" % "1.0.4",
   "org.scala-lang" % "scala-reflect" % scalaVersion.value,
   // ASM is included in the Soot Jar
-  "soot" % "soot" % "2.5.0+git2" from "https://ssebuild.cased.de/nightly/soot/lib/soot-trunk.jar"
+  "soot" % "soot" % "2.5.0+git2" from "http://soot-build.cs.uni-paderborn.de/nightly/soot/soot-trunk.jar"
 )
 
 //*** Additional source directories for PPL

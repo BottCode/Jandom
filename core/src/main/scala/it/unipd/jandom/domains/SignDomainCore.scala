@@ -75,7 +75,7 @@ object SignDomainCore {
       case (a, b) => if (a == b) Plus else Minus
     }
   }
-  
+
 
   /** JAVA CONVENTION for mod/remainder sign is to take as result
     * the sign  of the dividend

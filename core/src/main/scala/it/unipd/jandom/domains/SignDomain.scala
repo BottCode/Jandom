@@ -86,7 +86,7 @@ object SignDomain extends NumericalDomain {
       println(s"That: $that ${that.isEmpty}")
       println("Widening: " + this)
       Property((this.sign, that.sign).zipped.map(lub), this.isEmpty && that.isEmpty)
-
+      //SignDomain.this.top(this.dimension)
     }
 
 
@@ -312,9 +312,9 @@ object SignDomain extends NumericalDomain {
           val h = sign(i) match {
             case SignTop => "TOP"
             case SignBottom => "BOTTOM"
-            case Plus => "POSITIVE"
-            case Minus => "NEGATIVE"
-            case Zero => "ZERO"
+            case Plus => "PLUS"
+            case Minus => "Minus"
+            case Zero => "Zero"
           }
           s"${vars(i)} = $h"
         }

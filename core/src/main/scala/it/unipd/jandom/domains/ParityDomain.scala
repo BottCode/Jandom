@@ -59,7 +59,7 @@ object ParityDomain extends NumericalDomain {
     private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Parity = {
       require(homcoeffs.length <= dimension)
       if (unreachable && homcoeffs.exists { _ != 0 }) return ParityTop
-      var p: Parity = ParityTop
+      var p: Parity = toParity(known)
       for (i <- homcoeffs.indices)
         if (homcoeffs(i) != 0)
           p = sum(p, parity(i))

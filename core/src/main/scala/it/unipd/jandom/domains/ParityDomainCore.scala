@@ -16,7 +16,7 @@ object ParityDomainCore {
       Odd
 
   def toParity(n : Double) : Parity = {
-    if (n != n.floor) return ParityTop
+    // if (n != n.floor) return ParityTop
     if (n.toInt % 2 == 0)
       Even
     else

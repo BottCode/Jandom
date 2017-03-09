@@ -365,7 +365,7 @@ object SignDomain extends NumericalDomain {
   }
 
   def apply(signsArray : Array[Sign]): Property = {
-    Property(signsArray, signsArray.forall(s => s.equals(SignBottom)))
+    Property(signsArray, signsArray.forall( _.equals(SignBottom)) )
   }
 
 

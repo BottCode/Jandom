@@ -17,6 +17,13 @@ object ConstantDomainCore {
 
   def toConstant(num : Double) : Constant = Constant(num)
 
+  def inverse(x: Constant) : Constant = {
+    x match {
+      case ConstantTop => ConstantTop
+      case ConstantBottom => ConstantBottom
+      case Constant(a) => Constant(-a)
+    }
+  }
 
   def lub(x : Constant, y : Constant) : Constant = {
     (x, y) match {

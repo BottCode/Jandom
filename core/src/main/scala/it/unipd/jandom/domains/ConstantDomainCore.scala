@@ -72,6 +72,7 @@ object ConstantDomainCore {
       case (ConstantBottom, _) => ConstantBottom
       case (_, ConstantBottom) => ConstantBottom
       case (_, Const(0)) => ConstantBottom
+      case (Const(0), _) => Const(0)
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
       case (Const(a), Const(b)) => Const(a/b)

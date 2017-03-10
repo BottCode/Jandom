@@ -1,9 +1,11 @@
 package it.unipd.jandom.domains
 
-import it.unich.jandom.domains.numerical.{NumericalDomain, NumericalProperty}
+import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
+import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.ConstantDomainCore._
 import it.unipd.jandom.domains.constantsDomain.Property
 import it.unipd.jandom.domains.constantsDomainCore.constants
+import spire.math.Rational
 
 /**
   * Constant domain
@@ -26,14 +28,10 @@ object ConstantDomain extends NumericalDomain{
 
     override def isPolyhedral: Boolean = false
 
-    /**
-      * @inheritdoc
-      */
+    def constraints = List()
+
     def dimension: Int = constants.length
 
-    /**
-      * @inheritdoc
-      */
     def domain = ConstantDomain
 
     def isEmpty: Boolean = unreachable
@@ -72,6 +70,25 @@ object ConstantDomain extends NumericalDomain{
         result(resultIndex) = constants(i)
       Property(result, unreachable)
     }
+
+    def minimize(lf: LinearForm): RationalExt =
+      if (lf.homcoeffs.exists(!_.isZero))
+        RationalExt.NegativeInfinity
+      else
+        RationalExt(lf.known)
+
+    def maximize(lf: LinearForm): RationalExt =
+      if (lf.homcoeffs.exists(!_.isZero))
+        RationalExt.PositiveInfinity
+      else
+        RationalExt(lf.known)
+
+    def frequency(lf: LinearForm): Option[Rational] =
+      if (lf.homcoeffs.exists(!_.isZero))
+        Option.empty
+      else
+        Option(lf.known)
+
     
   }
 }

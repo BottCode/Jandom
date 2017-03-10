@@ -17,22 +17,40 @@ object ConstantDomain extends NumericalDomain{
 
   def bottom(num: Int) = Property(Array.fill(num)(ConstantBottom), unreachable = true)
 
-  case class Property private[ConstantDomain] (constants: Array[Constant], unreachable: Boolean) extends NumericalProperty[Property] {
+  case class Property private[ConstantDomain]
+    (constants: Array[Constant], unreachable: Boolean) extends NumericalProperty[Property] {
 
     override type Domain = ConstantDomain.type
 
-    /**
-      * @inheritdoc
-      */
     override def isPolyhedral: Boolean = false
 
     /**
       * @inheritdoc
       */
-    override def addVariable(): Property =
+    def dimension: Int = constants.length
+
+    /**
+      * @inheritdoc
+      */
+    def domain = ConstantDomain
+
+    def isEmpty: Boolean = unreachable
+
+    def isTop: Boolean = !isEmpty && constants.forall( _.equals(ConstantTop))
+
+    def isBottom: Boolean = isEmpty
+
+    def bottom: Property = ConstantDomain.bottom(constants.length)
+
+    def top: Property = ConstantDomain.top(constants.length)
+
+    /**
+      * @inheritdoc
+      */
+    override def addVariable(): Property = {
       if (unreachable)
-        ConstantDomain.this.bottom(dimension + 1)
-      else
-        ConstantDomain.this(Constant :+ ConstantTop)
+        return ConstantDomain.this.bottom(dimension + 1)
+      ConstantDomain.this(constants :+ ConstantTop)
+    }
   }
 }

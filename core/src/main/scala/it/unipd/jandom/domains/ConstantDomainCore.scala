@@ -9,19 +9,19 @@ package it.unipd.jandom.domains
 object ConstantDomainCore {
 
   trait Constant
-  case class Constant (num : Numeric) extends Constant
+  case class Const (num : Numeric) extends Constant
   case object ConstantTop extends Constant
   case object ConstantBottom extends Constant
 
-  def toConstant(num : Int) : Constant = Constant(num)
+  def toConstant(num : Int) : Constant = Const(num)
 
-  def toConstant(num : Double) : Constant = Constant(num)
+  def toConstant(num : Double) : Constant = Const(num)
 
   def inverse(x: Constant) : Constant = {
     x match {
       case ConstantTop => ConstantTop
       case ConstantBottom => ConstantBottom
-      case Constant(a) => Constant(-a)
+      case Const(a) => Const(-a)
     }
   }
 
@@ -51,7 +51,7 @@ object ConstantDomainCore {
       case (_, ConstantBottom) => ConstantBottom
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (Constant(a), Constant(b)) => Constant(a+b)
+      case (Const(a), Const(b)) => Const(a+b)
     }
   }
 
@@ -59,11 +59,11 @@ object ConstantDomainCore {
     (x, y) match {
       case (ConstantBottom, _) => ConstantBottom
       case (_, ConstantBottom) => ConstantBottom
-      case (Constant(0), _) => x
-      case (_, Constant(0)) => y
+      case (Const(0), _) => x
+      case (_, Const(0)) => y
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (Constant(a), Constant(b)) => Constant(a*b)
+      case (Const(a), Const(b)) => Const(a*b)
     }
   }
 
@@ -71,10 +71,10 @@ object ConstantDomainCore {
     (x, y) match {
       case (ConstantBottom, _) => ConstantBottom
       case (_, ConstantBottom) => ConstantBottom
-      case (_, Constant(0)) => ConstantBottom
+      case (_, Const(0)) => ConstantBottom
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (Constant(a), Constant(b)) => Constant(a/b)
+      case (Const(a), Const(b)) => Const(a/b)
     }
   }
 

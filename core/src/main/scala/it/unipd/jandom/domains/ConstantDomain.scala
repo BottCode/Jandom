@@ -150,6 +150,13 @@ object ConstantDomain extends NumericalDomain{
 
     /**
       * @inheritdoc
+      * @todo check implementation
+      */
+    override def widening(that: Property): Property =
+      Property((this.constants, that.constants).zipped.map(lub), this.isEmpty && that.isEmpty)
+
+    /**
+      * @inheritdoc
       */
     override def mkString(vars: Seq[String]) : String = {
       require(vars.length >= dimension)

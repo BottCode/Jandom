@@ -56,10 +56,10 @@ object ParityDomainCore {
     (p,q) match {
       case (ParityBottom, _) => ParityBottom
       case (_, ParityBottom) => ParityBottom
-      case (ParityTop, _) => ParityTop
-      case (_, ParityTop) => ParityTop
       case (Even, _) => Even
       case (_, Even) => Even
+      case (ParityTop, _) => ParityTop
+      case (_, ParityTop) => ParityTop
       case (Odd, Odd) => Odd
     }
   }

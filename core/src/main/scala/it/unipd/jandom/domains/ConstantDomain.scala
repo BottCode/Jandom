@@ -152,6 +152,16 @@ object ConstantDomain extends NumericalDomain{
       * @inheritdoc
       * @todo check implementation
       */
+    override def intersection(that: Property): Property = {
+      require(dimension == that.dimension)
+      val result = (this.constants, that.constants).zipped.map( glb )
+      ConstantDomain.this(result)
+    }
+
+    /**
+      * @inheritdoc
+      * @todo check implementation
+      */
     override def narrowing(that: Property): Property =
       Property((this.constants, that.constants).zipped.map(glb), this.isEmpty && that.isEmpty)
 

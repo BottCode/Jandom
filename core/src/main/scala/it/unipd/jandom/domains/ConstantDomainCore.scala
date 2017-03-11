@@ -9,7 +9,10 @@ package it.unipd.jandom.domains
 object ConstantDomainCore {
 
   trait Constant
-  case class Const (num : Numeric) extends Constant
+  case class Const (num : Double) extends Constant
+  case object Const extends Constant {
+    def apply(num : Int) = new Const(num)
+  }
   case object ConstantTop extends Constant
   case object ConstantBottom extends Constant
 

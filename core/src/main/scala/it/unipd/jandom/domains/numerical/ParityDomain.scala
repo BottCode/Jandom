@@ -190,6 +190,28 @@ object ParityDomain extends NumericalDomain {
     }
   }
 
+    override def variableMul(n: Int, m: Int): Property = {
+      println("Multiplication")
+      parity(n) = mult(parity(n), parity(m))
+      println(s"Result: ${parity(n)}")
+      this
+    }
+
+    override def variableDiv(n : Int, m : Int): Property = {
+      println("Division")
+      parity(n) = division(parity(n), parity(m))
+      this
+    }
+
+    /**
+      * @inheritdoc
+      * @note @inheritdoc
+      */
+    override def variableNeg(n: Int = dimension - 1): Property = {
+      parity(n) = inverse(parity(n))
+      this
+    }
+
     /**
       * @inheritdoc
       */

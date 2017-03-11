@@ -193,8 +193,7 @@ object ConstantDomain extends NumericalDomain{
       */
     override def union(that: Property): Property =  {
       require(dimension == that.dimension)
-      val result = (this.constants, that.constants).zipped.map( lub )
-      Property(result, unreachable && that.unreachable)
+      Property((this.constants, that.constants).zipped.map( lub ), this.isEmpty && that.isEmpty)
     }
 
     /**
@@ -211,15 +210,16 @@ object ConstantDomain extends NumericalDomain{
       * @inheritdoc
       * @todo check implementation
       */
-    override def narrowing(that: Property): Property =
+    override def narrowing(that: Property): Property = {
+      require(dimension == that.dimension)
       Property((this.constants, that.constants).zipped.map(glb), this.isEmpty && that.isEmpty)
+    }
 
     /**
       * @inheritdoc
       * @todo check implementation
       */
-    override def widening(that: Property): Property =
-      Property((this.constants, that.constants).zipped.map(lub), this.isEmpty && that.isEmpty)
+    override def widening(that: Property): Property = union(that)
 
     /**
       * @inheritdoc

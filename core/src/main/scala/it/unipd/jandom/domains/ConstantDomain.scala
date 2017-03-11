@@ -233,7 +233,7 @@ object ConstantDomain extends NumericalDomain{
           val c = constants(i) match {
             case ConstantTop => "TOP"
             case ConstantBottom => "BOTTOM"
-            case _ => "CONST"
+            case Const(num) => num
           }
           s"${vars(i)} = $c"
         }
@@ -312,11 +312,11 @@ object ConstantDomain extends NumericalDomain{
         return ConstantTop
       for (i <- homcoeffs.indices) {
         if (homcoeffs(i) > 0) {
-          val t: Constant = Const(i)
+          val t: Constant = constants(i)
           constant = sum(constant, t)
         }
         else if (homcoeffs(i) < 0) {
-          val t: Constant = inverse(Const(i))
+          val t: Constant = inverse(constants(i))
           constant = sum(constant, t)
         }
       }

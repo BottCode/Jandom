@@ -16,9 +16,13 @@ object ConstantDomainCore {
   case object ConstantTop extends Constant
   case object ConstantBottom extends Constant
 
-  def toConstant(num : Int) : Constant = Const(num)
+  def toConstant(num : Int) : Constant = {
+    Const(num)
+  }
 
-  def toConstant(num : Double) : Constant = Const(num)
+  def toConstant(num : Double) : Constant = {
+    Const(num)
+  }
 
   def inverse(x: Constant) : Constant = {
     x match {

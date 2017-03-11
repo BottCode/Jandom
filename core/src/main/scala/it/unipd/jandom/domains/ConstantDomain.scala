@@ -149,6 +149,26 @@ object ConstantDomain extends NumericalDomain{
     }
 
     /**
+      * @inheritdoc
+      */
+    override def mkString(vars: Seq[String]) : String = {
+      require(vars.length >= dimension)
+      if (unreachable)
+        "[ empty ]"
+      else {
+        val bounds = for (i <- 0 until dimension) yield {
+          val c = constants(i) match {
+            case ConstantTop => "TOP"
+            case ConstantBottom => "BOTTOM"
+            case _ => "CONST"
+          }
+          s"${vars(i)} = $c"
+        }
+        bounds.mkString("[ ", " , ", " ]")
+      }
+    }
+
+    /**
     * @todo check implementation
     */
     private def linearEvaluation(lf: LinearForm): Constant = {

@@ -84,9 +84,8 @@ object SignDomain extends NumericalDomain {
       println("Widening called")
       println(s"This: $this ${this.isEmpty}")
       println(s"That: $that ${that.isEmpty}")
-      println("Widening: " + this)
+      println("Widening: " + Property((this.sign, that.sign).zipped.map(lub), this.isEmpty && that.isEmpty))
       Property((this.sign, that.sign).zipped.map(lub), this.isEmpty && that.isEmpty)
-      //SignDomain.this.top(this.dimension)
     }
 
 
@@ -121,9 +120,9 @@ object SignDomain extends NumericalDomain {
       println("Intersection called")
       require(dimension == that.dimension)
       val newSign = (this.sign, that.sign).zipped.map( glb )
-      /*println(s"This: $this")
+      println(s"This: $this")
       println(s"That: $that")
-      println("Glb: " + SignDomain.this(newSign))*/
+      println("Glb: " + SignDomain.this(newSign))
       SignDomain.this(newSign)
      }
 

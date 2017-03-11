@@ -152,6 +152,45 @@ object ConstantDomain extends NumericalDomain{
       * @inheritdoc
       * @todo check implementation
       */
+    def tryCompareTo[B >: Property](that: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = that match {
+
+      case that: Property =>
+        require(dimension == that.dimension)
+        (isEmpty, that.isEmpty) match {
+          case (true, true) => Option(0)
+          case (false, true) => Option(1)
+          case (true, false) => Option(-1)
+          case (false, false) =>
+            val ConstantPairs = (this.constants, that.constants).zipped
+            val comparisonList = ConstantPairs.map(compare)
+
+            if (comparisonList.forall {
+              case Some(i) => if (i == 0) true else false
+              case None => false
+            })
+              Option(0)
+
+            else if (comparisonList.forall {
+              case Some(i) => if (i == 1) true else false
+              case None => false
+            })
+              Option(1)
+            else if (comparisonList.forall {
+              case Some(i) => if (i == -1) true else false
+              case None => false
+            })
+              Option(-1)
+            else
+              Option.empty
+        }
+
+      case _ => None
+    }
+
+    /**
+      * @inheritdoc
+      * @todo check implementation
+      */
     override def union(that: Property): Property =  {
       require(dimension == that.dimension)
       val result = (this.constants, that.constants).zipped.map( lub )

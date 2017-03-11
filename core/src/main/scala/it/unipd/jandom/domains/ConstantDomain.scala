@@ -152,6 +152,13 @@ object ConstantDomain extends NumericalDomain{
       * @inheritdoc
       * @todo check implementation
       */
+    override def narrowing(that: Property): Property =
+      Property((this.constants, that.constants).zipped.map(glb), this.isEmpty && that.isEmpty)
+
+    /**
+      * @inheritdoc
+      * @todo check implementation
+      */
     override def widening(that: Property): Property =
       Property((this.constants, that.constants).zipped.map(lub), this.isEmpty && that.isEmpty)
 

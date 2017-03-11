@@ -244,6 +244,15 @@ object ConstantDomain extends NumericalDomain{
     /**
       * @inheritdoc
       */
+    override def nonDeterministicAssignment(n: Int): Property = {
+      if (unreachable)
+        return this
+      Property(constants.updated(n, ConstantTop), unreachable = false)
+    }
+
+    /**
+      * @inheritdoc
+      */
     override def linearAssignment(index: Int, lf: LinearForm) : Property = {
       require(index < constants.length && index >= 0 && lf.dimension <= dimension)
 

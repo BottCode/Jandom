@@ -241,6 +241,19 @@ object ConstantDomain extends NumericalDomain{
       }
     }
 
+    /**
+      * @inheritdoc
+      */
+    override def linearAssignment(index: Int, lf: LinearForm) : Property = {
+      require(index < constants.length && index >= 0 && lf.dimension <= dimension)
+
+      if(unreachable)
+        return this
+      val constant : Constant = linearEvaluation(lf)
+
+      Property(constants.updated(index, constant), unreachable = false)
+    }
+
     /** @inheritdoc
       * @param lf expression that gets evaluated for the linear inequality
       */

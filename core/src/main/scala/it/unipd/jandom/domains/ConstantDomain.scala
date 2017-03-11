@@ -1,11 +1,11 @@
 package it.unipd.jandom.domains
 
+import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.ConstantDomainCore._
-import it.unipd.jandom.domains.constantsDomain.Property
-import it.unipd.jandom.domains.constantsDomainCore.constants
 import spire.math.Rational
+import scala.math.PartiallyOrdered
 
 /**
   * Constant domain
@@ -17,39 +17,113 @@ object ConstantDomain extends NumericalDomain{
 
   def apply(constants : Array[Constant]): Property = Property(constants, constants.forall( _.equals(ConstantBottom)))
 
+  /**
+    * @inheritdoc
+    */
   def top(num: Int) = Property(Array.fill(num)(ConstantTop), unreachable = false)
 
+  /**
+    * @inheritdoc
+    */
   def bottom(num: Int) = Property(Array.fill(num)(ConstantBottom), unreachable = true)
+
+  /**
+    * @inheritdoc
+    */
+  def widenings = Seq(WideningDescription.default[Property])
 
   case class Property private[ConstantDomain]
     (constants: Array[Constant], unreachable: Boolean) extends NumericalProperty[Property] {
 
+    /**
+      * @inheritdoc
+      */
     override type Domain = ConstantDomain.type
 
+    /**
+      * @inheritdoc
+      */
     override def isPolyhedral: Boolean = false
 
-    def constraints = List()
+    /**
+      * @inheritdoc
+      */
+    override def constraints : Seq[LinearForm] = List()
 
-    def dimension: Int = constants.length
+    /**
+      * @inheritdoc
+      */
+    override def dimension: Int = constants.length
 
-    def domain = ConstantDomain
+    /**
+      * @inheritdoc
+      */
+    override def domain = ConstantDomain
 
-    def isEmpty: Boolean = unreachable
+    /**
+      * @inheritdoc
+      */
+    override def isEmpty: Boolean = unreachable
 
-    def isTop: Boolean = !isEmpty && constants.forall( _.equals(ConstantTop))
+    /**
+      * @inheritdoc
+      */
+    override def isTop: Boolean = !isEmpty && constants.forall( _.equals(ConstantTop))
 
-    def isBottom: Boolean = isEmpty
+    /**
+      * @inheritdoc
+      */
+    override def isBottom: Boolean = isEmpty
 
-    def bottom: Property = ConstantDomain.bottom(constants.length)
+    /**
+      * @inheritdoc
+      */
+    override def bottom: Property = ConstantDomain.bottom(constants.length)
 
-    def top: Property = ConstantDomain.top(constants.length)
-    
+    /**
+      * @inheritdoc
+      */
+    override def top: Property = ConstantDomain.top(constants.length)
+
+    /**
+      * @inheritdoc
+      */
+    override def minimize(lf: LinearForm): RationalExt =
+      if (lf.homcoeffs.exists(!_.isZero))
+        RationalExt.NegativeInfinity
+      else
+        RationalExt(lf.known)
+
+    /**
+      * @inheritdoc
+      */
+    override def maximize(lf: LinearForm): RationalExt =
+      if (lf.homcoeffs.exists(!_.isZero))
+        RationalExt.PositiveInfinity
+      else
+        RationalExt(lf.known)
+
+    /**
+      * @inheritdoc
+      */
+    override def frequency(lf: LinearForm): Option[Rational] =
+      if (lf.homcoeffs.exists(!_.isZero))
+        Option.empty
+      else
+        Option(lf.known)
+
+    /**
+      * @inheritdoc
+      */
     override def addVariable(): Property = {
       if (unreachable)
         return ConstantDomain.this.bottom(dimension + 1)
       ConstantDomain.this(constants :+ ConstantTop)
     }
-    
+
+    /**
+      * @inheritdoc
+      */
     override def delVariable(index: Int): Property = {
       require(index < constants.length && index >= 0)
       val result = new Array[Constant](constants.length - 1)
@@ -59,8 +133,11 @@ object ConstantDomain extends NumericalDomain{
       Array.copy(constants, index + 1, result, index, constants.length - index - 1)
       Property(result, unreachable)
     }
-    
-    def mapVariables(rho: Seq[Int]): Property =  {
+
+    /**
+      * @inheritdoc
+      */
+    override def mapVariables(rho: Seq[Int]): Property =  {
       require(rho.length == dimension)
       val resultDim = rho.count(_ >= 0)
       require(rho forall { i => i >= -1 && i < resultDim })
@@ -71,24 +148,35 @@ object ConstantDomain extends NumericalDomain{
       Property(result, unreachable)
     }
 
-    def minimize(lf: LinearForm): RationalExt =
-      if (lf.homcoeffs.exists(!_.isZero))
-        RationalExt.NegativeInfinity
-      else
-        RationalExt(lf.known)
+    /**
+    * @todo check implementation
+    */
+    private def linearEvaluation(lf: LinearForm): Constant = {
+      val known = lf.known.toDouble
+      val homcoeffs = lf.homcoeffs.map (_.toDouble).toArray
+      linearEvaluation(known, homcoeffs)
+    }
 
-    def maximize(lf: LinearForm): RationalExt =
-      if (lf.homcoeffs.exists(!_.isZero))
-        RationalExt.PositiveInfinity
-      else
-        RationalExt(lf.known)
-
-    def frequency(lf: LinearForm): Option[Rational] =
-      if (lf.homcoeffs.exists(!_.isZero))
-        Option.empty
-      else
-        Option(lf.known)
-
+    /**
+      * @todo check implementation
+      */
+    private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Constant = {
+      require(homcoeffs.length <= dimension)
+      var constant: Constant = toConstant(known)
+      if (unreachable && homcoeffs.exists { _ != 0 })
+        return ConstantTop
+      for (i <- homcoeffs.indices) {
+        if (homcoeffs(i) > 0) {
+          val t: Constant = Const(i)
+          constant = sum(constant, t)
+        }
+        else if (homcoeffs(i) < 0) {
+          val t: Constant = inverse(Const(i))
+          constant = sum(constant, t)
+        }
+      }
+      constant
+    }
     
   }
 }

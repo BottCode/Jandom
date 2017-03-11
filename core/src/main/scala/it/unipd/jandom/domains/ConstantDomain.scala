@@ -241,6 +241,23 @@ object ConstantDomain extends NumericalDomain{
       }
     }
 
+
+    /**
+      * @inheritdoc
+      * @param lf expression that gets evaluated for the linear disequality
+      */
+    override def linearDisequality(lf: LinearForm) : Property = {
+      if (isEmpty)
+        return this
+      val constant : Constant = linearEvaluation(lf)
+      constant match {
+        case ConstantBottom => bottom
+        case Const(0) => bottom
+        case ConstantTop => top // lub(Const)
+        case _ => this // constant != Const(0)
+      }
+    }
+
     /**
     * @todo check implementation
     */

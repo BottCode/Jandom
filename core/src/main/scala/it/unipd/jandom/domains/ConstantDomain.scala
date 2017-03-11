@@ -20,17 +20,17 @@ object ConstantDomain extends NumericalDomain{
   /**
     * @inheritdoc
     */
-  def top(num: Int) = Property(Array.fill(num)(ConstantTop), unreachable = false)
+  override def top(num: Int) = Property(Array.fill(num)(ConstantTop), unreachable = false)
 
   /**
     * @inheritdoc
     */
-  def bottom(num: Int) = Property(Array.fill(num)(ConstantBottom), unreachable = true)
+  override def bottom(num: Int) = Property(Array.fill(num)(ConstantBottom), unreachable = true)
 
   /**
     * @inheritdoc
     */
-  def widenings = Seq(WideningDescription.default[Property])
+  override def widenings = Seq(WideningDescription.default[Property])
 
   case class Property private[ConstantDomain]
     (constants: Array[Constant], unreachable: Boolean) extends NumericalProperty[Property] {

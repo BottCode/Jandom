@@ -171,15 +171,23 @@ object ConstantDomain extends NumericalDomain{
               Option(0)
 
             else if (comparisonList.forall {
+              case Some(i) => if (i >= 0) true else false
+              case None => false
+            } && comparisonList.exists {
               case Some(i) => if (i == 1) true else false
               case None => false
             })
               Option(1)
+
             else if (comparisonList.forall {
+              case Some(i) => if (i <= 0) true else false
+              case None => false
+            } && comparisonList.exists {
               case Some(i) => if (i == -1) true else false
               case None => false
             })
               Option(-1)
+
             else
               Option.empty
         }
@@ -291,6 +299,30 @@ object ConstantDomain extends NumericalDomain{
         case ConstantTop => top // lub(Const)
         case _ => this // constant != Const(0)
       }
+    }
+    
+    /**
+      * @inheritdoc
+      */
+    override def variableMul(n: Int, m: Int): Property = {
+      constants(n) = mult(constants(n), constants(m))
+      this
+    }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableDiv(n : Int, m : Int): Property = {
+      constants(n) = division(constants(n), constants(m))
+      this
+    }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableNeg(n: Int = dimension - 1): Property = {
+      constants(n) = inverse(constants(n))
+      this
     }
 
     /**

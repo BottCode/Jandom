@@ -30,7 +30,7 @@ import spire.math.Rational
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari@studenti.unipd.it>
  */
-object SignDomain extends NumericalDomain {
+class SignDomain extends NumericalDomain {
 
   import SignDomainCore._
 
@@ -38,12 +38,12 @@ object SignDomain extends NumericalDomain {
     val dimension: Int = sign.length
     require(dimension >= 0)
 
-    type Domain = SignDomain.type
+    type Domain = SignDomain
 
-    def domain = SignDomain
+    def domain = SignDomain.this
 
-
-
+    def top: Property = Property(Array.fill(sign.length)(SignTop), unreachable = false)
+    def bottom : Property = Property(Array.fill(sign.length)(SignBottom), unreachable = true)
     def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = other match {
 
       case other: Property =>
@@ -298,8 +298,9 @@ object SignDomain extends NumericalDomain {
     def isTop: Boolean = !isEmpty && sign.forall( _.equals(SignTop))
     def isBottom: Boolean = isEmpty
 
-    def bottom: Property = SignDomain.bottom(sign.length)
-    def top: Property = SignDomain.top(sign.length)
+
+    def top(n: Int) = Property(Array.fill(n)(SignTop), unreachable = false)
+    def bottom(n: Int) = Property(Array.fill(n)(SignBottom), unreachable = true)
 
      /**
      * @inheritdoc
@@ -380,3 +381,12 @@ object SignDomain extends NumericalDomain {
   def top(n: Int) = Property(Array.fill(n)(SignTop), unreachable = false)
   def bottom(n: Int) = Property(Array.fill(n)(SignBottom), unreachable = true)
 }
+object SignDomain {
+  /**
+    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
+    * double arithmetic, according to the parameter `overReals`.
+    */
+  def apply() = new SignDomain()
+
+}
+

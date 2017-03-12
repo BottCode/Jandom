@@ -26,13 +26,36 @@ import spire.math.Rational
 
 import scala.math.PartiallyOrdered
 
-object ParityDomain extends NumericalDomain {
+class ParityDomain extends NumericalDomain {
 
   def apply(parities: Array[Parity]): Property = Property(parities, parities.forall(p => p.equals(ParityBottom)))
 
-  case class Property private[ParityDomain](parity : Array[Parity], unreachable: Boolean) extends NumericalProperty[Property] {
+  /**
+    * @inheritdoc
+    */
+  def bottom(n: Int) = Property(Array.fill(n)(ParityBottom), unreachable = true)
 
-    override type Domain = ParityDomain.type
+  /**
+    * @inheritdoc
+    */
+  def top(n: Int) = Property(Array.fill(n)(ParityTop), unreachable = false)
+
+
+  case class Property private[ParityDomain](parity : Array[Parity], unreachable: Boolean) extends NumericalProperty[Property] {
+    type Domain = ParityDomain
+
+    def domain = ParityDomain.this
+
+    /**
+      * @inheritdoc
+      */
+    def bottom : Property = Property(Array.fill(parity.length)(ParityBottom), unreachable = true)
+
+    /**
+      * @inheritdoc
+      */
+    def top : Property = Property(Array.fill(parity.length)(ParityTop), unreachable = false)
+
 
     /**
       * @inheritdoc
@@ -144,10 +167,7 @@ object ParityDomain extends NumericalDomain {
       Property(newParity, unreachable)
     }
 
-    /**
-      * @inheritdoc
-      */
-    def bottom: Property = ParityDomain.bottom(parity.length)
+
 
     /**
       * @inheritdoc
@@ -159,10 +179,7 @@ object ParityDomain extends NumericalDomain {
       */
     def isEmpty: Boolean = unreachable
 
-    /**
-      * @inheritdoc
-      */
-    def top: Property = ParityDomain.top(parity.length)
+
 
     /**
       * @inheritdoc
@@ -217,10 +234,6 @@ object ParityDomain extends NumericalDomain {
       */
     def dimension: Int = parity.length
 
-    /**
-      * @inheritdoc
-      */
-    def domain = ParityDomain
 
     /**
       * @inheritdoc
@@ -328,19 +341,19 @@ object ParityDomain extends NumericalDomain {
 
   } // end of Property
 
-  /**
-    * @inheritdoc
-    */
-  def bottom(n: Int) = Property(Array.fill(n)(ParityBottom), unreachable = true)
 
-  /**
-    * @inheritdoc
-    */
-  def top(n: Int) = Property(Array.fill(n)(ParityTop), unreachable = false)
 
   /**
     * @inheritdoc
     */
   val widenings = Seq(WideningDescription.default[Property])
+
+}
+object ParityDomain {
+  /**
+    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
+    * double arithmetic, according to the parameter `overReals`.
+    */
+  def apply() = new ParityDomain()
 
 }

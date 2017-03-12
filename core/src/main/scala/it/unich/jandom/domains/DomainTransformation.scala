@@ -21,6 +21,8 @@ package it.unich.jandom.domains
 import it.unich.jandom.domains.numerical._
 import it.unich.jandom.utils.breeze.RationalForBreeze._
 import it.unich.jandom.utils.numberext.RationalExt
+import it.unipd.jandom.domains.numerical._
+
 
 /**
  * This is the trait for domain transformations, i.e. maps from properties of one abstract domain to
@@ -117,6 +119,7 @@ object DomainTransformation {
   implicit object BoxRationalToBoxRational extends DomainTransformation[BoxRationalDomain, BoxRationalDomain] {
     def apply(src: BoxRationalDomain, dst: BoxRationalDomain): src.Property => dst.Property = { (x) => { dst(x.low, x.high) } }
   }
+
 
   /**
    * This is a class for domain transformations which transform every object of the souece domin into the top object of the

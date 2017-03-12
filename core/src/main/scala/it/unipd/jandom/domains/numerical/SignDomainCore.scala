@@ -76,14 +76,13 @@ object SignDomainCore {
   }
 
 
-  /** JAVA CONVENTION for mod/remainder sign is to take as result
-    * the sign  of the dividend
-   */
   def remainder(s : Sign, t : Sign) : Sign = {
     (s,t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
-      case (a, _) => a
+      case (_ Zero) => SignBottom
+      case (Zero, _) => Zero
+      case (_, _) => SignTop
     }
   }
 

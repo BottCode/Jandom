@@ -46,20 +46,20 @@ class ProductDomainSuite extends NumericalDomainSuite {
   }
 
   describe("create a full pair") {
-    val p1 = new dom.Property(dom.dom1.top(n), dom.dom2.top(n))
+    val p1 = new dom.Product(dom.dom1.top(n), dom.dom2.top(n))
     assertResult(true) { p1.isTop }
     assertResult(false) { p1.isEmpty }
   }
 
   describe("create a non-empty non-full pair") {
     val box = dom.dom1(Array(1, 2), Array(5, 4))
-    val p2 = new dom.Property(box, dom.dom2.top(n))
+    val p2 = new dom.Product(box, dom.dom2.top(n))
     assertResult(false) { p2.isTop }
     assertResult(false) { p2.isEmpty }
   }
 
   describe("create an empty pair") {
-    val p3 = new dom.Property(boxEmpty, ptopeFull)
+    val p3 = new dom.Product(boxEmpty, ptopeFull)
     assertResult(false) { p3.isTop }
     assertResult(true) { p3.isEmpty }
   }
@@ -67,7 +67,7 @@ class ProductDomainSuite extends NumericalDomainSuite {
   describe("assignment on product") {
     val x2 = full.linearAssignment(0, 0.0)
     assertResult(x2) {
-      new dom.Property(
+      new dom.Product(
         dom.dom1.top(2).linearAssignment(0, 0.0),
         ptopeFull.linearAssignment(0, 0.0))
     }

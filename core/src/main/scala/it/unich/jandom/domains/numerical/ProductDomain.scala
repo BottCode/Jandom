@@ -41,26 +41,29 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
   val widenings = {
     for (w1 <- dom1.widenings; w2 <- dom2.widenings) yield
        WideningDescription(s"${w1.name} X ${w2.name}",s"Component-wise combination of the two widenings.",
-           Box { (a: Property, b: Property) =>
-             new Property( w1.box(a.p1, b.p1), w2.box(a.p2, b.p2) )
+           Box { (a: Product, b: Product) =>
+             new Product( w1.box(a.p1, b.p1), w2.box(a.p2, b.p2) )
            })
   }
 
   private val d12 = dom1Todom2(dom1,dom2)
   private val d21 = dom2Todom1(dom2,dom1)
 
+  type Property = Product
+
   def top(n: Int) =
-    new Property(dom1.top(n), dom2.top(n))
+    new Product(dom1.top(n), dom2.top(n))
 
   def bottom(n: Int) =
-    new Property(dom1.bottom(n), dom2.bottom(n))
+    new Product(dom1.bottom(n), dom2.bottom(n))
 
   /**
    * This class represents the reduced product of two base numerical properties.
+ *
    * @author Gianluca Amato <gamato@unich.it>
    * @author Francesca Scozzari <fscozzari@unich.it>
    */
-  class Property(val p1: dom1.Property, val p2: dom2.Property) extends NumericalProperty[Property] {
+  class Product(val p1: dom1.Property, val p2: dom2.Property) extends NumericalProperty[Product] {
 
     require(p1.dimension == p2.dimension)
 
@@ -68,55 +71,55 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
 
     def domain = ProductDomain.this
 
-    def reduce(x1: dom1.Property, x2: dom2.Property): Property = {
+    def reduce(x1: dom1.Property, x2: dom2.Property): Product = {
       if (x1.isEmpty || x2.isEmpty)
-        new Property(x1.bottom,x2.bottom)
+        new Product(x1.bottom,x2.bottom)
       else{
         val y1 = x1.intersection(d21(x2))
         val y2 = x2.intersection(d12(x1))
-        new Property(y1, y2)
+        new Product(y1, y2)
       }
     }
 
-    def union(that: Property): Property = {
+    def union(that: Product): Product = {
       val q1 = p1 union that.p1
       val q2 = p2 union that.p2
       reduce(q1, q2)
     }
 
-    def widening(that: Property): Property =
+    def widening(that: Product): Product =
       // We do not reduce since it may prevent termination
-      new Property(this.p1 widening that.p1, this.p2 widening that.p2)
+      new Product(this.p1 widening that.p1, this.p2 widening that.p2)
 
-    def narrowing(that: Property): Property =
+    def narrowing(that: Product): Product =
       // We do not reduce since it may prevent termination
-      new Property(this.p1 narrowing that.p1, this.p2 narrowing that.p2)
+      new Product(this.p1 narrowing that.p1, this.p2 narrowing that.p2)
 
-    def intersection(that: Property): Property = {
+    def intersection(that: Product): Product = {
       val q1 = p1 intersection that.p1
       val q2 = p2 intersection that.p2
       reduce(q1, q2)
     }
 
-    def nonDeterministicAssignment(n: Int): Property = {
+    def nonDeterministicAssignment(n: Int): Product = {
       val q1 = p1.nonDeterministicAssignment(n)
       val q2 = p2.nonDeterministicAssignment(n)
       reduce(q1, q2)
     }
 
-    def linearAssignment(n: Int, lf: LinearForm): Property = {
+    def linearAssignment(n: Int, lf: LinearForm): Product = {
       val q1 = p1.linearAssignment(n, lf)
       val q2 = p2.linearAssignment(n, lf)
       reduce(q1, q2)
     }
 
-    def linearInequality(lf: LinearForm): Property = {
+    def linearInequality(lf: LinearForm): Product = {
       val q1 = p1.linearInequality(lf)
       val q2 = p2.linearInequality(lf)
       reduce(q1, q2)
     }
 
-    def linearDisequality(lf: LinearForm): Property = {
+    def linearDisequality(lf: LinearForm): Product = {
       val q1 = p1.linearDisequality(lf)
       val q2 = p2.linearDisequality(lf)
       reduce(q1, q2)
@@ -146,13 +149,13 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
 
     def isPolyhedral = p1.isPolyhedral && p2.isPolyhedral
 
-    def addVariable: Property =
-      new Property(p1.addVariable, p2.addVariable)
+    def addVariable: Product =
+      new Product(p1.addVariable, p2.addVariable)
 
-    def delVariable(n: Int): Property =
-      new Property(p1.delVariable(n), p2.delVariable(n))
+    def delVariable(n: Int): Product =
+      new Product(p1.delVariable(n), p2.delVariable(n))
 
-    def mapVariables(rho: Seq[Int]): Property = {
+    def mapVariables(rho: Seq[Int]): Product = {
       val q1 = p1.mapVariables(rho)
       val q2 = p2.mapVariables(rho)
       reduce(q1, q2)
@@ -166,9 +169,9 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
 
     def isBottom = isEmpty || (p1.isBottom && p2.isBottom)
 
-    def bottom: Property = domain.bottom(dimension)
+    def bottom: Product = domain.bottom(dimension)
 
-    def top: Property = domain.top(dimension)
+    def top: Product = domain.top(dimension)
 
     def mkString(vars: Seq[String]): String = {
       if (isEmpty)
@@ -179,9 +182,9 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
         p1.mkString(vars) + " / " + p2.mkString(vars)
     }
 
-    def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = {
+    def tryCompareTo[B >: Product](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = {
       other match {
-        case other: Property => {
+        case other: Product => {
           val c1 = p1.tryCompareTo(other.p1)
           val c2 = p2.tryCompareTo(other.p2)
           if (c1 == Some(0))

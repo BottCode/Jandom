@@ -4,7 +4,7 @@ package it.unipd.jandom.domains.numerical
   * Utilities for the domain <0, 0, 1 and >1.
   * This domain is intended to be used for analysis on integer variables.
   */
-object ExtendedSigns01Core {
+object ExtendedSigns01DomainCore {
   trait ExtendedSign01
   case object GreaterThanOne extends ExtendedSign01
   case object Negative extends ExtendedSign01

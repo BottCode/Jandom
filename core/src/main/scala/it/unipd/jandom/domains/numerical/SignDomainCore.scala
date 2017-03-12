@@ -80,7 +80,7 @@ object SignDomainCore {
     (s,t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
-      case (_ Zero) => SignBottom
+      case (_, Zero) => SignBottom
       case (Zero, _) => Zero
       case (_, _) => SignTop
     }

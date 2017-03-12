@@ -81,7 +81,7 @@ object ExtendedSigns01Core {
     }
   }
 
-  def remainder(s: ExtendedSign01, t : ExtendedSign01) : ExtendedSign01 = {
+  def remainder(s : ExtendedSign01, t : ExtendedSign01) : ExtendedSign01 = {
     (s,t) match {
       case (ES01Bottom, _) => ES01Bottom
       case (_, ES01Bottom) => ES01Bottom
@@ -90,6 +90,38 @@ object ExtendedSigns01Core {
       case (Zero, _) => Zero
       case (One, GreaterThanOne) => One
       case _ => ES01Top
+    }
+  }
+
+  def lub(s : ExtendedSign01, t : ExtendedSign01) : ExtendedSign01 = {
+    (s,t) match {
+      case (ES01Top, _) => ES01Top
+      case (_, ES01Top) => ES01Top
+      case (_, ES01Bottom) => ES01Bottom
+      case (ES01Bottom, _) => ES01Bottom
+      case (a, b) => if (a.equals(b)) a else ES01Top
+    }
+  }
+
+  def glb(s : ExtendedSign01, t : ExtendedSign01) : ExtendedSign01 = {
+    (s,t) match {
+      case (ES01Top, a) => a
+      case (a, ES01Top) => a
+      case (_, ES01Bottom) => ES01Bottom
+      case (ES01Bottom, _) => ES01Bottom
+      case (a,b) => if(a.equals(b)) a else ES01Bottom
+    }
+  }
+
+  def compare(s : ExtendedSign01, t : ExtendedSign01) : Option[Int] = {
+    (s,t) match {
+      case (ES01Top, ES01Top) => Option(0)
+      case (ES01Bottom, ES01Bottom) => Option(0)
+      case (ES01Top, _) => Option(1)
+      case (_, ES01Top) => Option(-1)
+      case (ES01Bottom, _) => Option(-1)
+      case (_, ES01Bottom) => Option(1)
+      case (a,b) => if(a.equals(b)) Option(0) else Option.empty
     }
   }
 }

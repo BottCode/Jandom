@@ -78,13 +78,13 @@ object ParityDomainCore {
     (p,q) match {
       case (ParityBottom, _) => ParityBottom
       case (_, ParityBottom) => ParityBottom
-      case (_, Even) => ParityBottom // could be 0
       case (Odd, Odd) => Even
       case (_, _) => ParityTop
       /*
         (Even, Odd) => Top
         (ParityTop, Odd) => Top
         (_, ParityTop) => Top
+        (_, Even) => Top
       */
     }
   }

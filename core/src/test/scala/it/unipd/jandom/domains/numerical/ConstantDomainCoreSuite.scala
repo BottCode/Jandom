@@ -108,4 +108,31 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(mult(positive, positive) === multPositive)
   }
 
+  "ConstantDomain.division" should
+    " - return the division of the constant values given as input" in {
+
+    val divisionPositive=
+      positive match {
+        case Const(value) => value/value
+      }
+
+    // ConstantBottom
+    assert(division(ConstantBottom, positive) === ConstantBottom)
+    assert(division(ConstantBottom, ConstantTop) === ConstantBottom)
+    assert(division(positive, ConstantBottom) === ConstantBottom)
+    assert(division(ConstantTop, ConstantBottom) === ConstantBottom)
+    // Const(0)
+    assert(division(ConstantTop, zero) === ConstantBottom)
+    assert(division(zero, ConstantTop) === zero)
+    assert(division(zero, positive) === zero)
+    assert(division(positive, zero) === ConstantBottom)
+    assert(division(zero, zero) === ConstantBottom)
+    // ConstantTop
+    assert(division(ConstantTop, positive) === ConstantTop)
+    assert(division(positive, ConstantTop) === ConstantTop)
+    assert(division(ConstantTop, ConstantTop) === ConstantTop)
+    // Const
+    assert(division(positive, positive) === divisionPositive)
+  }
+
 }

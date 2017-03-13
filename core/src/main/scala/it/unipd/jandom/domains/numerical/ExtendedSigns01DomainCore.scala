@@ -70,14 +70,14 @@ object ExtendedSigns01DomainCore {
       case (Zero, _) => Zero
         // a / 1 = a
       case (a, One) => a
-      case (One, Negative) => Negative
       case (One, GreaterThanOne) => Zero
       // (2 / 5) = 0   ---   (5 / 5) = 1   ---   (10 / 5) = 2
-      case (GreaterThanOne, GreaterThanOne) => ES01Top
+      case (_, GreaterThanOne) => ES01Top
       // (-2 / -5) = 0   ---   (-4 / -2) = 2
       // (1 / -5) = 0   ---   (1 / -1) = -1
       // (5 / -5) = -1   ---   (2 / -5) = 0
       case (_, Negative) => ES01Top
+      case _ => ES01Top
     }
   }
 

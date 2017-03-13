@@ -28,4 +28,22 @@ class ConstantDomainCoreSuite extends FlatSpec {
     // corner case
     assert(inverse(zero) === zero)
   }
+
+  "ConstantDomain.lub" should
+    " - return the lub of the constant values given as input" in {
+    // ConstantTop
+    assert(lub(ConstantTop, positive) === ConstantTop)
+    assert(lub(positive, ConstantTop) === ConstantTop)
+    assert(lub(ConstantTop, ConstantBottom) === ConstantTop)
+    assert(lub(ConstantBottom, ConstantTop) === ConstantTop)
+    assert(lub(ConstantTop, ConstantTop) === ConstantTop)
+    // ConstantBottom
+    assert(lub(ConstantBottom, positive) === positive)
+    assert(lub(positive, ConstantBottom) === positive)
+    assert(lub(ConstantBottom, ConstantBottom) === ConstantBottom)
+    // Const
+    assert(lub(positive, zero) === ConstantTop)
+    assert(lub(zero, zero) === zero)
+  }
+
 }

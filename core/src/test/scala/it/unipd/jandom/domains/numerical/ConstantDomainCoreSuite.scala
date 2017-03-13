@@ -46,4 +46,22 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(lub(zero, zero) === zero)
   }
 
+  "ConstantDomain.glb" should
+    " - return the glb of the constant values given as input" in {
+
+    // ConstantBottom
+    assert(glb(ConstantBottom, ConstantTop) === ConstantBottom)
+    assert(glb(ConstantBottom, positive) === ConstantBottom)
+    assert(glb(ConstantTop, ConstantBottom) === ConstantBottom)
+    assert(glb(positive, ConstantBottom) === ConstantBottom)
+    assert(glb(ConstantBottom, ConstantBottom) === ConstantBottom)
+    // ConstantTop
+    assert(glb(ConstantTop, positive) === positive)
+    assert(glb(positive, ConstantTop) === positive)
+    assert(glb(ConstantTop, ConstantTop) === ConstantTop)
+    // Const
+    assert(glb(positive, zero) === ConstantBottom)
+    assert(glb(zero, zero) === zero)
+  }
+
 }

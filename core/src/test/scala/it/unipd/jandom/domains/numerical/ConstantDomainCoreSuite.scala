@@ -135,4 +135,27 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(division(positive, positive) === divisionPositive)
   }
 
+  "ConstantDomain.remainder" should
+    " - return the remainder (modulo) of the constant values given as input" in
+    {
+
+      // ConstantBottom
+      assert(remainder(ConstantBottom, positive) === ConstantBottom)
+      assert(remainder(ConstantBottom, ConstantTop) === ConstantBottom)
+      assert(remainder(positive, ConstantBottom) === ConstantBottom)
+      assert(remainder(ConstantTop, ConstantBottom) === ConstantBottom)
+      // Const(0)
+      assert(remainder(ConstantTop, zero) === ConstantBottom)
+      assert(remainder(zero, ConstantTop) === zero)
+      assert(remainder(zero, positive) === zero)
+      assert(remainder(positive, zero) === ConstantBottom)
+      assert(remainder(zero, zero) === ConstantBottom)
+      // ConstantTop
+      assert(remainder(ConstantTop, positive) === ConstantTop)
+      assert(remainder(positive, ConstantTop) === ConstantTop)
+      assert(remainder(ConstantTop, ConstantTop) === ConstantTop)
+      // Const
+      assert(remainder(positive, positive) === zero)
+    }
+
 }

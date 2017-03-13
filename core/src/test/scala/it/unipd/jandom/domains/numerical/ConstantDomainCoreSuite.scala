@@ -84,7 +84,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
     val multPositive=
       positive match {
-        case Const(value) => value*value
+        case Const(value) => Const(value*value)
       }
 
     // ConstantBottom
@@ -111,7 +111,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
     val divisionPositive=
       positive match {
-        case Const(value) => value/value
+        case Const(value) => Const(value/value)
       }
 
     // ConstantBottom

@@ -58,7 +58,7 @@ object ExtendedSigns01Domain extends NumericalDomain {
     override def union(that: Property): Property =
       Property((this.sign, that.sign).zipped.map(lub), unreachable && that.unreachable)
 
-    override def intersection(that: Property) =
+    override def intersection(that: Property) : Property =
       ExtendedSigns01Domain.this ((this.sign, that.sign).zipped.map(glb))
 
     override def widening(that: Property): Property = union(that)

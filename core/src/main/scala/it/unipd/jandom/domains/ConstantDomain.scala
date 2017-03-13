@@ -329,15 +329,15 @@ object ConstantDomain extends NumericalDomain{
     * @todo check implementation
     */
     private def linearEvaluation(lf: LinearForm): Constant = {
-      val known = lf.known.toDouble
-      val homcoeffs = lf.homcoeffs.map (_.toDouble).toArray
+      val known = lf.known.toInt
+      val homcoeffs = lf.homcoeffs.map (_.toInt).toArray
       linearEvaluation(known, homcoeffs)
     }
 
     /**
       * @todo check implementation
       */
-    private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Constant = {
+    private def linearEvaluation(known: Int, homcoeffs: Array[Int]): Constant = {
       require(homcoeffs.length <= dimension)
       var constant: Constant = toConstant(known)
       if (unreachable && homcoeffs.exists { _ != 0 })

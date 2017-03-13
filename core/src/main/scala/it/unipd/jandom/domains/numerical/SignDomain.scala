@@ -25,34 +25,51 @@ import spire.math.Rational
 
 
 /**
-  * Sign domain
+  * Sign domain, i.e. the domain composed of the elements Minus (negative numbers), Plus (positive numbers) and
+  * Zero (0). SignTop and SignBottom complete the lattice, providing a greatest and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari@studenti.unipd.it>
  */
 class SignDomain extends NumericalDomain {
 
+  // this class uses the operations defined in SignDomainCore
   import SignDomainCore._
 
+  /**
+    * Numerical property that describes the sign of the variables in a certain point of the CFG.
+    * @param sign array of the variables' signs
+    * @param unreachable tells if a given program point is unreachable
+    */
   case class Property private[SignDomain](sign : Array[Sign], unreachable: Boolean) extends NumericalProperty[Property] {
-    val dimension: Int = sign.length
+    val dimension: Int = sign.length   // pretty straightforward
     require(dimension >= 0)
 
     type Domain = SignDomain
 
     def domain : NumericalDomain = SignDomain.this
 
+    // returns an array of all-top variables
     def top: Property = Property(Array.fill(sign.length)(SignTop), unreachable = false)
+    // returns an array of all-bottom variables
     def bottom : Property = Property(Array.fill(sign.length)(SignBottom), unreachable = true)
+
+    /**
+      * Performs the comparison between two properties.
+      * @param other the right hand side of the comparison
+      * @param arg0 dk
+      * @tparam B actual type of the right hand side
+      * @return a Scala's tryCompareTo-like result
+      */
     def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = other match {
 
       case other: Property =>
         require(dimension == other.dimension)
         (isEmpty, other.isEmpty) match {
           case (true, true) => Option(0)
-          case (false, true) => Option(1)
-          case (true, false) => Option(-1)
-          case (false, false) =>
+          case (false, true) => Option(1)   // _ > unreachable
+          case (true, false) => Option(-1)  // _ < unreachable
+          case (false, false) =>            // non-trivial case
             val signPairs = (this.sign, other.sign).zipped
             val comparisonList = signPairs.map(compare)
 
@@ -61,96 +78,71 @@ class SignDomain extends NumericalDomain {
               case None => false
             })
               Option(0)
-            else if (comparisonList.forall {
+            else if (comparisonList.forall { // lhs >= rhs
               case Some(i) => if (i >= 0) true else false
               case None => false
-            } && comparisonList.exists {
+            } && comparisonList.exists {     // requires strict > for at least one element
               case Some(i) => if (i == 1) true else false
               case None => false
             })
               Option(1)
-            else if (comparisonList.forall {
+            else if (comparisonList.forall { // lhs <= rhs
               case Some(i) => if (i <= 0) true else false
               case None => false
-            } && comparisonList.exists {
+            } && comparisonList.exists {     // requires strict < for at least one element
               case Some(i) => if (i == -1) true else false
               case None => false
             })
               Option(-1)
-            else
+            else                             // non-comparable arrays
               Option.empty
         }
-
+      // comparison not defined for other properties' types
       case _ => None
     }
 
-    //TODO: Add widening implementation
-    def widening(that: Property): Property = {
-      println("Widening called")
-      println(s"This: $this ${this.isEmpty}")
-      println(s"That: $that ${that.isEmpty}")
-      println("Widening: " + Property((this.sign, that.sign).zipped.map(lub), this.isEmpty && that.isEmpty))
-      Property((this.sign, that.sign).zipped.map(lub), this.isEmpty && that.isEmpty)
-    }
-
-
-    /* Compute an upper bound of two abstract properties. */
+    /**
+      * @inheritdoc
+      */
     def union(that: Property) : Property = {
-      println("Union called")
       require(dimension == that.dimension)
-      val newSign = (this.sign, that.sign).zipped.map( lub )
-      println(s"This: $this")
-      println(s"That: $that")
-      println("Lub: " + Property(newSign, unreachable && that.unreachable))
-      Property(newSign, unreachable && that.unreachable)
+      Property((this.sign, that.sign).zipped.map( lub ), unreachable && that.unreachable)
     }
-
-
-    //TODO: Add narrowing implementation
-    def narrowing(that: Property): Property = {
-      println("Narrowing called")
-      println(s"This: $this")
-      println(s"That: $that")
-      println("Narrowing: " + this)
-      this
-    }
-
 
     /**
       * @inheritdoc
-      * @note @inheritdoc
       */
-     /*Compute an upper approximation of the greatest lower bound of two abstract properties.*/
     def intersection(that: Property) : Property = {
-      println("Intersection called")
       require(dimension == that.dimension)
-      val newSign = (this.sign, that.sign).zipped.map( glb )
-      println(s"This: $this")
-      println(s"That: $that")
-      println("Glb: " + SignDomain.this(newSign))
-      SignDomain.this(newSign)
-     }
+      SignDomain.this((this.sign, that.sign).zipped.map( glb ))
+    }
+
+    /**
+      * @inheritdoc
+      */
+    def widening(that: Property): Property = union(that)
+
+    /**
+      * @inheritdoc
+      */
+    // it is likely that it can't be improved, but returning `this` preserves the soundness
+    def narrowing(that: Property): Property = this
 
 
     /**
       * @inheritdoc
-      * @note @inheritdoc
-      // * @throws IllegalArgumentException
       */
-    def nonDeterministicAssignment(n: Int): Property = {
+    def nonDeterministicAssignment(n: Int): Property =
       if(unreachable)
         return this
-      Property(sign.updated(n, SignTop), unreachable = false)
-    }
-
-
+      else
+        Property(sign.updated(n, SignTop), unreachable = false)
 
     /**
       * Compute the minimum and maximum value of a linear form in a box.
       *
       * @param lf a linear form
-      * @return a tuple with two components: the first component is the least value, the second component is the greatest value
-      * of the linear form over the box.
+      * @return  the sign of the linear evaluation of `lf`
       */
     private def linearEvaluation(lf: LinearForm): Sign = {
       val known = lf.known.toDouble
@@ -162,8 +154,8 @@ class SignDomain extends NumericalDomain {
       * Compute the minimum and maximum value of a linear form in a box.
       *
       * @param known the known term of a linear form
-      * @return a tuple with two components: the first component is the least value, the second component is the greatest value
-      * of the linear form over the box.
+      * @param homcoeffs homogeneous coefficients of a linear form
+      * @return the sign of the linear evaluation of a linear form
       */
     private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Sign = {
       require(homcoeffs.length <= dimension)
@@ -182,19 +174,19 @@ class SignDomain extends NumericalDomain {
       s
     }
 
+    /**
+      * @inheritdoc
+      */
     def linearAssignment(pos: Int, lf: LinearForm) : Property = {
       require(pos < sign.length && pos >= 0 && lf.dimension <= dimension)
-      println(s"Assigning... $this \nwith linear form: $lf \nand number n: $pos")
       if(unreachable)
         return this
       val s : Sign = linearEvaluation(lf)
-      println("Generated: " + Property(sign.updated(pos, s), unreachable = false))
       Property(sign.updated(pos, s), unreachable = false)
     }
 
 
     /** @inheritdoc
-       * @param lf expression that gets evaluated for the linear inequality
       */
     def linearInequality(lf: LinearForm) : Property = {
       val s : Sign = linearEvaluation(lf)
@@ -210,7 +202,6 @@ class SignDomain extends NumericalDomain {
 
     /**
       * @inheritdoc
-      * @param lf expression that gets evaluated for the linear disequality
       */
     def linearDisequality(lf: LinearForm) : Property = {
       if (isEmpty)
@@ -225,51 +216,57 @@ class SignDomain extends NumericalDomain {
       }
     }
 
+    /**
+      * @inheritdoc
+      */
     def minimize(lf: LinearForm): RationalExt =
       if (lf.homcoeffs.exists(!_.isZero))
         RationalExt.NegativeInfinity
       else
         RationalExt(lf.known)
 
+    /**
+      * @inheritdoc
+      */
     def maximize(lf: LinearForm): RationalExt =
       if (lf.homcoeffs.exists(!_.isZero))
         RationalExt.PositiveInfinity
       else
         RationalExt(lf.known)
 
+    /**
+      * @inheritdoc
+      */
     def frequency(lf: LinearForm): Option[Rational] =
       if (lf.homcoeffs.exists(!_.isZero))
         Option.empty
       else
         Option(lf.known)
 
+    /**
+      * @inheritdoc
+      */
     def constraints = List()
 
+    /**
+      * @inheritdoc
+      */
     def isPolyhedral = false
 
     /**
      * @inheritdoc
-     * Add new variable maintaining the current values
-     * @note @inheritdoc
-     // * @throws IllegalArgumentException
      */
-    def addVariable(): Property = {
-      println(s"Adding variable at the $dimension position")
+    def addVariable(): Property =
       if (unreachable)
         return SignDomain.this.bottom(dimension + 1)
-      SignDomain.this(sign :+ SignTop)
-    }
+      else
+        SignDomain.this(sign :+ SignTop)
 
     /**
      * @inheritdoc
-     * This is a complete operator for boxes.
-     * @note @inheritdoc
-     // * @throws IllegalArgumentException
      */
     def delVariable(pos: Int): Property = {
       require(pos < sign.length && pos >= 0)
-      println(s"Deleting variable at $pos position")
-      println(s"This: $this")
       val newSign = new Array[Sign](sign.length - 1)
       // Copy the first pos-1 elements
       Array.copy(sign, 0, newSign, 0, pos)
@@ -279,32 +276,47 @@ class SignDomain extends NumericalDomain {
     }
 
 
-    /* Done in complete analogy to the BoxDoubleDomain */
+    /**
+      * @inheritdoc
+      */
     def mapVariables(rho: Seq[Int]): Property = {
       require(rho.length == dimension)
       val newdim = rho.count(_ >= 0)
       require(rho forall { i => i >= -1 && i < newdim })
       // we do not check injectivity
       val newSign = new Array[Sign](newdim)
-
-      for ((newi, i) <- rho.zipWithIndex; if newi >= 0) {
+      for ((newi, i) <- rho.zipWithIndex; if newi >= 0)
         newSign(newi) = sign(i)
-      }
       Property(newSign, unreachable)
     }
 
+    /**
+      * @inheritdoc
+      */
     def isEmpty: Boolean = unreachable
 
+    /**
+      * @inheritdoc
+      */
     def isTop: Boolean = !isEmpty && sign.forall( _.equals(SignTop))
+
+    /**
+      * @inheritdoc
+      */
     def isBottom: Boolean = isEmpty
 
-
+    /**
+      * @inheritdoc
+      */
     def top(n: Int) = Property(Array.fill(n)(SignTop), unreachable = false)
+
+    /**
+      * @inheritdoc
+      */
     def bottom(n: Int) = Property(Array.fill(n)(SignBottom), unreachable = true)
 
      /**
      * @inheritdoc
-     // * @throws IllegalArgumentException
      */
     def mkString(vars: Seq[String]): String = {
       require(vars.length >= dimension)
@@ -328,27 +340,23 @@ class SignDomain extends NumericalDomain {
 
 
     /**
-      * Assignments of the kind `vn = vn * vm`.  The standard implementation determines
-      * whether `vn` or `vm` is a constant, and use linearAssignment in such a case.
-      * Otherwise, it resorts to a non deterministic assignment.
-      *
-      * @note $NOTEN
+      * @inheritdoc
       */
     override def variableMul(n: Int, m: Int): Property = {
-      println("Multiplication")
       sign(n) = mult(sign(n), sign(m))
       this
     }
 
+    /**
+      * @inheritdoc
+      */
     override def variableDiv(n : Int, m : Int): Property = {
-      println("Division")
       sign(n) = division(sign(n), sign(m))
       this
     }
 
-     /**
-       * @inheritdoc
-       * @note @inheritdoc
+    /**
+      * @inheritdoc
       */
     override def variableNeg(n: Int = dimension - 1): Property = {
       sign(n) = inverse(sign(n))
@@ -358,7 +366,6 @@ class SignDomain extends NumericalDomain {
 
     /**
       * @inheritdoc
-      * @note @inheritdoc
       */
     override def variableRem(n: Int = dimension - 2, m: Int = dimension - 1): Property = {
       sign(n) = remainder(sign(n), sign(m))
@@ -367,26 +374,37 @@ class SignDomain extends NumericalDomain {
 
 
 
-  }
+  } // end of SignDomain's Property
 
+  /**
+    * Handy ctor for properties, callable from the outside of the class
+    * @param signsArray array filled with elements in SignDomain
+    * @return a new property for `signsArray`
+    */
   def apply(signsArray : Array[Sign]): Property = {
     Property(signsArray, signsArray.forall( _.equals(SignBottom)) )
   }
 
-
+  /**
+    * Specifies which widenings are available for SignDomain.
+    */
   val widenings = Seq(WideningDescription.default[Property])
 
-
-
+  /**
+    * @inheritdoc
+    */
   def top(n: Int) = Property(Array.fill(n)(SignTop), unreachable = false)
+
+  /**
+    * @inheritdoc
+    */
   def bottom(n: Int) = Property(Array.fill(n)(SignBottom), unreachable = true)
-}
+} // end of SignDomain class
+
 object SignDomain {
   /**
     * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
     * double arithmetic, according to the parameter `overReals`.
     */
   def apply() = new SignDomain()
-
-}
-
+} // end of SignDomain's companion object

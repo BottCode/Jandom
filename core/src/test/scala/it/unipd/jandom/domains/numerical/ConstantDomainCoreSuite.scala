@@ -48,7 +48,6 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
   "ConstantDomain.glb" should
     " - return the glb of the constant values given as input" in {
-
     // ConstantBottom
     assert(glb(ConstantBottom, ConstantTop) === ConstantBottom)
     assert(glb(ConstantBottom, positive) === ConstantBottom)
@@ -66,7 +65,6 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
   "ConstantDomain.sum" should
     " - return the sum of the constant values given as input" in {
-
     // ConstantBottom
     assert(sum(ConstantBottom, positive) === ConstantBottom)
     assert(sum(ConstantBottom, ConstantTop) === ConstantBottom)
@@ -138,7 +136,6 @@ class ConstantDomainCoreSuite extends FlatSpec {
   "ConstantDomain.remainder" should
     " - return the remainder (modulo) of the constant values given as input" in
     {
-
       // ConstantBottom
       assert(remainder(ConstantBottom, positive) === ConstantBottom)
       assert(remainder(ConstantBottom, ConstantTop) === ConstantBottom)
@@ -158,4 +155,22 @@ class ConstantDomainCoreSuite extends FlatSpec {
       assert(remainder(positive, positive) === zero)
     }
 
+  "ConstantDomain.compare" should
+    " - return the comparison between the constant values given as input" in {
+    // ConstantTop
+    assert(compare(ConstantTop, ConstantTop) === Option(0))
+    assert(compare(ConstantTop, positive) === Option(1))
+    assert(compare(ConstantTop, ConstantBottom) === Option(1))
+    assert(compare(positive, ConstantTop) === Option(-1))
+    assert(compare(ConstantBottom, ConstantTop) === Option(-1))
+    // ConstantBottom
+    assert(compare(ConstantBottom, ConstantBottom) === Option(0))
+    assert(compare(ConstantBottom, ConstantTop) === Option(-1))
+    assert(compare(ConstantBottom, positive) === Option(-1))
+    assert(compare(ConstantTop, ConstantBottom) === Option(1))
+    assert(compare(positive, ConstantBottom) === Option(1))
+    // Const
+    assert(compare(positive, zero) === Option.empty)
+    assert(compare(positive, positive) === Option(0))
+  }
 }

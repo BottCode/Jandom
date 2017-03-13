@@ -64,4 +64,21 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(glb(zero, zero) === zero)
   }
 
+  "ConstantDomain.sum" should
+    " - return the sum of the constant values given as input" in {
+
+    // ConstantBottom
+    assert(sum(ConstantBottom, positive) === ConstantBottom)
+    assert(sum(ConstantBottom, ConstantTop) === ConstantBottom)
+    assert(sum(positive, ConstantBottom) === ConstantBottom)
+    assert(sum(ConstantTop, ConstantBottom) === ConstantBottom)
+    assert(sum(ConstantBottom, ConstantBottom) === ConstantBottom)
+    // ConstantTop
+    assert(sum(ConstantTop, positive) === ConstantTop)
+    assert(sum(positive, ConstantTop) === ConstantTop)
+    assert(sum(ConstantTop, ConstantTop) === ConstantTop)
+    // Const
+    assert(sum(positive, zero) === positive)
+  }
+
 }

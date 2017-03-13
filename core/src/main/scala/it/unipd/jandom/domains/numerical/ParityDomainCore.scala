@@ -64,6 +64,8 @@ object ParityDomainCore {
     }
   }
 
+  def inverse(p : Parity) : Parity = p
+
   def division(p : Parity, q : Parity) : Parity = {
     (p,q) match {
       case (ParityBottom, _) => ParityBottom
@@ -83,10 +85,5 @@ object ParityDomainCore {
       case (a,b) => if(a.equals(b)) Option(0) else Option.empty
     }
   }
-
-  def inverse(p : Parity) : Parity = {
-    p
-  }
-
 
 }

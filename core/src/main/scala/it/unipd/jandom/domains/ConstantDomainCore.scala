@@ -83,8 +83,9 @@ object ConstantDomainCore {
     (x,y) match {
       case (ConstantBottom, _) => ConstantBottom
       case (_, ConstantBottom) => ConstantBottom
-      case (_, ConstantTop) => ConstantTop
       case (_, Const(0)) => ConstantBottom
+      case (Const(0), _) => Const(0)
+      case (_, ConstantTop) => ConstantTop
       case (ConstantTop, _) => ConstantTop
       case (Const(a), Const(b)) => Const(a%b)
     }

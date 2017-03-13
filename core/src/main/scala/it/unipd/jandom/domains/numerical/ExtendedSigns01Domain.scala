@@ -3,7 +3,6 @@ package it.unipd.jandom.domains.numerical
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
-import it.unipd.jandom.domains.numerical.ExtendedSigns01DomainCore.ExtendedSign01
 import spire.math.Rational
 
 /**
@@ -21,39 +20,46 @@ object ExtendedSigns01Domain extends NumericalDomain {
 
     def domain = ExtendedSigns01Domain
 
-    def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] =
-      other match {
-        case that: Property =>
-          require(dimension == that.dimension)
-          (isEmpty, that.isEmpty) match {
-            case (true, true) => Option(0)
-            case (false, true) => Option(1)
-            case (true, false) => Option(-1)
-            case (false, false) =>
-              val signPairs = (this.sign, that.sign).zipped
-              val comparisonList = signPairs.map(compare)
-              if (comparisonList.forall {
-                case Some(0) => true
-                case _ => false
-              }) Option(0)
-              else if (comparisonList.forall {
-                case Some(i) => if (i >= 0) true else false
-                case None => false
-              } && comparisonList.exists {
-                case Some(i) => if (i == 1) true else false
-                case None => false
-              }) Option(1)
-              else if (comparisonList.forall {
-                case Some(i) => if (i <= 0) true else false
-                case None => false
-              } && comparisonList.exists {
-                case Some(i) => if (i == -1) true else false
-                case None => false
-              }) Option(-1)
-              else Option.empty
-          }
-        case _ => None
-      }
+    def tryCompareTo[B >: Property](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]): Option[Int] = that match {
+
+      case that: Property =>
+        require(dimension == that.dimension)
+        (isEmpty, that.isEmpty) match {
+          case (true, true) => Option(0)
+          case (false, true) => Option(1)
+          case (true, false) => Option(-1)
+          case (false, false) =>
+            println(s"s: $this   --- t: $that")
+            val signPairs = (this.sign, that.sign).zipped
+            val comparisonList = signPairs.map(compare)
+
+            if (comparisonList.forall {
+              case Some(i) => if (i == 0) true else false
+              case None => false
+            })
+              Option(0)
+            else if (comparisonList.forall {
+              case Some(i) => if (i >= 0) true else false
+              case None => false
+            } && comparisonList.exists {
+              case Some(i) => if (i == 1) true else false
+              case None => false
+            })
+              Option(1)
+            else if (comparisonList.forall {
+              case Some(i) => if (i <= 0) true else false
+              case None => false
+            } && comparisonList.exists {
+              case Some(i) => if (i == -1) true else false
+              case None => false
+            })
+              Option(-1)
+            else
+              Option.empty
+        }
+
+      case _ => None
+    }
 
     override def union(that: Property): Property =
       Property((this.sign, that.sign).zipped.map(lub), unreachable && that.unreachable)

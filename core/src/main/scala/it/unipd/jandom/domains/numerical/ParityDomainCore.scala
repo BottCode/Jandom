@@ -74,6 +74,21 @@ object ParityDomainCore {
     }
   }
 
+  def remainder(p : Parity, q : Parity) : Parity = {
+    (p,q) match {
+      case (ParityBottom, _) => ParityBottom
+      case (_, ParityBottom) => ParityBottom
+      case (_, Even) => ParityBottom // could be 0
+      case (Odd, Odd) => Even
+      case (_, _) => ParityTop
+      /*
+        (Even, Odd) => Top
+        (ParityTop, Odd) => Top
+        (_, ParityTop) => Top
+      */
+    }
+  }
+
   def compare(p : Parity, q : Parity) : Option[Int] = {
     (p,q) match {
       case (ParityTop, ParityTop) => Option(0)

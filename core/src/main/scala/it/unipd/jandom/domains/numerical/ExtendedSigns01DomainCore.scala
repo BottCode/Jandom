@@ -14,9 +14,9 @@ object ExtendedSigns01DomainCore {
   case object ES01Bottom extends ExtendedSign01
 
   def toSign(n : Int) : ExtendedSign01 = {
-    if (n == 0) Zero
-    if (n == 1) One
-    if (n < 0)  Negative
+    if (n == 0) return Zero
+    if (n == 1) return One
+    if (n < 0)  return Negative
     GreaterThanOne
   }
 

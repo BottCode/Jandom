@@ -81,4 +81,31 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(sum(positive, zero) === positive)
   }
 
+  "ConstantDomain.mult" should
+    " - return the product of the constant values given as input" in {
+
+    val multPositive=
+      positive match {
+        case Const(value) => value*value
+      }
+
+    // ConstantBottom
+    assert(mult(ConstantBottom, positive) === ConstantBottom)
+    assert(mult(ConstantBottom, ConstantTop) === ConstantBottom)
+    assert(mult(positive, ConstantBottom) === ConstantBottom)
+    assert(mult(ConstantTop, ConstantBottom) === ConstantBottom)
+    // Const(0)
+    assert(mult(ConstantTop, zero) === zero)
+    assert(mult(zero, ConstantTop) === zero)
+    assert(mult(zero, positive) === zero)
+    assert(mult(positive, zero) === zero)
+    assert(mult(zero, zero) === zero)
+    // ConstantTop
+    assert(mult(ConstantTop, positive) === ConstantTop)
+    assert(mult(positive, ConstantTop) === ConstantTop)
+    assert(mult(ConstantTop, ConstantTop) === ConstantTop)
+    // Const
+    assert(mult(positive, positive) === multPositive)
+  }
+
 }

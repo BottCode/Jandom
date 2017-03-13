@@ -29,9 +29,9 @@ object ConstantDomainCore {
     (x, y) match {
       case (ConstantTop, _) => ConstantTop
       case (_, ConstantTop) => ConstantTop
-      case (ConstantBottom, a) => a
-      case (a, ConstantBottom) => a
-      case (a, b) => if(a == b) a else ConstantTop
+      case (ConstantBottom, _) => y
+      case (_, ConstantBottom) => x
+      case (_, _) => if(x == y) x else ConstantTop
     }
   }
 
@@ -39,9 +39,9 @@ object ConstantDomainCore {
     (x, y) match {
       case (ConstantBottom, _) => ConstantBottom
       case (_, ConstantBottom) => ConstantBottom
-      case (ConstantTop, a) => a
-      case (a, ConstantTop) => a
-      case (a, b) => if(a == b) a else ConstantBottom
+      case (ConstantTop, _) => y
+      case (_, ConstantTop) => x
+      case (_, _) => if(x == y) x else ConstantBottom
     }
   }
 
@@ -92,9 +92,9 @@ object ConstantDomainCore {
   }
 
   /**
-    * @return Option(0) : x == y
-    *         Option(1) : x > y
-    *         Option(-1) : x < y
+    * @return x == y => Option(0);
+    *         x > y => Option(1);
+    *         x < y => Option(-1);
     */
   def compare(x : Constant, y : Constant) : Option[Int] = {
       (x, y) match {
@@ -104,7 +104,7 @@ object ConstantDomainCore {
       case (ConstantBottom, ConstantBottom) => Option(0)
       case (ConstantBottom, _) => Option(-1)
       case (_, ConstantBottom) => Option(1)
-      case (a, b) => if(a.equals(b)) Option(0) else Option.empty
+      case (_, _) => if(x.equals(y)) Option(0) else Option.empty
     }
   }
 }

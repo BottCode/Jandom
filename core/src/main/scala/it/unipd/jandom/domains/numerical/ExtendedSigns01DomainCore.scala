@@ -97,8 +97,8 @@ object ExtendedSigns01DomainCore {
     (s,t) match {
       case (ES01Top, _) => ES01Top
       case (_, ES01Top) => ES01Top
-      case (_, ES01Bottom) => ES01Bottom
-      case (ES01Bottom, _) => ES01Bottom
+      case (a, ES01Bottom) => a
+      case (ES01Bottom, a) => a
       case (a, b) => if (a.equals(b)) a else ES01Top
     }
   }

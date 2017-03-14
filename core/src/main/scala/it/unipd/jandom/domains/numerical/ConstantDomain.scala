@@ -340,7 +340,7 @@ class ConstantDomain extends NumericalDomain {
       */
     private def linearEvaluation(known: Int, homcoeffs: Array[Int]): Constant = {
       require(homcoeffs.length <= dimension)
-      var constant: Constant = toConstant(known)
+      var constant: Constant = alpha(known)
       if (unreachable && homcoeffs.exists { _ != 0 })
         return ConstantTop
       for (i <- homcoeffs.indices) {

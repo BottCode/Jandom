@@ -124,12 +124,14 @@ object DomainTransformation {
 
   implicit object SignToParity extends DomainTransformation[SignDomain, ParityDomain] {
     def apply(src: SignDomain, dst: ParityDomain): src.Property => dst.Property = {
-      (p) => {
+      { p => dst.top(p.dimension) }
+
+      /* (p) => {
         dst(p.sign.map {
           case Zero => Even
           case _ => ParityTop
         })
-      }
+      }*/
     }
   }
 

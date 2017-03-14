@@ -13,14 +13,14 @@ case object ConstantTop extends Constant
 case object ConstantBottom extends Constant
 
 
-object ConstantDomainCore extends CompleteLatticeOperator[Constant] with IntOperator[Constant]{
-
+object ConstantDomainCore extends CompleteLatticeOperator[Constant]
+  with IntOperator[Constant] with Abstraction[Int, Constant]{
 
   override def top: Constant = ConstantTop
 
   override def bottom: Constant = ConstantBottom
 
-  def toConstant(num : Int) : Constant = {
+  def alpha(num : Int) : Constant = {
     Const(num)
   }
 

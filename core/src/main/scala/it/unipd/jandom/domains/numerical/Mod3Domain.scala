@@ -54,7 +54,47 @@ class Mod3Domain extends NumericalDomain {
       * @inheritdoc
       */
     override def isPolyhedral: Boolean = false
-    
+
+    /**
+      * @inheritdoc
+      */
+    override def constraints : Seq[LinearForm] = List()
+
+    /**
+      * @inheritdoc
+      */
+    override def dimension: Int = mod3s.length
+
+    /**
+      * @inheritdoc
+      */
+    override def domain = ConstantDomain
+
+    /**
+      * @inheritdoc
+      */
+    override def isEmpty: Boolean = unreachable
+
+    /**
+      * @inheritdoc
+      */
+    override def isTop: Boolean = !isEmpty && mod3s.forall( _.equals(ConstantTop))
+
+    /**
+      * @inheritdoc
+      */
+    override def isBottom: Boolean = isEmpty
+
+    /**
+      * @inheritdoc
+      */
+    override def bottom: Property = ConstantDomain.bottom(mod3s.length)
+
+    /**
+      * @inheritdoc
+      */
+    override def top: Property = ConstantDomain.top(mod3s.length)
+
   } // end of Property
 }
 object Mod3Domain {

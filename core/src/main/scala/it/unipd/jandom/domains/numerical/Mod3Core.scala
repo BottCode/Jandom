@@ -1,15 +1,13 @@
 package it.unipd.jandom.domains.numerical
 
-object Mod3DomainCore {
-  trait Mod3
-  case class RestClass(num : Int) extends Mod3
-  case object Mod3Bottom extends Mod3
-  case object Mod3Top extends Mod3
+trait Mod3
+case class RestClass(num : Int) extends Mod3
+case object Mod3Bottom extends Mod3
+case object Mod3Top extends Mod3
 
+object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] {
 
   def toMod3(t : Int) : Mod3 = RestClass(t % 3)
-
-  def toParity(n : Double) : Mod3 = Mod3Top
 
   def sum(m : Mod3, n : Mod3) : Mod3 = {
     (m, n) match {
@@ -70,24 +68,24 @@ object Mod3DomainCore {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
       case (Odd, Odd) => Even
-      case (_, _) => ParityTop
+      case (_, _) => Mod3Top
       /*
         (Even, Odd) => Top
-        (ParityTop, Odd) => Top
-        (_, ParityTop) => Top
+        (Mod3Top, Odd) => Top
+        (_, Mod3Top) => Top
         (_, Even) => Top
       */
     }
   }
 
-  def compare(p : Parity, q : Parity) : Option[Int] = {
+  def compare(p : Mod3, q : Mod3) : Option[Int] = {
     (p,q) match {
-      case (ParityTop, ParityTop) => Option(0)
-      case (ParityTop, _) => Option(1)
-      case (_, ParityTop) => Option(-1)
-      case (ParityBottom, ParityBottom) => Option(0)
-      case (ParityBottom, _) => Option(-1)
-      case (_, ParityBottom) => Option(1)
+      case (Mod3Top, Mod3Top) => Option(0)
+      case (Mod3Top, _) => Option(1)
+      case (_, Mod3Top) => Option(-1)
+      case (Mod3Bottom, Mod3Bottom) => Option(0)
+      case (Mod3Bottom, _) => Option(-1)
+      case (_, Mod3Bottom) => Option(1)
       case (a,b) => if(a.equals(b)) Option(0) else Option.empty
     }
   }

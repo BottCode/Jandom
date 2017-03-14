@@ -47,7 +47,7 @@ class SignDomain extends NumericalDomain {
 
     type Domain = SignDomain
 
-    def domain : NumericalDomain = SignDomain.this
+    def domain = SignDomain.this
 
     // returns an array of all-top variables
     def top: Property = Property(Array.fill(sign.length)(SignTop), unreachable = false)

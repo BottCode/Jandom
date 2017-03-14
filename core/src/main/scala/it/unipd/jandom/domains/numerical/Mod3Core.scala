@@ -1,11 +1,13 @@
 package it.unipd.jandom.domains.numerical
 
+import it.unipd.jandom.domains._
+
 trait Mod3
 case class RestClass(num : Int) extends Mod3
 case object Mod3Bottom extends Mod3
 case object Mod3Top extends Mod3
 
-object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] {
+class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] {
 
   def toMod3(t : Int) : Mod3 = RestClass(t % 3)
 
@@ -67,7 +69,7 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
     (p,q) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
-      case (Odd, Odd) => Even
+      //case (Odd, Odd) => Even
       case (_, _) => Mod3Top
       /*
         (Even, Odd) => Top
@@ -90,4 +92,7 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
     }
   }
 
+  override def top: Mod3 = Mod3Top
+
+  override def bottom: Mod3 = Mod3Bottom
 }

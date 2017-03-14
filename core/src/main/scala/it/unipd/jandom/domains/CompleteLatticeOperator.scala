@@ -1,7 +1,7 @@
 package it.unipd.jandom.domains
 
 /**
-  * Created by m0bius on 3/14/17.
+  * @define UniPDAUTHORS  Mirko Bez, Stefano Munari, Sebastiano Valle
   */
 trait CompleteLatticeOperator [T] {
   def lub(x : T, y : T) : T  

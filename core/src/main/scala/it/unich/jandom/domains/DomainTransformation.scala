@@ -21,7 +21,7 @@ package it.unich.jandom.domains
 import it.unich.jandom.domains.numerical._
 import it.unich.jandom.utils.breeze.RationalForBreeze._
 import it.unich.jandom.utils.numberext.RationalExt
-import it.unipd.jandom.domains.numerical.ParityDomainCore.{Even, ParityTop}
+import it.unipd.jandom.domains.numerical.{Even, ParityTop}
 import it.unipd.jandom.domains.numerical.{Zero}
 import it.unipd.jandom.domains.numerical._
 

@@ -1,27 +1,30 @@
 package it.unipd.jandom.domains.numerical
 
+import it.unipd.jandom.domains.CompleteLatticeOperator
+
+trait Sign
+// positive numbers (> 0)
+case object Plus extends Sign
+// negative numbers (< 0)
+case object Minus extends Sign
+// null numbers (= 0)
+case object Zero extends Sign
+// no accurate info available for variable
+case object SignTop extends Sign
+// no possible value
+case object SignBottom extends Sign
+
 /**
   * Static class that describes operations on the sign domain.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari@studenti.unipd.it>
   */
-object SignDomainCore {
-
-  trait Sign
-  // positive numbers (> 0)
-  case object Plus extends Sign
-  // negative numbers (< 0)
-  case object Minus extends Sign
-  // null numbers (= 0)
-  case object Zero extends Sign
-  // no accurate info available for variable
-  case object SignTop extends Sign
-  // no possible value
-  case object SignBottom extends Sign
+object SignDomainCore extends CompleteLatticeOperator[Sign] {
 
   /**
     * Factory method for signs.
+    *
     * @param n number that has to be converted to sign
     * @return sign of `n`
     */
@@ -35,6 +38,7 @@ object SignDomainCore {
 
   /**
     * Factory method for signs.
+    *
     * @param num number that has to be converted to sign
     * @return sign of `num`
     */
@@ -49,6 +53,7 @@ object SignDomainCore {
 
   /**
     * Returns the sum of two sign variables.
+    *
     * @param s the first term of the addition
     * @param t the second term of the addition
     * @return the result of the addition
@@ -68,6 +73,7 @@ object SignDomainCore {
 
   /**
     * Returns the multiplication of two sign variables.
+    *
     * @param s the first factor of the multiplication
     * @param t the second factor of the multiplication
     * @return the result of the multiplication
@@ -85,6 +91,7 @@ object SignDomainCore {
 
   /**
     * Performs the (-) prefix operation.
+    *
     * @param s sign that will be inverted
     * @return the inverse of `s`
     */
@@ -97,6 +104,7 @@ object SignDomainCore {
 
   /**
     * Returns the division of two sign variables.
+    *
     * @param s the numerator of the division
     * @param t the denominator of the division
     * @return the result of the division
@@ -114,6 +122,7 @@ object SignDomainCore {
 
   /**
     * Returns the result of the modulo operation between two sign variables.
+    *
     * @param s number put under modulo operation
     * @param t modulus
     * @return the remainder of the modulo operation
@@ -129,6 +138,7 @@ object SignDomainCore {
 
   /**
     * Returns the least upper bound between two sign variables.
+    *
     * @param s first term of the lub
     * @param t second term of the lub
     * @return the lub of `s` and `t`
@@ -144,6 +154,7 @@ object SignDomainCore {
 
   /**
     * Returns the greatest lower bound between two sign variables.
+    *
     * @param s first term of the glb
     * @param t second term of the glb
     * @return the glb of `s` and `t`
@@ -159,6 +170,7 @@ object SignDomainCore {
 
   /**
     * Performs a Java-like comparison (same behaviour as Java's compareTo) between two signs.
+    *
     * @param s left hand side
     * @param t right hand side
     * @return 1 if `s` > `t` -- 0 if `s` = `t` -- -1 if `s` < `t`
@@ -173,5 +185,8 @@ object SignDomainCore {
       case (_, SignBottom) => Option(1)
       case (a, b) => if (a.equals(b)) Option(0) else Option.empty
     }
+
+  override def top: Sign = SignTop
+  override def bottom: Sign = SignBottom
 
 } // end object SignDomainCore

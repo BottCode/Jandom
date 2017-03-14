@@ -1,29 +1,22 @@
 package it.unipd.jandom.domains.numerical
 
+import it.unipd.jandom.domains.CompleteLatticeOperator
+
+// numbers greater or equal than 0 (>= 0)
+case object Geq0 extends Sign
+// numbers less or equal than 0 (>= 0)
+case object Leq0 extends Sign
+// numbers not equal to 0 (>= 0)
+case object Neq0 extends Sign
+
 /**
   * Operations on the extended domain of signs with >=0, <=0 and !=0.
   */
-object ESeqDomainCore {
-  trait Sign
-  // positive numbers (> 0)
-  case object Plus extends Sign
-  // negative numbers (< 0)
-  case object Minus extends Sign
-  // null numbers (= 0)
-  case object Zero extends Sign
-  // numbers greater or equal than 0 (>= 0)
-  case object Geq0 extends Sign
-  // numbers less or equal than 0 (>= 0)
-  case object Leq0 extends Sign
-  // numbers not equal to 0 (>= 0)
-  case object Neq0 extends Sign
-  // no accurate info available for variable
-  case object SignTop extends Sign
-  // no possible value
-  case object SignBottom extends Sign
+object ESeqDomainCore extends CompleteLatticeOperator[Sign] {
 
   /**
     * Factory method for signs.
+    *
     * @param n number that has to be converted to sign
     * @return sign of `n`
     */
@@ -37,6 +30,7 @@ object ESeqDomainCore {
 
   /**
     * Factory method for signs.
+    *
     * @param num number that has to be converted to sign
     * @return sign of `num`
     */
@@ -50,6 +44,7 @@ object ESeqDomainCore {
 
   /**
     * Returns the sum of two sign variables.
+    *
     * @param s the first term of the addition
     * @param t the second term of the addition
     * @return the result of the addition
@@ -75,6 +70,7 @@ object ESeqDomainCore {
 
   /**
     * Returns the multiplication of two sign variables.
+    *
     * @param s the first factor of the multiplication
     * @param t the second factor of the multiplication
     * @return the result of the multiplication
@@ -98,6 +94,7 @@ object ESeqDomainCore {
 
   /**
     * Performs the (-) prefix operation.
+    *
     * @param s sign that will be inverted
     * @return the inverse of `s`
     */
@@ -112,6 +109,7 @@ object ESeqDomainCore {
 
   /**
     * Returns the division of two sign variables.
+    *
     * @param s the numerator of the division
     * @param t the denominator of the division
     * @return the result of the division
@@ -142,6 +140,7 @@ object ESeqDomainCore {
 
   /**
     * Returns the result of the modulo operation between two sign variables.
+    *
     * @param s number put under modulo operation
     * @param t modulus
     * @return the remainder of the modulo operation
@@ -161,6 +160,7 @@ object ESeqDomainCore {
 
   /**
     * Returns the least upper bound between two sign variables.
+    *
     * @param s first term of the lub
     * @param t second term of the lub
     * @return the lub of `s` and `t`
@@ -182,6 +182,7 @@ object ESeqDomainCore {
 
   /**
     * Returns the greatest lower bound between two sign variables.
+    *
     * @param s first term of the glb
     * @param t second term of the glb
     * @return the glb of `s` and `t`
@@ -199,6 +200,7 @@ object ESeqDomainCore {
 
   /**
     * Performs a Java-like comparison (same behaviour as Java's compareTo) between two signs.
+    *
     * @param s left hand side
     * @param t right hand side
     * @return 1 if `s` > `t` -- 0 if `s` = `t` -- -1 if `s` < `t`
@@ -225,5 +227,8 @@ object ESeqDomainCore {
       case (Neq0, Minus) => Option(1)
       case (a, b) => if (a.equals(b)) Option(0) else Option.empty
     }
+
+  override def top: Sign = SignTop
+  override def bottom: Sign = SignBottom
 
 } // end object ESeqDomainCore

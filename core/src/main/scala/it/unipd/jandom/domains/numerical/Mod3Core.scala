@@ -31,9 +31,9 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
     (m,n) match {
       case (Mod3Top, _) => Mod3Top
       case (_, Mod3Top) => Mod3Top
-      case (Mod3Bottom, a) => a
-      case (a, Mod3Bottom) => a
-      case (a,b) => if(a == b) a else Mod3Top
+      case (Mod3Bottom, _) => n
+      case (_, Mod3Bottom) => m
+      case (_, _) => if(m == n) m else Mod3Top
     }
   }
 
@@ -41,9 +41,9 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
     (m, n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
-      case (Mod3Top, a) => a
-      case (a, Mod3Top) => a
-      case (a, b) => if(a == b) a else Mod3Bottom
+      case (Mod3Top, _) => n
+      case (_, Mod3Top) => m
+      case (_, _) => if(m == n) m else Mod3Bottom
     }
   }
 
@@ -64,9 +64,11 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
 
   def division(p : Mod3, q : Mod3) : Mod3 = {
     (p,q) match {
-      case (Mod3Top, _) => Mod3Bottom
-      case (_, Mod3Top) => Mod3Bottom
-      case _ => Mod3Top //Because you cannot know if the result is an integer number. For instance 1/4 is neither even nor odd
+      case (Mod3Bottom, _) => Mod3Bottom
+      case (_, Mod3Bottom) => Mod3Bottom
+      case (Mod3Top, _) => Mod3Top
+      case (_, Mod3Top) => Mod3Top
+      case (_, _) => Mod3Top 
     }
   }
 
@@ -90,7 +92,7 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
       case (Mod3Bottom, Mod3Bottom) => Option(0)
       case (Mod3Bottom, _) => Option(-1)
       case (_, Mod3Bottom) => Option(1)
-      case (a,b) => if(a.equals(b)) Option(0) else Option.empty
+      case (_, _) => if(m == n) Option(0) else Option.empty
     }
   }
 

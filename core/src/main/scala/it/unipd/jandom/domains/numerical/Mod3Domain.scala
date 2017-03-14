@@ -68,7 +68,7 @@ class Mod3Domain extends NumericalDomain {
     /**
       * @inheritdoc
       */
-    override def domain = ConstantDomain
+    override def domain = Mod3Domain
 
     /**
       * @inheritdoc
@@ -88,12 +88,12 @@ class Mod3Domain extends NumericalDomain {
     /**
       * @inheritdoc
       */
-    override def bottom: Property = ConstantDomain.bottom(mod3s.length)
+    override def bottom: Property = Mod3Domain.this.bottom(mod3s.length)
 
     /**
       * @inheritdoc
       */
-    override def top: Property = ConstantDomain.top(mod3s.length)
+    override def top: Property = Mod3Domain.this.top(mod3s.length)
 
   } // end of Property
 }

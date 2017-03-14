@@ -48,8 +48,6 @@ class Mod3Domain extends NumericalDomain {
   case class Property private[Mod3Domain](mod3s : Array[Mod3], unreachable: Boolean) extends NumericalProperty[Property] {
     type Domain = Mod3Domain
 
-    def domain = Mod3Domain.this
-
     /**
       * @inheritdoc
       */
@@ -68,7 +66,7 @@ class Mod3Domain extends NumericalDomain {
     /**
       * @inheritdoc
       */
-    override def domain = Mod3Domain
+    override def domain = Mod3Domain.this
 
     /**
       * @inheritdoc

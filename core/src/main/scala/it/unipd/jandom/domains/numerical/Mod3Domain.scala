@@ -40,12 +40,16 @@ class Mod3Domain extends NumericalDomain {
     */
   def top(n: Int) = Property(Array.fill(n)(Mod3Top), unreachable = false)
 
-
-  case class Property private[Mod3Domain](parity : Array[Mod3], unreachable: Boolean) extends NumericalProperty[Property] {
+  /**
+    * @inheritdoc
+    */
+  override def widenings = Seq(WideningDescription.default[Property])
+  
+  case class Property private[Mod3Domain](mod3s : Array[Mod3], unreachable: Boolean) extends NumericalProperty[Property] {
     type Domain = Mod3Domain
 
     def domain = Mod3Domain.this
-    
+
   } // end of Property
 }
 object Mod3Domain {

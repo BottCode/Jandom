@@ -2,6 +2,11 @@ package it.unipd.jandom.domains.numerical
 
 import it.unipd.jandom.domains._
 
+/**
+  *
+  *
+  * @author $assume
+  */
 trait Mod3
 case class RestClass(num : Int) extends Mod3
 case object Mod3Bottom extends Mod3

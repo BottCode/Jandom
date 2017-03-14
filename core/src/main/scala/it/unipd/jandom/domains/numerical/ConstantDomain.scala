@@ -13,7 +13,8 @@ import scala.math.PartiallyOrdered
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
-object ConstantDomain extends NumericalDomain{
+class ConstantDomain extends NumericalDomain {
+
 
   def apply(constants : Array[Constant]): Property = Property(constants, constants.forall( _.equals(ConstantBottom)))
 
@@ -38,7 +39,7 @@ object ConstantDomain extends NumericalDomain{
     /**
       * @inheritdoc
       */
-    override type Domain = ConstantDomain.type
+    type Domain = ConstantDomain
 
     /**
       * @inheritdoc
@@ -58,7 +59,7 @@ object ConstantDomain extends NumericalDomain{
     /**
       * @inheritdoc
       */
-    override def domain = ConstantDomain
+    override def domain = ConstantDomain.this
 
     /**
       * @inheritdoc
@@ -78,12 +79,12 @@ object ConstantDomain extends NumericalDomain{
     /**
       * @inheritdoc
       */
-    override def bottom: Property = ConstantDomain.bottom(constants.length)
+    override def bottom: Property = ConstantDomain.this.bottom(constants.length)
 
     /**
       * @inheritdoc
       */
-    override def top: Property = ConstantDomain.top(constants.length)
+    override def top: Property = ConstantDomain.this.top(constants.length)
 
     /**
       * @inheritdoc
@@ -356,4 +357,13 @@ object ConstantDomain extends NumericalDomain{
     }
     
   }
+}
+
+object ConstantDomain {
+  /**
+    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
+    * double arithmetic, according to the parameter `overReals`.
+    */
+  def apply() = new ConstantDomain()
+
 }

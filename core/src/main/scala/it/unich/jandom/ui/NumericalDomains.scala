@@ -20,6 +20,8 @@ package it.unich.jandom.ui
 import scala.collection.mutable.Buffer
 import scala.util.Try
 import it.unich.jandom.domains.numerical._
+import it.unich.jandom.ui
+import it.unipd.jandom.domains.ConstantDomain
 import it.unipd.jandom.domains.numerical._
 
 /**
@@ -40,7 +42,8 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers."),
     ParameterValue(SignDomain(), "Sign Domain", "UniPD"),
     ParameterValue(ParityDomain(), "Parity Domain", "UniPD"),
-    ParameterValue(SumSignParityDomain(), "Sum between Parity and Sign Domain", "UniPD")
+    ParameterValue(SumSignParityDomain(), "Sum between Parity and Sign Domain", "UniPD"),
+    ParameterValue(ConstantDomain(), "Constant domain", "UniPD: Constant propagation ")
   )
   val default = values.last
 

@@ -3,7 +3,7 @@ package it.unipd.jandom.domains
 /**
   * @author $assume
   */
-trait NumOperator [T]  {
+trait NumOperator [T] extends UniPDAnnotation {
   def inverse(x : T) : T
   def sum(x : T, y : T) : T
   def mult(x : T, y : T) : T

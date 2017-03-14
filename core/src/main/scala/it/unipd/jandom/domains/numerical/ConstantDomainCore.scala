@@ -6,12 +6,19 @@ package it.unipd.jandom.domains
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
-object ConstantDomainCore {
 
-  trait Constant
-  case class Const (num : Int) extends Constant
-  case object ConstantTop extends Constant
-  case object ConstantBottom extends Constant
+trait Constant
+case class Const (num : Int) extends Constant
+case object ConstantTop extends Constant
+case object ConstantBottom extends Constant
+
+
+object ConstantDomainCore extends CompleteLatticeOperator[Constant] with IntOperator[Constant]{
+
+
+  override def top: Constant = ConstantTop
+
+  override def bottom: Constant = ConstantBottom
 
   def toConstant(num : Int) : Constant = {
     Const(num)

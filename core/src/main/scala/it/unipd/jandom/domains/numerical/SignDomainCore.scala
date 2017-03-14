@@ -109,7 +109,7 @@ object SignDomainCore {
       case (SignTop, _) => SignTop
       case (Zero, _) => Zero
       case (_, SignTop) => SignTop
-      case (a, b) => if (a == b) Plus else Minus
+      case _ => SignTop
     }
 
   /**

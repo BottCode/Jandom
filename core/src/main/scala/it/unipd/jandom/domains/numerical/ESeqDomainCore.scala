@@ -1,6 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.CompleteLatticeOperator
+import it.unipd.jandom.domains.{CompleteLatticeOperator, IntOperator}
 
 // numbers greater or equal than 0 (>= 0)
 case object Geq0 extends Sign
@@ -12,7 +12,7 @@ case object Neq0 extends Sign
 /**
   * Operations on the extended domain of signs with >=0, <=0 and !=0.
   */
-object ESeqDomainCore extends CompleteLatticeOperator[Sign] {
+object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] {
 
   /**
     * Factory method for signs.

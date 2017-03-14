@@ -1,6 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.CompleteLatticeOperator
+import it.unipd.jandom.domains.{CompleteLatticeOperator, IntOperator}
 
 trait Sign
 // positive numbers (> 0)
@@ -20,7 +20,7 @@ case object SignBottom extends Sign
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari@studenti.unipd.it>
   */
-object SignDomainCore extends CompleteLatticeOperator[Sign] {
+object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] {
 
   /**
     * Factory method for signs.

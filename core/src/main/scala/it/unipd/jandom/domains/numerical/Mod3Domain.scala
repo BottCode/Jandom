@@ -44,12 +44,17 @@ class Mod3Domain extends NumericalDomain {
     * @inheritdoc
     */
   override def widenings = Seq(WideningDescription.default[Property])
-  
+
   case class Property private[Mod3Domain](mod3s : Array[Mod3], unreachable: Boolean) extends NumericalProperty[Property] {
     type Domain = Mod3Domain
 
     def domain = Mod3Domain.this
 
+    /**
+      * @inheritdoc
+      */
+    override def isPolyhedral: Boolean = false
+    
   } // end of Property
 }
 object Mod3Domain {

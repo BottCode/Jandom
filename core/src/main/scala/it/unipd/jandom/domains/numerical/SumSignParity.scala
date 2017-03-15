@@ -2,7 +2,7 @@ package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical.ParityDomainCore._
-import it.unipd.jandom.domains.numerical.SignDomainCore._
+import it.unipd.jandom.domains.numerical.sign.{SignDomain, SignDomainCore}
 
 
 class SumSignParityDomain(val dom1: SignDomain, val dom2: ParityDomain) extends SumDomain[SignDomain, ParityDomain]{

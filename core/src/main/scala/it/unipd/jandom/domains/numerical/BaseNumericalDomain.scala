@@ -18,15 +18,18 @@ abstract class BaseNumericalDomain
 
   def createProperty(elements: Array[T], unreachable: Boolean) : Property
 
-  /**
-    * @inheritdoc
-    */
-  def bottom(n: Int)  = createProperty(Array.fill(n)(core.bottom), true)
+  def createProperty(elements: Array[T]) : Property =
+    createProperty(elements, elements.forall(x => x.equals(core.bottom)))
 
   /**
     * @inheritdoc
     */
-  def top(n: Int)  = createProperty(Array.fill(n)(core.top), false)
+  def bottom(n: Int)  = createProperty(Array.fill(n)(core.bottom))
+
+  /**
+    * @inheritdoc
+    */
+  def top(n: Int)  = createProperty(Array.fill(n)(core.top))
 
   /**
     * @inheritdoc
@@ -54,12 +57,12 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def bottom : Property = createProperty(Array.fill(dimension)(core.bottom), true)
+    def bottom : Property = createProperty(Array.fill(dimension)(core.bottom))
 
     /**
       * @inheritdoc
       */
-    def top : Property = createProperty(Array.fill(dimension)(core.top), false)
+    def top : Property = createProperty(Array.fill(dimension)(core.top))
 
     /**
       * @inheritdoc
@@ -87,7 +90,7 @@ abstract class BaseNumericalDomain
     override def nonDeterministicAssignment(n: Int): Property = {
       if (unreachable)
         return this
-      createProperty(elements.updated(n, core.top), false)
+      createProperty(elements.updated(n, core.top))
     }
 
     /**
@@ -98,7 +101,7 @@ abstract class BaseNumericalDomain
       if (unreachable)
         return this
       val result : T = linearEvaluation(lf)
-      createProperty(elements.updated(pos, result), false)
+      createProperty(elements.updated(pos, result))
     }
 
     /**

@@ -16,10 +16,11 @@
  * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical
+import it.unipd.jandom.domains.numerical.{sign, _}
 
 /**
   * Sign domain, i.e. the domain composed of the elements Minus (negative numbers), Plus (positive numbers) and
@@ -28,10 +29,9 @@ import it.unipd.jandom.domains.numerical
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari@studenti.unipd.it>
  */
-class SignDomain extends BaseNumericalDomain[Sign, numerical.SignDomainCore.type](numerical.SignDomainCore) {
+class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.SignDomainCore) {
 
   // this class uses the operations defined in SignDomainCore
-  import SignDomainCore._
 
   /**
     * Handy factory method for properties, callable from the outside of the class

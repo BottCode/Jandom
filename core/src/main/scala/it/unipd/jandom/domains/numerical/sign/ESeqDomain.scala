@@ -9,18 +9,23 @@ import it.unipd.jandom.domains.numerical.BaseNumericalDomain
   * and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>,
-  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDomainCore) {
-
 
   override def createProperty(elements: Array[Sign], unreachable: Boolean): Property =
     new Property(elements, unreachable)
 
+  /**
+    * Property of a point in the CFG for the ESeq domain.
+    * @param sign array of sign variables
+    * @param unreachable tells if the point of the CFG is unreachable
+    */
   class Property (sign : Array[Sign], unreachable : Boolean) extends BaseProperty(sign, unreachable) {
 
-    /** @inheritdoc
+    /**
+      * @inheritdoc
       */
     override def linearInequality(lf: LinearForm) : Property = {
       val s : Sign = linearEvaluation(lf)
@@ -54,4 +59,4 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDoma
 
 object ESeqDomain {
   def apply() = new ESeqDomain()
-} // end of SignDomain's companion object
+} // end of ESeqDomain's companion object

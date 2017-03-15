@@ -19,7 +19,6 @@
 package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical
 import it.unipd.jandom.domains.numerical.{sign, _}
 
 /**
@@ -48,9 +47,8 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.Sig
     */
   class Property (sign : Array[Sign], unreachable: Boolean) extends BaseProperty(sign, unreachable) {
 
-
-
-    /** @inheritdoc
+    /**
+      * @inheritdoc
       */
     override def linearInequality(lf: LinearForm) : Property = {
       val s : Sign = linearEvaluation(lf)
@@ -107,8 +105,7 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.Sig
 
 object SignDomain {
   /**
-    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
-    * double arithmetic, according to the parameter `overReals`.
+    * Ctor for SignDomain.
     */
   def apply() = new SignDomain()
 } // end of SignDomain's companion object

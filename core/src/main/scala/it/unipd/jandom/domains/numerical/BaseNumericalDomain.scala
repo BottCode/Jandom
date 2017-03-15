@@ -12,6 +12,10 @@ import scala.math.PartiallyOrdered
 /**
   * @note CoreType is the trait of the XDomainCore object (e.g. Sign, Constant, etc.). By employing the template method
   *       pattern, it is possible to specify only some behaviours in the subclasses.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 abstract class BaseNumericalDomain
   [T : ClassTag, CoreType <: CompleteLatticeOperator[T] with IntOperator[T] with Abstraction[Int, T]](core : CoreType)

@@ -1,4 +1,6 @@
-package it.unipd.jandom.domains
+package it.unipd.jandom.domains.numerical
+
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
 /**
   * Constant domain

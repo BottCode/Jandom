@@ -1,6 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.{CompleteLatticeOperator, IntOperator}
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
 trait Sign
 // positive numbers (> 0)
@@ -20,7 +20,7 @@ case object SignBottom extends Sign
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari@studenti.unipd.it>
   */
-object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] {
+object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
   /**
     * Factory method for signs.
@@ -28,7 +28,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @param n number that has to be converted to sign
     * @return sign of `n`
     */
-  def toSign(n : Int) : Sign =
+  override def alpha(n : Int) : Sign =
     if(n < 0)
       Minus
     else if(n == 0)
@@ -42,6 +42,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @param num number that has to be converted to sign
     * @return sign of `num`
     */
+  // Stale
   def toSign(num : Double): Sign =
     if(num > 0)
       Plus

@@ -21,6 +21,7 @@ import scala.collection.mutable.Buffer
 import scala.util.Try
 import it.unich.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical._
+import it.unipd.jandom.domains.numerical.congruence.CongruenceDomain
 import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.constant.ConstantDomain
 import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, SignDomain}
@@ -46,7 +47,8 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ParityDomain(), "Parity Domain", "UniPD"),
     ParameterValue(SumSignParityDomain(), "Sum between Parity and Sign Domain", "UniPD"),
     ParameterValue(ConstantDomain(), "Constant domain", "UniPD: Constant propagation "),
-    ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements")
+    ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements"),
+    ParameterValue(CongruenceDomain(), "Congruence Domain", "UniPD: the congruenceDomain")
   )
   val default = values.last
 

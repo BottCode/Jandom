@@ -25,13 +25,15 @@ import it.unipd.jandom.domains.numerical
   * Sign domain, i.e. the domain composed of the elements Minus (negative numbers), Plus (positive numbers) and
   * Zero (0). SignTop and SignBottom complete the lattice, providing a greatest and a least element for this set.
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  *
  */
 class SignDomain extends BaseNumericalDomain[Sign, numerical.SignDomainCore.type](numerical.SignDomainCore) {
 
   // this class uses the operations defined in SignDomainCore
-  import SignDomainCore._
+
 
   /**
     * Handy factory method for properties, callable from the outside of the class

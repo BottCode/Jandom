@@ -1,8 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.numerical._
-import it.unipd.jandom.domains.numerical.ParityDomainCore._
-import it.unipd.jandom.domains.numerical.SignDomainCore._
 
 
 class SumSignParityDomain(val dom1: SignDomain, val dom2: ParityDomain) extends SumDomain[SignDomain, ParityDomain]{
@@ -14,13 +12,10 @@ class SumSignParityDomain(val dom1: SignDomain, val dom2: ParityDomain) extends 
   }
 
   def apply(p1: dom1.Property, p2: dom2.Property) = new SumSignParity(p1, p2)
-
-
-
-
 }
+
 object SumSignParityDomain {
   private lazy val v = new SumSignParityDomain(SignDomain(), ParityDomain())
 
-  def apply() = v
+  def apply() : SumSignParityDomain = v
 }

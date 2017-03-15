@@ -16,5 +16,5 @@ class ProductSignParityDomain(override val dom1 : SignDomain, override val dom2 
 object ProductSignParityDomain {
   private lazy val v = new ProductSignParityDomain(SignDomain(), ParityDomain())
 
-  def apply() = v
+  def apply() : ProductSignParityDomain = v
 }

@@ -19,7 +19,6 @@
 package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.numerical.LinearForm
-import ParityDomainCore._
 import it.unipd.jandom.domains.numerical
 
 class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCore.type](numerical.ParityDomainCore) {
@@ -43,8 +42,8 @@ class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCor
       p match {
         case Even => this
         case Odd => this
-        case ParityTop => createProperty(Array.fill(dimension)(ParityDomainCore.top), false)
-        case ParityBottom => createProperty(Array.fill(dimension)(ParityDomainCore.top), true)
+        case ParityTop => createProperty(Array.fill(dimension)(ParityDomainCore.top), unreachable = false)
+        case ParityBottom => createProperty(Array.fill(dimension)(ParityDomainCore.top), unreachable = true)
       }
     }
 

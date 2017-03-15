@@ -51,6 +51,20 @@ class Mod3Domain extends BaseNumericalDomain[Mod3, numerical.Mod3Core.type](nume
       }
     }
 
+    /**
+      * @inheritdoc
+      */
+    override def linearInequality(lf: LinearForm): Property = {
+      val mod3: Mod3 = linearEvaluation(lf)
+      if (isEmpty)
+        return this
+      mod3 match {
+        case Mod3Bottom => bottom
+        case Mod3Top => top
+        case RestClass(r) => if (r > 0) bottom else this
+      }
+    }
+
   } // end of Property
 }
 object Mod3Domain {

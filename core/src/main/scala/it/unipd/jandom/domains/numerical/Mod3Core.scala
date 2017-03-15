@@ -72,8 +72,8 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
     }
   }
 
-  override def remainder(p : Mod3, q : Mod3) : Mod3 = {
-    (p,q) match {
+  def remainder(m : Mod3, n : Mod3) : Mod3 = {
+    (m,n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
       case (_, RestClass(0)) => Mod3Bottom

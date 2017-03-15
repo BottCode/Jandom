@@ -1,7 +1,5 @@
 package it.unipd.jandom.domains.numerical
 
-
-
 import it.unich.jandom.domains.numerical.SumDomain
 import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.sign.SignDomain

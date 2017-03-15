@@ -33,6 +33,7 @@ import it.unipd.jandom.domains.numerical.{sign, _}
  */
 class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.SignDomainCore) {
 
+  // this class uses the operations defined in SignDomainCore
 
   /**
     * Handy factory method for properties, callable from the outside of the class

@@ -189,6 +189,25 @@ abstract class BaseNumericalDomain
       }
     }
 
+
+
+    /**
+      * @inheritdoc
+      */
+    override def mkString(vars: Seq[String]): String = {
+      require(vars.length >= dimension)
+      if (unreachable)
+        "[ empty ]"
+      else {
+        val bounds = for (i <- 0 until dimension) yield {
+          val h = elements(i).toString
+          s"${vars(i)} = $h"
+        }
+        bounds.mkString("[ ", " , ", " ]")
+      }
+    }
+
+
     /**
       * @inheritdoc
       */
@@ -265,7 +284,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    private def linearEvaluation(lf: LinearForm): T = {
+    def linearEvaluation(lf: LinearForm): T = {
       val known = lf.known.toDouble.toInt
       val homcoeffs = lf.homcoeffs.map(_.toDouble.toInt).toArray
       linearEvaluation(known, homcoeffs)
@@ -274,7 +293,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    private def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
+    def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
       require(homcoeffs.length <= dimension)
       if (unreachable && homcoeffs.exists { _ != 0 })
         return core.top
@@ -307,26 +326,10 @@ abstract class BaseNumericalDomain
     override def domain: Domain = BaseNumericalDomain.this
 
 
-    /**
-      * Intersection with the half-plane `lf <= 0`.
-      *
-      * @todo $TODOGEN
-      */
-    override def linearInequality(lf: LinearForm): Property = this
 
-    /**
-      * Intersection with `lf != 0`.
-      *
-      * @todo $TODOGEN
-      */
-override def linearDisequality(lf: LinearForm): Property = this
 
-    /**
-      * Returns a string representation of the abstract property.
-      *
-      * @param vars an array with the name of the variables in the environment
-      */
-    override def mkString(vars: Seq[String]): String = ""
+
+
 }
 }
 

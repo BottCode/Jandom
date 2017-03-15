@@ -32,27 +32,6 @@ class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCor
 
     def apply(parity: Array[Parity], unreachable: Boolean) : Property = new Property(parity, unreachable)
 
-    /**
-      * @inheritdoc
-      */
-    private def linearEvaluation(lf: LinearForm): Parity = {
-      val known = lf.known.toDouble
-      val homcoeffs = lf.homcoeffs.map(_.toDouble).toArray
-      linearEvaluation(known, homcoeffs)
-    }
-
-    /**
-      * @inheritdoc
-      */
-    private def linearEvaluation(known: Double, homcoeffs: Array[Double]): Parity = {
-      require(homcoeffs.length <= dimension)
-      if (unreachable && homcoeffs.exists { _ != 0 }) return ParityTop
-      var p: Parity = toParity(known)
-      for (i <- homcoeffs.indices)
-        if (homcoeffs(i) != 0)
-          p = sum(p, elements(i))
-      p
-    }
 
     /**
       * @inheritdoc
@@ -74,26 +53,7 @@ class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCor
       */
     override def linearInequality(lf: LinearForm): Property = linearDisequality(lf)
 
-    /**
-      * @inheritdoc
-      */
-    override def mkString(vars: Seq[String]): String = {
-      require(vars.length >= dimension)
-      if (unreachable)
-        "[ empty ]"
-      else {
-        val bounds = for (i <- 0 until dimension) yield {
-          val h = elements(i) match {
-            case Even => "EVEN"
-            case Odd => "ODD"
-            case ParityTop => "TOP"
-            case ParityBottom => "BOTTOM"
-          }
-          s"${vars(i)} = $h"
-        }
-      bounds.mkString("[ ", " , ", " ]")
-      }
-    }
+
 
   } // end of Property
 

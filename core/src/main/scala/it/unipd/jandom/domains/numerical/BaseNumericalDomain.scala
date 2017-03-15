@@ -296,7 +296,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    protected def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
+    private def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
       require(homcoeffs.length <= dimension)
       if (unreachable && homcoeffs.exists { _ != 0 })
         return core.top

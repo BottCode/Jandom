@@ -16,13 +16,12 @@
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.mod
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical
+import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 
-class Mod3Domain extends BaseNumericalDomain[Mod3, numerical.Mod3DomainCore.type](numerical.Mod3DomainCore) {
-  
+class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore.type](Mod3DomainCore) {
 
   override def createProperty(mod3s: Array[Mod3], unreachable: Boolean): Property =
     new Property(mod3s, unreachable)

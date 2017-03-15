@@ -1,10 +1,8 @@
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.mod
 
-import it.unipd.jandom.domains._
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
 /**
-  *
-  *
   * @author $assume
   */
 trait Mod3
@@ -55,15 +53,15 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
       case (_, RestClass(0)) => RestClass(0)
       case (Mod3Top, _) => Mod3Top
       case (_, Mod3Top) => Mod3Top
-      case (RestClass(c1), RestClass(c2)) =>
-        alpha(c1*c2)
+      case (RestClass(m1), RestClass(n1)) =>
+        alpha(m1*n1)
     }
   }
 
   override def inverse(m : Mod3) : Mod3 = m
 
-  override def division(p : Mod3, q : Mod3) : Mod3 = {
-    (p,q) match {
+  override def division(m : Mod3, n : Mod3) : Mod3 = {
+    (m,n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
       case (Mod3Top, _) => Mod3Top
@@ -72,7 +70,7 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
     }
   }
 
-  def remainder(m : Mod3, n : Mod3) : Mod3 = {
+  override def remainder(m : Mod3, n : Mod3) : Mod3 = {
     (m,n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
@@ -80,19 +78,19 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
       case (RestClass(0), _) => RestClass(0)
       case (_, Mod3Top) => Mod3Top
       case (Mod3Top, _) => Mod3Top
-      case (RestClass(p), RestClass(q)) => alpha(p%q)
+      case (RestClass(m1), RestClass(n1)) => alpha(m1%n1)
     }
   }
 
-  override def compare(p : Mod3, q : Mod3) : Option[Int] = {
-    (p,q) match {
+  override def compare(m : Mod3, n : Mod3) : Option[Int] = {
+    (m,n) match {
       case (Mod3Top, Mod3Top) => Option(0)
       case (Mod3Top, _) => Option(1)
       case (_, Mod3Top) => Option(-1)
       case (Mod3Bottom, Mod3Bottom) => Option(0)
       case (Mod3Bottom, _) => Option(-1)
       case (_, Mod3Bottom) => Option(1)
-      case (_, _) => if(p == q) Option(0) else Option.empty
+      case (_, _) => if(m == n) Option(0) else Option.empty
     }
   }
 

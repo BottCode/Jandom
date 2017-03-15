@@ -19,6 +19,41 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDoma
     new Property(elements, unreachable)
 
   class Property (sign : Array[Sign], unreachable : Boolean) extends BaseProperty(sign, unreachable) {
+    /**
+      * Compute the minimum and maximum value of a linear form in a box.
+      *
+      * @param lf a linear form
+      * @return  the sign of the linear evaluation of `lf`
+      */
+    override def linearEvaluation(lf: LinearForm): Sign = {
+      val known = lf.known.toDouble
+      val homcoeffs = lf.homcoeffs.map (_.toDouble).toArray
+      linearEvaluation(known, homcoeffs)
+    }
+
+    /**
+      * Compute the minimum and maximum value of a linear form in a box.
+      *
+      * @param known the known term of a linear form
+      * @param homcoeffs homogeneous coefficients of a linear form
+      * @return the sign of the linear evaluation of a linear form
+      */
+    def linearEvaluation(known: Double, homcoeffs: Array[Double]): Sign = {
+      require(homcoeffs.length <= dimension)
+      var s: Sign = ESeqDomainCore.alpha(known.toInt)
+      if (unreachable && homcoeffs.exists { _ != 0 }) return SignTop
+      for (i <- homcoeffs.indices) {
+        if (homcoeffs(i) > 0) {
+          val t: Sign = sign(i)
+          s = sum(s, t)
+        }
+        else if (homcoeffs(i) < 0) {
+          val t: Sign = inverse(sign(i))
+          s = sum(s, t)
+        }
+      }
+      s
+    }
 
     /** @inheritdoc
       */

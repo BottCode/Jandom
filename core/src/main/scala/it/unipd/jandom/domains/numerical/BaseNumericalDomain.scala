@@ -284,7 +284,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def linearEvaluation(lf: LinearForm): T = {
+    protected def linearEvaluation(lf: LinearForm): T = {
       val known = lf.known.toDouble.toInt
       val homcoeffs = lf.homcoeffs.map(_.toDouble.toInt).toArray
       linearEvaluation(known, homcoeffs)
@@ -293,7 +293,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
+    protected def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
       require(homcoeffs.length <= dimension)
       if (unreachable && homcoeffs.exists { _ != 0 })
         return core.top

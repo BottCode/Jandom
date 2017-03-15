@@ -26,72 +26,30 @@ import spire.math.Rational
 
 import scala.math.PartiallyOrdered
 
-class Mod3Domain extends NumericalDomain {
+class Mod3Domain extends BaseNumericalDomain[Mod3, numerical.Mod3Core.type](numerical.Mod3Core) {
+  
 
-  def apply(mod3s: Array[Mod3]): Property = Property(mod3s, mod3s.forall(p => p.equals(Mod3Bottom)))
+  override def createProperty(mod3s: Array[Constant], unreachable: Boolean): Property =
+    new Property(mod3s, unreachable)
 
-  /**
-    * @inheritdoc
-    */
-  def bottom(n: Int) = Property(Array.fill(n)(Mod3Bottom), unreachable = true)
+  class Property (mod3s : Array[Constant], unreachable: Boolean) extends BaseProperty(mod3s, unreachable) {
 
-  /**
-    * @inheritdoc
-    */
-  def top(n: Int) = Property(Array.fill(n)(Mod3Top), unreachable = false)
-
-  /**
-    * @inheritdoc
-    */
-  override def widenings = Seq(WideningDescription.default[Property])
-
-  case class Property private[Mod3Domain](mod3s : Array[Mod3], unreachable: Boolean) extends NumericalProperty[Property] {
-    type Domain = Mod3Domain
+    def apply(mod3s: Array[Mod3], unreachable: Boolean) : Property = new Property(mod3s, unreachable)
 
     /**
       * @inheritdoc
       */
-    override def isPolyhedral: Boolean = false
-
-    /**
-      * @inheritdoc
-      */
-    override def constraints : Seq[LinearForm] = List()
-
-    /**
-      * @inheritdoc
-      */
-    override def dimension: Int = mod3s.length
-
-    /**
-      * @inheritdoc
-      */
-    override def domain = Mod3Domain.this
-
-    /**
-      * @inheritdoc
-      */
-    override def isEmpty: Boolean = unreachable
-
-    /**
-      * @inheritdoc
-      */
-    override def isTop: Boolean = !isEmpty && mod3s.forall( _.equals(ConstantTop))
-
-    /**
-      * @inheritdoc
-      */
-    override def isBottom: Boolean = isEmpty
-
-    /**
-      * @inheritdoc
-      */
-    override def bottom: Property = Mod3Domain.this.bottom(mod3s.length)
-
-    /**
-      * @inheritdoc
-      */
-    override def top: Property = Mod3Domain.this.top(mod3s.length)
+    override def linearDisequality(lf: LinearForm): Property = {
+      if (isEmpty)
+        return this
+      val mod3 : Mod3 = linearEvaluation(lf)
+      mod3 match {
+        case Mod3Bottom => bottom
+        case RestClass(0) => bottom
+        case Mod3Top => top // lub
+        case _ => this // mod3 != RestClass(0)
+      }
+    }
 
   } // end of Property
 }

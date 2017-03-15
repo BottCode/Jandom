@@ -12,22 +12,22 @@ case class RestClass(num : Int) extends Mod3
 case object Mod3Bottom extends Mod3
 case object Mod3Top extends Mod3
 
-class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] {
+class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
 
-  def toMod3(t : Int) : Mod3 = RestClass(t % 3)
+  override def alpha(t : Int) : Mod3 = RestClass(t % 3)
 
-  def sum(m : Mod3, n : Mod3) : Mod3 = {
+  override def sum(m : Mod3, n : Mod3) : Mod3 = {
     (m, n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
       case (Mod3Top, _) => Mod3Top
       case (_, Mod3Top) => Mod3Top
       case (RestClass(m1), RestClass(n1)) =>
-        toMod3(m1+n1)
+        alpha(m1+n1)
     }
   }
 
-  def lub(m : Mod3, n : Mod3) : Mod3 = {
+  override def lub(m : Mod3, n : Mod3) : Mod3 = {
     (m,n) match {
       case (Mod3Top, _) => Mod3Top
       case (_, Mod3Top) => Mod3Top
@@ -37,7 +37,7 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
     }
   }
 
-  def glb(m : Mod3, n : Mod3) : Mod3 = {
+  override def glb(m : Mod3, n : Mod3) : Mod3 = {
     (m, n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
@@ -47,7 +47,7 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
     }
   }
 
-  def mult(m : Mod3, n : Mod3) : Mod3 = {
+  override def mult(m : Mod3, n : Mod3) : Mod3 = {
     (m, n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
@@ -56,13 +56,13 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
       case (Mod3Top, _) => Mod3Top
       case (_, Mod3Top) => Mod3Top
       case (RestClass(c1), RestClass(c2)) =>
-        toMod3(c1*c2)
+        alpha(c1*c2)
     }
   }
 
-  def inverse(m : Mod3) : Mod3 = m
+  override def inverse(m : Mod3) : Mod3 = m
 
-  def division(p : Mod3, q : Mod3) : Mod3 = {
+  override def division(p : Mod3, q : Mod3) : Mod3 = {
     (p,q) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
@@ -72,19 +72,19 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
     }
   }
 
-  def remainder(m : Mod3, n : Mod3) : Mod3 = {
-    (m,n) match {
+  override def remainder(p : Mod3, q : Mod3) : Mod3 = {
+    (p,q) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
       case (_, RestClass(0)) => Mod3Bottom
       case (RestClass(0), _) => RestClass(0)
       case (_, Mod3Top) => Mod3Top
       case (Mod3Top, _) => Mod3Top
-      case (RestClass(p), RestClass(q)) => toMod3(p%q)
+      case (RestClass(p), RestClass(q)) => alpha(p%q)
     }
   }
 
-  def compare(p : Mod3, q : Mod3) : Option[Int] = {
+  override def compare(p : Mod3, q : Mod3) : Option[Int] = {
     (p,q) match {
       case (Mod3Top, Mod3Top) => Option(0)
       case (Mod3Top, _) => Option(1)

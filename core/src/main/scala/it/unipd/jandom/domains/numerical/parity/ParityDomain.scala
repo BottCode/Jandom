@@ -16,12 +16,13 @@
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.parity
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical
+import it.unipd.jandom.domains.numerical.{parity, _}
 
-class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCore.type](numerical.ParityDomainCore) {
+class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore.type](parity.ParityDomainCore) {
 
 
   override def createProperty(elements: Array[Parity], unreachable: Boolean): Property =

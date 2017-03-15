@@ -2,6 +2,7 @@ package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.DomainTransformation
 import it.unich.jandom.domains.numerical.ProductDomain
+import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.sign.SignDomain
 
 class ProductSignParityDomain(override val dom1 : SignDomain, override val dom2 : ParityDomain) extends ProductDomain[SignDomain, ParityDomain](dom1, dom2) {

@@ -1,4 +1,4 @@
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.parity
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 

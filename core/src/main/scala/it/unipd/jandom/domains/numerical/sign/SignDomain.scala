@@ -33,11 +33,6 @@ import it.unipd.jandom.domains.numerical.{sign, _}
  */
 class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.SignDomainCore) {
 
-  // this class uses the operations defined in SignDomainCore
-<<<<<<< HEAD:core/src/main/scala/it/unipd/jandom/domains/numerical/SignDomain.scala
-
-=======
->>>>>>> 3940638cc1b1381a02a7252b484bd254b915945a:core/src/main/scala/it/unipd/jandom/domains/numerical/sign/SignDomain.scala
 
   /**
     * Handy factory method for properties, callable from the outside of the class

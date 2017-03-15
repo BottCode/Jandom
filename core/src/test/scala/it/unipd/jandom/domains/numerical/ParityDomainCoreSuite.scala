@@ -1,6 +1,7 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.numerical.ParityDomainCore._
+import it.unipd.jandom.domains.numerical.parity.{Even, Odd, ParityBottom, ParityTop}
+import it.unipd.jandom.domains.numerical.parity.ParityDomainCore._
 import org.scalatest.FlatSpec
 
 /**

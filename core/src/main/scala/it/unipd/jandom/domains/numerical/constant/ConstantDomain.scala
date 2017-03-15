@@ -1,16 +1,14 @@
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.constant
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical
-
-
+import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 /**
   * Constant domain
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
-class ConstantDomain extends BaseNumericalDomain[Constant, numerical.ConstantDomainCore.type](numerical.ConstantDomainCore) {
+class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore.type](ConstantDomainCore) {
 
 
   override def createProperty(constants: Array[Constant], unreachable: Boolean): Property =

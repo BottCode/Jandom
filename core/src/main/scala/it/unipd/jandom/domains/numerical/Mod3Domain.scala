@@ -65,6 +65,26 @@ class Mod3Domain extends BaseNumericalDomain[Mod3, numerical.Mod3Core.type](nume
       }
     }
 
+    /**
+      * @inheritdoc
+      */
+    override def mkString(vars: Seq[String]): String = {
+      require(vars.length >= dimension)
+      if (unreachable)
+        "[ empty ]"
+      else {
+        val bounds = for (i <- 0 until dimension) yield {
+          val c = mod3s(i) match {
+            case Mod3Top => "TOP"
+            case Mod3Bottom => "BOTTOM"
+            case RestClass(r) => r
+          }
+          s"${vars(i)} = $c"
+        }
+        bounds.mkString("[ ", " , ", " ]")
+      }
+    }
+
   } // end of Property
 }
 object Mod3Domain {

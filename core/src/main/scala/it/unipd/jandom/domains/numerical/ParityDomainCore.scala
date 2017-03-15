@@ -1,6 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.{CompleteLatticeOperator, IntOperator}
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
 trait Parity
 case object Even extends Parity
@@ -8,14 +8,15 @@ case object Odd extends Parity
 case object ParityTop extends Parity
 case object ParityBottom extends Parity
 
-object ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[Parity] {
+object ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[Parity] with Abstraction[Int, Parity] {
 
-  def toParity(t : Int) : Parity =
-    if(t % 2 == 0)
+  override def alpha(num: Int): Parity =
+    if(num % 2 == 0)
       Even
     else
       Odd
 
+  // stale
   def toParity(n : Double) : Parity = {
     // if (n != n.floor) return ParityTop
     if (n.toInt % 2 == 0)

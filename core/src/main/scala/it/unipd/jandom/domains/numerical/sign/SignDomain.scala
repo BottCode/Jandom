@@ -36,9 +36,7 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.Sig
   // this class uses the operations defined in SignDomainCore
 
   /**
-    * Handy factory method for properties, callable from the outside of the class
-    * @param signsArray array filled with elements in SignDomain
-    * @return a new property for `signsArray`
+    * @inheritdoc
     */
   override def createProperty(signsArray : Array[Sign], unreachable : Boolean): Property =
     new Property(signsArray, unreachable)

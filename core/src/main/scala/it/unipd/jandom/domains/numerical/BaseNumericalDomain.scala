@@ -10,14 +10,26 @@ import spire.math.Rational
 import scala.math.PartiallyOrdered
 
 /**
-  * @note CoreType is the trait of the XDomainCore object (e.g. Sign, Constant, etc.)
+  * @note CoreType is the trait of the XDomainCore object (e.g. Sign, Constant, etc.). By employing the template method
+  *       pattern, it is possible to specify only some behaviours in the subclasses.
   */
 abstract class BaseNumericalDomain
   [T : ClassTag, CoreType <: CompleteLatticeOperator[T] with IntOperator[T] with Abstraction[Int, T]](core : CoreType)
   extends NumericalDomain {
 
+  /**
+    * Handy factory method for properties, callable from the outside of the class.
+    * @param elements array filled with domain elements
+    * @param unreachable tells whether the program point is reachable or not
+    * @return a new property for the given array
+    */
   def createProperty(elements: Array[T], unreachable: Boolean) : Property
 
+  /**
+    * Factory method for creating a Property.
+    * @param elements of the domain
+    * @return a new property
+    */
   def createProperty(elements: Array[T]) : Property =
     createProperty(elements, elements.forall(x => x.equals(core.bottom)))
 
@@ -37,8 +49,7 @@ abstract class BaseNumericalDomain
     val widenings = Seq(WideningDescription.default[Property])
 
   /**
-    * @inheritdoc
-    * For numerical domains, properties needs to be instances of
+    * Property type that implements some common operations for numerical domains' properties.
     */
   abstract class BaseProperty (val elements: Array[T], val unreachable: Boolean) extends NumericalProperty[Property] {
 
@@ -237,6 +248,7 @@ abstract class BaseNumericalDomain
         Option.empty
       else
         Option(lf.known)
+
     /**
       * Performs the comparison between two properties.
       * @param that the right hand side of the comparison
@@ -313,7 +325,6 @@ abstract class BaseNumericalDomain
           acc = core.sum(acc, core.inverse(elements(i)))
         else if(homcoeffs(i) > 0)
           acc = core.sum(acc, elements(i))
-
       acc
     }
 
@@ -328,8 +339,11 @@ abstract class BaseNumericalDomain
     // narrowing to be sound
     override def narrowing(that: Property): Property = this
 
-
+    /**
+      * Type used by superclass.
+      */
     override type Domain = BaseNumericalDomain[T, CoreType]
+
     /**
       * Returns the abstract domain corresponding to this property.
       */

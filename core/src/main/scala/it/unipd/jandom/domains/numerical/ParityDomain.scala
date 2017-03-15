@@ -30,8 +30,6 @@ class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCor
 
   class Property (elements : Array[Parity], unreachable: Boolean) extends BaseProperty(elements, unreachable) {
 
-  override def dimension = elements.length
-
     def apply(parity: Array[Parity], unreachable: Boolean) : Property = new Property(parity, unreachable)
 
     /**

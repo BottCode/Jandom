@@ -1,23 +1,37 @@
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.sign
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
-// numbers greater or equal than 0 (>= 0)
-case object Geq0 extends Sign
-// numbers less or equal than 0 (>= 0)
-case object Leq0 extends Sign
-// numbers not equal to 0 (>= 0)
-case object Neq0 extends Sign
+trait Sign
+// positive numbers (> 0)
+case object Plus extends Sign
+// negative numbers (< 0)
+case object Minus extends Sign
+// null numbers (= 0)
+case object Zero extends Sign
+// no accurate info available for variable
+case object SignTop extends Sign
+// no possible value
+case object SignBottom extends Sign
 
 /**
-  * Operations on the extended domain of signs with >=0, <=0 and !=0.
+  * Static class that describes operations on the sign domain.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  *           Stefano Munari <stefano.munari@studenti.unipd.it>
   */
-object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
+object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
-  override def alpha(num: Int): Sign =
-    if(num < 0)
+  /**
+    * Factory method for signs.
+    *
+    * @param n number that has to be converted to sign
+    * @return sign of `n`
+    */
+  override def alpha(n : Int) : Sign =
+    if(n < 0)
       Minus
-    else if(num == 0)
+    else if(n == 0)
       Zero
     else
       Plus
@@ -28,7 +42,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @param num number that has to be converted to sign
     * @return sign of `num`
     */
-  // stale
+  // Stale
   def toSign(num : Double): Sign =
     if(num > 0)
       Plus
@@ -36,6 +50,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       Minus
     else
       Zero
+
 
   /**
     * Returns the sum of two sign variables.
@@ -54,12 +69,6 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (Zero, a) => a
       case (Plus, Plus) => Plus
       case (Minus, Minus) => Minus
-      case (Geq0, Geq0) => Geq0
-      case (Geq0, Plus) => Plus
-      case (Plus, Geq0) => Plus
-      case (Leq0, Leq0) => Leq0
-      case (Leq0, Minus) => Minus
-      case (Minus, Leq0) => Minus
       case _ => SignTop
     }
 
@@ -78,13 +87,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (Zero, _) => Zero
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
-      case (Plus, a) => a
-      case (a, Plus) => a
-      case (Minus, a) => inverse(a)
-      case (a, Minus) => inverse(a)
-      case (Leq0, Geq0) => Leq0
-      case (Geq0, Leq0) => Leq0
-      case _ => SignTop
+      case (a, b) => if(a == b) Plus else Minus
     }
 
   /**
@@ -97,8 +100,6 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     s match {
       case Plus => Minus
       case Minus => Plus
-      case Leq0 => Geq0
-      case Geq0 => Leq0
       case a => a
     }
 
@@ -117,20 +118,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (SignTop, _) => SignTop
       case (Zero, _) => Zero
       case (_, SignTop) => SignTop
-      case (Plus, Minus) => Leq0
-      case (Minus, Plus) => Leq0
-      case (Plus, Geq0) => Geq0
-      case (Geq0, Plus) => Geq0
-      case (Minus, Geq0) => Leq0
-      case (Geq0, Minus) => Leq0
-      case (Plus, Leq0) => Leq0
-      case (Leq0, Plus) => Leq0
-      case (Minus, Leq0) => Geq0
-      case (Leq0, Minus) => Geq0
-      case (Leq0, Geq0) => Leq0
-      case (Geq0, Leq0) => Leq0
-        // TODO: Check if something is missing
-      case (a, b) => if (a.equals(b)) Geq0 else SignTop
+      case _ => SignTop
     }
 
   /**
@@ -141,15 +129,11 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @return the remainder of the modulo operation
     */
   def remainder(s : Sign, t : Sign) : Sign =
-    (s, t) match {
+    (s,t) match {
       case (SignBottom, _) => SignBottom
       case (_, SignBottom) => SignBottom
       case (_, Zero) => SignBottom
       case (Zero, _) => Zero
-      case (Plus, _) => Geq0
-      case (Geq0, _) => Geq0
-      case (Minus, _) => Leq0
-      case (Leq0, _) => Leq0
       case (_, _) => SignTop
     }
 
@@ -166,12 +150,6 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (_, SignTop) => SignTop
       case (SignBottom, a) => a
       case (a, SignBottom) => a
-      case (Zero, Plus) => Geq0
-      case (Plus, Zero) => Geq0
-      case (Zero, Minus) => Leq0
-      case (Minus, Zero) => Leq0
-      case (Plus, Minus) => Neq0
-      case (Minus, Plus) => Neq0
       case (a, b) => if (a == b) a else SignTop
     }
 
@@ -183,15 +161,13 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @return the glb of `s` and `t`
     */
   def glb(s : Sign, t : Sign) : Sign =
-    (s, t) match {
-      case (SignTop, a) => a
-      case (a, SignTop) => a
-      case (_, SignBottom) => SignBottom
-      case (SignBottom, _) => SignBottom
-      case (Geq0, Leq0) => Zero
-      case (Leq0, Geq0) => Zero
-      case (a, b) => if(a == b) a else SignBottom
-    }
+      (s,t) match {
+        case (SignTop, a) => a
+        case (a, SignTop) => a
+        case (_, SignBottom) => SignBottom
+        case (SignBottom, _) => SignBottom
+        case (a, b) => if(a == b) a else SignBottom
+      }
 
   /**
     * Performs a Java-like comparison (same behaviour as Java's compareTo) between two signs.
@@ -208,21 +184,10 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (SignBottom, SignBottom) => Option(0)
       case (SignBottom, _) => Option(-1)
       case (_, SignBottom) => Option(1)
-      case (Zero, Geq0) => Option(-1)
-      case (Plus, Geq0) => Option(-1)
-      case (Zero, Leq0) => Option(-1)
-      case (Minus, Leq0) => Option(-1)
-      case (Plus, Neq0) => Option(-1)
-      case (Minus, Neq0) => Option(-1)
-      case (Geq0, Zero) => Option(1)
-      case (Geq0, Plus) => Option(1)
-      case (Leq0, Zero) => Option(1)
-      case (Leq0, Minus) => Option(1)
-      case (Neq0, Plus) => Option(1)
-      case (Neq0, Minus) => Option(1)
       case (a, b) => if (a.equals(b)) Option(0) else Option.empty
     }
 
   override def top: Sign = SignTop
   override def bottom: Sign = SignBottom
-} // end object ESeqDomainCore
+
+} // end object SignDomainCore

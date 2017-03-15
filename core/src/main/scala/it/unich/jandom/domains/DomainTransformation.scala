@@ -22,8 +22,9 @@ import it.unich.jandom.domains.numerical._
 import it.unich.jandom.utils.breeze.RationalForBreeze._
 import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.numerical.{Even, ParityTop}
-import it.unipd.jandom.domains.numerical.{Zero}
+import it.unipd.jandom.domains.numerical.sign.Zero
 import it.unipd.jandom.domains.numerical._
+import it.unipd.jandom.domains.numerical.sign.SignDomain
 
 
 /**
@@ -124,14 +125,12 @@ object DomainTransformation {
 
   implicit object SignToParity extends DomainTransformation[SignDomain, ParityDomain] {
     def apply(src: SignDomain, dst: ParityDomain): src.Property => dst.Property = {
-      { p => dst.top(p.dimension) }
-
-      /* (p) => {
-        dst(p.sign.map {
+      (p) => {
+        dst.createProperty(p.elements.map {
           case Zero => Even
           case _ => ParityTop
         })
-      }*/
+      }
     }
   }
 

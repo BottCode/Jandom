@@ -21,6 +21,7 @@ import scala.collection.mutable.Buffer
 import scala.util.Try
 import it.unich.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical._
+import it.unipd.jandom.domains.numerical.sign.SignDomain
 
 /**
  * The ParameterEnumeration for numerical domains.

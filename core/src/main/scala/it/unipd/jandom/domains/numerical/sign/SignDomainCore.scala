@@ -15,15 +15,16 @@ case object SignTop extends Sign
 case object SignBottom extends Sign
 
 /**
-  * Static class that describes operations on the sign domain.
+  * Operations on the (basic) sign domain.
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
   /**
-    * Factory method for signs.
+    * Factory method for signs (i.e. abstraction).
     *
     * @param n number that has to be converted to sign
     * @return sign of `n`
@@ -42,7 +43,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @param num number that has to be converted to sign
     * @return sign of `num`
     */
-  // Stale
+  // TODO: Stale - keep or dispose?
   def toSign(num : Double): Sign =
     if(num > 0)
       Plus
@@ -50,7 +51,6 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       Minus
     else
       Zero
-
 
   /**
     * Returns the sum of two sign variables.
@@ -187,7 +187,16 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (a, b) => if (a.equals(b)) Option(0) else Option.empty
     }
 
+  /**
+    * Maximum element of this lattice.
+    * @return the top element
+    */
   override def top: Sign = SignTop
+
+  /**
+    * Least element of this lattice.
+    * @return the bottom element
+    */
   override def bottom: Sign = SignBottom
 
 } // end object SignDomainCore

@@ -83,31 +83,6 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDoma
         case SignBottom => bottom
       }
     }
-
-    /**
-      * @inheritdoc
-      */
-    override def mkString(vars: Seq[String]): String = {
-      require(vars.length >= dimension)
-      if (unreachable)
-        "empty"
-      else {
-        val bounds = for (i <- 0 until dimension) yield {
-          val h = sign(i) match {
-            case SignTop => "Top"
-            case SignBottom => "Bottom"
-            case Plus => "Plus"
-            case Minus => "Minus"
-            case Zero => "Zero"
-            case Geq0 => "Geq0"
-            case Leq0 => "Leq0"
-            case Neq0 => "Neq0"
-          }
-          s"${vars(i)} = $h"
-        }
-        bounds.mkString("[ ", " , ", " ]")
-      }
-    }
   } // end class Property
 } // end class ESeqDomain
 

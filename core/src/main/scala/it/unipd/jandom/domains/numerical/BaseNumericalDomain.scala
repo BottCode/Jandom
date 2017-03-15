@@ -47,7 +47,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def dimension: Int = elements.length
+    override def dimension: Int = elements.length
 
     /**
       * @inheritdoc
@@ -57,27 +57,27 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def bottom : Property = createProperty(Array.fill(dimension)(core.bottom))
+    override def bottom : Property = createProperty(Array.fill(dimension)(core.bottom))
 
     /**
       * @inheritdoc
       */
-    def top : Property = createProperty(Array.fill(dimension)(core.top))
+    override def top : Property = createProperty(Array.fill(dimension)(core.top))
 
     /**
       * @inheritdoc
       */
-    def isBottom: Boolean = unreachable
+    override def isBottom: Boolean = unreachable
 
     /**
       * @inheritdoc
       */
-    def isEmpty: Boolean = unreachable
+    override def isEmpty: Boolean = unreachable
 
     /**
       * @inheritdoc
       */
-    def isTop: Boolean = !unreachable && elements.forall( _.equals(core.top))
+    override def isTop: Boolean = !unreachable && elements.forall( _.equals(core.top))
 
     /**
       * @inheritdoc
@@ -129,7 +129,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def mapVariables(rho: Seq[Int]): Property =  {
+    override def mapVariables(rho: Seq[Int]): Property =  {
       require(rho.length == dimension)
       val newdim = rho.count(_ >= 0)
       require(rho forall { i => i >= -1 && i < newdim })
@@ -169,7 +169,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def union(that: Property): Property =  {
+    override def union(that: Property): Property =  {
       require(dimension == that.dimension)
       that match {
         case that : BaseProperty =>
@@ -182,7 +182,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def intersection(that : Property): Property = {
+    override def intersection(that : Property): Property = {
       require(dimension == that.dimension)
       that match {
         case that : BaseProperty =>
@@ -214,7 +214,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def minimize(lf: LinearForm): RationalExt =
+    override def minimize(lf: LinearForm): RationalExt =
       if (lf.homcoeffs.exists(!_.isZero))
         RationalExt.NegativeInfinity
       else
@@ -223,7 +223,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def maximize(lf: LinearForm): RationalExt =
+    override def maximize(lf: LinearForm): RationalExt =
       if (lf.homcoeffs.exists(!_.isZero))
         RationalExt.PositiveInfinity
       else
@@ -232,7 +232,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    def frequency(lf: LinearForm): Option[Rational] =
+    override def frequency(lf: LinearForm): Option[Rational] =
       if (lf.homcoeffs.exists(!_.isZero))
         Option.empty
       else
@@ -242,9 +242,9 @@ abstract class BaseNumericalDomain
       * @param that the right hand side of the comparison
       * @param evidence$1 dk
       * @tparam B actual type of the right hand side
-      * @return a Scala's tryCompareTo-like result
+      * @return a Scala Option which can contain {-1 = the first property is less defined than the second one; 0 = perfectly equal properties; 1 = the first property is better defined than the second one}
       */
-    def tryCompareTo[B >: Property](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]): Option[Int] = that match {
+    override def tryCompareTo[B >: Property](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]): Option[Int] = that match {
 
       case that: BaseProperty =>
         require(dimension == that.dimension)
@@ -334,12 +334,6 @@ abstract class BaseNumericalDomain
       * Returns the abstract domain corresponding to this property.
       */
     override def domain: Domain = BaseNumericalDomain.this
-
-
-
-
-
-
-}
+  }
 }
 

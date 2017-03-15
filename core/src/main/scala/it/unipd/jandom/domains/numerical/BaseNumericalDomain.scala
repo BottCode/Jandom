@@ -285,7 +285,10 @@ abstract class BaseNumericalDomain
     }
 
     /**
-      * @inheritdoc
+      * Compute the minimum and maximum value of a linear form in a box.
+      *
+      * @param lf a linear form
+      * @return  the result (istantiated to the correct type T) of the linear evaluation of `lf`
       */
     protected def linearEvaluation(lf: LinearForm): T = {
       val known = lf.known.toDouble.toInt
@@ -294,7 +297,11 @@ abstract class BaseNumericalDomain
     }
 
     /**
-      * @inheritdoc
+      * Compute the minimum and maximum value of a linear form in a box.
+      *
+      * @param known the known term of a linear form
+      * @param homcoeffs homogeneous coefficients of a linear form
+      * @return the result (istantiated to the correct type T) of the linear evaluation of a linear form
       */
     private def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
       require(homcoeffs.length <= dimension)

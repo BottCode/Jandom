@@ -12,7 +12,7 @@ case class RestClass(num : Int) extends Mod3
 case object Mod3Bottom extends Mod3
 case object Mod3Top extends Mod3
 
-class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
+object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
 
   override def alpha(t : Int) : Mod3 = RestClass(t % 3)
 
@@ -92,7 +92,7 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
       case (Mod3Bottom, Mod3Bottom) => Option(0)
       case (Mod3Bottom, _) => Option(-1)
       case (_, Mod3Bottom) => Option(1)
-      case (_, _) => if(m == n) Option(0) else Option.empty
+      case (_, _) => if(p == q) Option(0) else Option.empty
     }
   }
 

@@ -18,21 +18,16 @@
 
 package it.unipd.jandom.domains.numerical
 
-import it.unich.jandom.domains.WideningDescription
-import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
-import it.unich.jandom.utils.numberext.RationalExt
-import Mod3DomainCore._
-import spire.math.Rational
+import it.unich.jandom.domains.numerical.LinearForm
+import it.unipd.jandom.domains.numerical
 
-import scala.math.PartiallyOrdered
-
-class Mod3Domain extends BaseNumericalDomain[Mod3, numerical.Mod3Core.type](numerical.Mod3Core) {
+class Mod3Domain extends BaseNumericalDomain[Mod3, numerical.Mod3DomainCore.type](numerical.Mod3DomainCore) {
   
 
-  override def createProperty(mod3s: Array[Constant], unreachable: Boolean): Property =
+  override def createProperty(mod3s: Array[Mod3], unreachable: Boolean): Property =
     new Property(mod3s, unreachable)
 
-  class Property (mod3s : Array[Constant], unreachable: Boolean) extends BaseProperty(mod3s, unreachable) {
+  class Property (mod3s : Array[Mod3], unreachable: Boolean) extends BaseProperty(mod3s, unreachable) {
 
     def apply(mod3s: Array[Mod3], unreachable: Boolean) : Property = new Property(mod3s, unreachable)
 

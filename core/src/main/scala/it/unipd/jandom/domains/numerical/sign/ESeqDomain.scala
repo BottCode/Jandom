@@ -45,11 +45,11 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDoma
       for (i <- homcoeffs.indices) {
         if (homcoeffs(i) > 0) {
           val t: Sign = sign(i)
-          s = sum(s, t)
+          s = ESeqDomainCore.sum(s, t)
         }
         else if (homcoeffs(i) < 0) {
-          val t: Sign = inverse(sign(i))
-          s = sum(s, t)
+          val t: Sign = ESeqDomainCore.inverse(sign(i))
+          s = ESeqDomainCore.sum(s, t)
         }
       }
       s

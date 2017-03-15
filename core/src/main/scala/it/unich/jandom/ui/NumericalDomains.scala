@@ -22,6 +22,7 @@ import scala.util.Try
 import it.unich.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical.parity.ParityDomain
+import it.unipd.jandom.domains.numerical.constant.ConstantDomain
 import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, SignDomain}
 import it.unipd.jandom.domains.numerical.sign.SignDomain
 

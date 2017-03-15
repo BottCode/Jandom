@@ -20,8 +20,6 @@ package it.unich.jandom.ui
 import scala.collection.mutable.Buffer
 import scala.util.Try
 import it.unich.jandom.domains.numerical._
-import it.unich.jandom.ui
-import it.unipd.jandom.domains.ConstantDomain
 import it.unipd.jandom.domains.numerical._
 
 /**

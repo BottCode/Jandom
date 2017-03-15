@@ -11,9 +11,19 @@ case object Neq0 extends Sign
 
 /**
   * Operations on the extended domain of signs with >=0, <=0 and !=0.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
+  /**
+    * Factory method for extended signs (i.e. abstraction).
+    *
+    * @param num number that has to be converted to extended sign
+    * @return sign of `n`
+    */
   override def alpha(num: Int): Sign =
     if(num < 0)
       Minus
@@ -38,7 +48,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       Zero
 
   /**
-    * Returns the sum of two sign variables.
+    * Returns the sum of two extended sign variables.
     *
     * @param s the first term of the addition
     * @param t the second term of the addition
@@ -64,7 +74,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the multiplication of two sign variables.
+    * Returns the multiplication of two extended sign variables.
     *
     * @param s the first factor of the multiplication
     * @param t the second factor of the multiplication
@@ -90,7 +100,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
   /**
     * Performs the (-) prefix operation.
     *
-    * @param s sign that will be inverted
+    * @param s extended sign that will be inverted
     * @return the inverse of `s`
     */
   def inverse(s: Sign) : Sign =
@@ -103,7 +113,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the division of two sign variables.
+    * Returns the division of two extended sign variables.
     *
     * @param s the numerator of the division
     * @param t the denominator of the division
@@ -134,7 +144,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the result of the modulo operation between two sign variables.
+    * Returns the result of the modulo operation between two extended sign variables.
     *
     * @param s number put under modulo operation
     * @param t modulus
@@ -154,7 +164,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the least upper bound between two sign variables.
+    * Returns the least upper bound between two extended sign variables.
     *
     * @param s first term of the lub
     * @param t second term of the lub
@@ -176,7 +186,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the greatest lower bound between two sign variables.
+    * Returns the greatest lower bound between two extended sign variables.
     *
     * @param s first term of the glb
     * @param t second term of the glb
@@ -194,7 +204,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Performs a Java-like comparison (same behaviour as Java's compareTo) between two signs.
+    * Performs a Java-like comparison (same behaviour as Java's compareTo) between two extended signs.
     *
     * @param s left hand side
     * @param t right hand side
@@ -223,6 +233,15 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (a, b) => if (a.equals(b)) Option(0) else Option.empty
     }
 
+  /**
+    * Maximum element of this lattice.
+    * @return the top element
+    */
   override def top: Sign = SignTop
+
+  /**
+    * Least element of this lattice.
+    * @return the bottom element
+    */
   override def bottom: Sign = SignBottom
 } // end object ESeqDomainCore

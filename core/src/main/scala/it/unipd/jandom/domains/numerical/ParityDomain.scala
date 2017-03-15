@@ -77,7 +77,7 @@ class ParityDomain extends BaseNumericalDomain[Parity, numerical.ParityDomainCor
     /**
       * @inheritdoc
       */
-    def mkString(vars: Seq[String]): String = {
+    override def mkString(vars: Seq[String]): String = {
       require(vars.length >= dimension)
       if (unreachable)
         "[ empty ]"

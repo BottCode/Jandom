@@ -24,36 +24,6 @@ class ConstantDomain extends BaseNumericalDomain[Constant, numerical.ConstantDom
     /**
       * @inheritdoc
       */
-    override def linearEvaluation(lf: LinearForm): Constant = {
-      val known = lf.known.toInt
-      val homcoeffs = lf.homcoeffs.map (_.toInt).toArray
-      linearEvaluation(known, homcoeffs)
-    }
-
-    /**
-      * @inheritdoc
-      */
-    override def linearEvaluation(known: Int, homcoeffs: Array[Int]): Constant = {
-      require(homcoeffs.length <= dimension)
-      var constant: Constant = alpha(known)
-      if (unreachable && homcoeffs.exists { _ != 0 })
-        return ConstantTop
-      for (i <- homcoeffs.indices) {
-        if (homcoeffs(i) > 0) {
-          val t: Constant = constants(i)
-          constant = sum(constant, t)
-        }
-        else if (homcoeffs(i) < 0) {
-          val t: Constant = inverse(constants(i))
-          constant = sum(constant, t)
-        }
-      }
-      constant
-    }
-
-    /**
-      * @inheritdoc
-      */
     override def linearDisequality(lf: LinearForm): Property = {
       if (isEmpty)
         return this

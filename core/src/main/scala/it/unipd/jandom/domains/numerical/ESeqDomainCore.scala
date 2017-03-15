@@ -1,6 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.{CompleteLatticeOperator, IntOperator}
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
 // numbers greater or equal than 0 (>= 0)
 case object Geq0 extends Sign
@@ -12,18 +12,12 @@ case object Neq0 extends Sign
 /**
   * Operations on the extended domain of signs with >=0, <=0 and !=0.
   */
-object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] {
+object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
-  /**
-    * Factory method for signs.
-    *
-    * @param n number that has to be converted to sign
-    * @return sign of `n`
-    */
-  def toSign(n : Int) : Sign =
-    if(n < 0)
+  override def alpha(num: Int): Sign =
+    if(num < 0)
       Minus
-    else if(n == 0)
+    else if(num == 0)
       Zero
     else
       Plus
@@ -34,6 +28,7 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     * @param num number that has to be converted to sign
     * @return sign of `num`
     */
+  // stale
   def toSign(num : Double): Sign =
     if(num > 0)
       Plus
@@ -230,5 +225,4 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
 
   override def top: Sign = SignTop
   override def bottom: Sign = SignBottom
-
 } // end object ESeqDomainCore

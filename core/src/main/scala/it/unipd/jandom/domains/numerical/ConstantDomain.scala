@@ -1,7 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unich.jandom.domains.numerical.{LinearForm}
-import ConstantDomainCore._
+import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical
 
 

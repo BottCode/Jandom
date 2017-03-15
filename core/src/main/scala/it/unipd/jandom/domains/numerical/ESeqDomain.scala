@@ -8,12 +8,12 @@ import it.unich.jandom.domains.numerical.LinearForm
   * Zero (0), Geq0 (>=0), Leq0 (<=0) and Neq0 (!=0). SignTop and SignBottom complete the lattice, providing a greatest
   * and a least element for this set.
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>,
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   */
 class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDomainCore) {
 
-  import ESeqDomainCore._
 
   override def createProperty(elements: Array[Sign], unreachable: Boolean): ESeqDomain.this.type = ???
 

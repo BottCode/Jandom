@@ -22,16 +22,31 @@ import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical
 import it.unipd.jandom.domains.numerical.{parity, _}
 
+/**
+  * Parity domain, i.e. the domain composed of the elements Even (even numbers) and Odd (odd numbers). SignTop and
+  * SignBottom complete the lattice, providing a greatest and a least element for this set.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  *
+  */
 class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore.type](parity.ParityDomainCore) {
 
+  // this class uses the operations defined in ParityDomainCore
 
+  /**
+    * @inheritdoc
+    */
   override def createProperty(elements: Array[Parity], unreachable: Boolean): Property =
     new Property(elements, unreachable)
 
+  /**
+    * Numerical property that describes the parity of the variables in a certain point of the CFG.
+    * @param elements array of the variables' parities
+    * @param unreachable tells if a given program point is unreachable
+    */
   class Property (elements : Array[Parity], unreachable: Boolean) extends BaseProperty(elements, unreachable) {
-
-    def apply(parity: Array[Parity], unreachable: Boolean) : Property = new Property(parity, unreachable)
-
 
     /**
       * @inheritdoc
@@ -53,18 +68,12 @@ class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore.type](pa
       */
     override def linearInequality(lf: LinearForm): Property = linearDisequality(lf)
 
-
-
   } // end of Property
-
 } // end of ParityDomain (class)
 
 object ParityDomain {
-
   /**
-    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
-    * double arithmetic, according to the parameter `overReals`.
+    * Ctor for ParityDomain.
     */
   def apply() = new ParityDomain()
-
 } // end of ParityDomain (companion object)

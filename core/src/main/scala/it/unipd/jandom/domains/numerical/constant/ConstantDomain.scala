@@ -3,20 +3,27 @@ package it.unipd.jandom.domains.numerical.constant
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 /**
-  * Constant domain
+  * Constant domain, i.e. the domain composed of constant values. SignTop and SignBottom complete the lattice, providing
+  * a greatest and a least element for this set.
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
 class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore.type](ConstantDomainCore) {
 
-
+  /**
+    * @inheritdoc
+    */
   override def createProperty(constants: Array[Constant], unreachable: Boolean): Property =
     new Property(constants, unreachable)
 
+  /**
+    * Numerical property that tells whether the variables in a certain point of the CFG are constant or not.
+    * @param constants array of the variables' constant status
+    * @param unreachable tells if a given program point is unreachable
+    */
   class Property (constants : Array[Constant], unreachable: Boolean) extends BaseProperty(constants, unreachable) {
-
-    def apply(constants: Array[Constant], unreachable: Boolean) : Property = new Property(constants, unreachable)
 
     /**
       * @inheritdoc
@@ -68,15 +75,12 @@ class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore.ty
     }
 
   } // end of Property
-
 } // end of ConstantDomain (class)
 
 object ConstantDomain {
-
   /**
     * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
     * double arithmetic, according to the parameter `overReals`.
     */
   def apply() = new ConstantDomain()
-
 } // end of ConstantDomain (companion object)

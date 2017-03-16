@@ -2,58 +2,35 @@ package it.unipd.jandom.domains.numerical.constant
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
-/**
-  * Constant domain
-  *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
-  */
-
 trait Constant
+// constant value
 case class Const (num : Int) extends Constant
+// no accurate info available for variable
 case object ConstantTop extends Constant
+// no possible value
 case object ConstantBottom extends Constant
 
-
+/**
+  * Constant domain, i.e. the one which tells if a given variable is constant (and equal to a value `n`) in a program
+  * point or not.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  */
 object ConstantDomainCore extends CompleteLatticeOperator[Constant]
   with IntOperator[Constant] with Abstraction[Int, Constant]{
 
-  override def top: Constant = ConstantTop
-
-  override def bottom: Constant = ConstantBottom
-
+  /**
+    * @inheritdoc
+    */
   def alpha(num : Int) : Constant = {
     Const(num)
   }
 
-  def inverse(x: Constant) : Constant = {
-    x match {
-      case ConstantTop => ConstantTop
-      case ConstantBottom => ConstantBottom
-      case Const(a) => Const(-a)
-    }
-  }
-
-  def lub(x : Constant, y : Constant) : Constant = {
-    (x, y) match {
-      case (ConstantTop, _) => ConstantTop
-      case (_, ConstantTop) => ConstantTop
-      case (ConstantBottom, _) => y
-      case (_, ConstantBottom) => x
-      case (_, _) => if(x == y) x else ConstantTop
-    }
-  }
-
-  def glb(x : Constant, y : Constant) : Constant = {
-    (x, y) match {
-      case (ConstantBottom, _) => ConstantBottom
-      case (_, ConstantBottom) => ConstantBottom
-      case (ConstantTop, _) => y
-      case (_, ConstantTop) => x
-      case (_, _) => if(x == y) x else ConstantBottom
-    }
-  }
-
+  /**
+    * @inheritdoc
+    */
   def sum(x : Constant, y : Constant) : Constant = {
     (x,y) match {
       case (ConstantBottom, _) => ConstantBottom
@@ -64,6 +41,20 @@ object ConstantDomainCore extends CompleteLatticeOperator[Constant]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
+  def inverse(x: Constant) : Constant = {
+    x match {
+      case ConstantTop => ConstantTop
+      case ConstantBottom => ConstantBottom
+      case Const(a) => Const(-a)
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
   def mult(x : Constant, y : Constant) : Constant = {
     (x, y) match {
       case (ConstantBottom, _) => ConstantBottom
@@ -76,6 +67,9 @@ object ConstantDomainCore extends CompleteLatticeOperator[Constant]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def division(x : Constant, y : Constant) : Constant = {
     (x, y) match {
       case (ConstantBottom, _) => ConstantBottom
@@ -88,6 +82,9 @@ object ConstantDomainCore extends CompleteLatticeOperator[Constant]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def remainder(x : Constant, y : Constant) : Constant = {
     (x,y) match {
       case (ConstantBottom, _) => ConstantBottom
@@ -101,9 +98,33 @@ object ConstantDomainCore extends CompleteLatticeOperator[Constant]
   }
 
   /**
-    * @return x == y => Option(0);
-    *         x > y => Option(1);
-    *         x < y => Option(-1);
+    * @inheritdoc
+    */
+  def lub(x : Constant, y : Constant) : Constant = {
+    (x, y) match {
+      case (ConstantTop, _) => ConstantTop
+      case (_, ConstantTop) => ConstantTop
+      case (ConstantBottom, _) => y
+      case (_, ConstantBottom) => x
+      case (_, _) => if(x == y) x else ConstantTop
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  def glb(x : Constant, y : Constant) : Constant = {
+    (x, y) match {
+      case (ConstantBottom, _) => ConstantBottom
+      case (_, ConstantBottom) => ConstantBottom
+      case (ConstantTop, _) => y
+      case (_, ConstantTop) => x
+      case (_, _) => if(x == y) x else ConstantBottom
+    }
+  }
+
+  /**
+    * @inheritdoc
     */
   def compare(x : Constant, y : Constant) : Option[Int] = {
       (x, y) match {
@@ -116,4 +137,14 @@ object ConstantDomainCore extends CompleteLatticeOperator[Constant]
       case (_, _) => if(x.equals(y)) Option(0) else Option.empty
     }
   }
+
+  /**
+    * @inheritdoc
+    */
+  override def top: Constant = ConstantTop
+
+  /**
+    * @inheritdoc
+    */
+  override def bottom: Constant = ConstantBottom
 }

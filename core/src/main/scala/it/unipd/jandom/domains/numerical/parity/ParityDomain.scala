@@ -20,6 +20,7 @@ package it.unipd.jandom.domains.numerical.parity
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical._
+import it.unipd.jandom.domains.numerical.parity.Parity._
 
 /**
   * Parity domain, i.e. the domain composed of the elements Even (even numbers) and Odd (odd numbers). SignTop and

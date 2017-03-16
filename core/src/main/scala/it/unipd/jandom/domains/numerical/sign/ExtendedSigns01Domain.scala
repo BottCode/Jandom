@@ -1,8 +1,9 @@
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.WideningDescription
 import it.unich.jandom.domains.numerical.{LinearForm, NumericalDomain, NumericalProperty}
 import it.unich.jandom.utils.numberext.RationalExt
+import it.unipd.jandom.domains.numerical.sign.ES01._
 import spire.math.Rational
 
 /**
@@ -85,7 +86,7 @@ object ExtendedSigns01Domain extends NumericalDomain {
 
     private def linearEvaluation(known : Int, homCoeffs : Array[Int]) : ExtendedSign01 = {
       require(homCoeffs.length <= dimension)
-      var s : ExtendedSign01 = toSign(known)
+      var s : ExtendedSign01 = alpha(known)
       if  (unreachable && homCoeffs.exists { _ != 0} ) return ES01Top
       for (i <- homCoeffs.indices) {
         if (homCoeffs(i) > 0) {
@@ -116,7 +117,7 @@ object ExtendedSigns01Domain extends NumericalDomain {
         return this
       s match {
         case One => bottom
-        case GreaterThanOne => bottom
+        case GTOne => bottom
         case ES01Top => top
         case ES01Bottom => bottom
         case _ => this
@@ -133,7 +134,7 @@ object ExtendedSigns01Domain extends NumericalDomain {
       s match {
         case Zero => bottom
         case One => this
-        case GreaterThanOne => this
+        case GTOne => this
         case Negative => this
         case ES01Top => top
         case ES01Bottom => bottom
@@ -219,7 +220,7 @@ object ExtendedSigns01Domain extends NumericalDomain {
           val h = sign(i) match {
             case ES01Top => "TOP"
             case ES01Bottom => "BOTTOM"
-            case GreaterThanOne => "Gt1"
+            case GTOne => "Gt1"
             case Negative => "NEG"
             case Zero => "Zero"
             case One => "One"

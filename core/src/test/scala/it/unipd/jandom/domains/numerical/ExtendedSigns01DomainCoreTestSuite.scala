@@ -8,7 +8,7 @@ import org.scalatest.FunSuite
   */
 class ExtendedSigns01DomainCoreTestSuite extends FunSuite {
 
-  import ExtendedSigns01DomainCore._
+  import it.unipd.jandom.domains.numerical.sign.ExtendedSigns01DomainCore._
 
   test("toES01") {
     assert(Zero.equals(toSign(0)))

@@ -19,6 +19,7 @@
 package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.numerical.LinearForm
+import it.unipd.jandom.domains.numerical.sign.Sign._
 import it.unipd.jandom.domains.numerical.{sign, _}
 
 /**

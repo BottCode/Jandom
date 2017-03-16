@@ -23,8 +23,7 @@ import it.unich.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.constant.ConstantDomain
-import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, SignDomain}
-import it.unipd.jandom.domains.numerical.sign.SignDomain
+import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, ExtendedSigns01Domain, SignDomain}
 
 /**
  * The ParameterEnumeration for numerical domains.
@@ -46,6 +45,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ParityDomain(), "Parity Domain", "UniPD"),
     ParameterValue(SumSignParityDomain(), "Sum between Parity and Sign Domain", "UniPD"),
     ParameterValue(ConstantDomain(), "Constant domain", "UniPD: Constant propagation "),
+    ParameterValue(ExtendedSigns01Domain(), "ES01 Domain", "UniPD: extended sign domain with 0 and 1"),
     ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements")
   )
   val default = values.last

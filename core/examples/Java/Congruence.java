@@ -10,4 +10,13 @@ class Congruence {
 		else 
 			x += 2;
 	}
+	
+	static void testCongruence() {
+		int x = 2;
+		int y = 3;
+		int z = x*y;
+		while(z < 10) {
+			z *= x;
+		}
+	}
 }

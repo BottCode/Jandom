@@ -6,6 +6,7 @@ import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperato
 trait Congruence
 case class Mod(a : Int, b : Int) extends Congruence
 case object CongruenceBottom extends Congruence //Corresponds to the empty set
+
 /**
   * Created by mirko on 3/9/17.
   *
@@ -41,8 +42,8 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     val c = standardForm(_c)
     val d = standardForm(_d)
     (c,d) match {
-      case (CongruenceBottom, _) => c
-      case (_, CongruenceBottom) => d
+      case (CongruenceBottom, a) => d
+      case (_, CongruenceBottom) => c
       case (Mod(a0, b0), Mod(a1,b1)) =>
         if(compare(c,d) == Option(0))
           c
@@ -87,13 +88,13 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        if (a0 == a1 && a0 == 0) //c and d are constants
-          Mod(0, b0 + b1)
-        else {
-          val a = gcd(a0, a1)
-          val b = Math.min(b0, b1)
-          Mod(a, b)
-        }
+          if(a0 == 0 && a1 == 0){ //Constants
+            Mod(0, b0+b1)
+          } else {
+            val a = gcd(a0, a1)
+            val b = Math.min(b0, b1)
+            Mod(a, b)
+          }
     }
   }
 

@@ -95,12 +95,13 @@ object ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator
       case (ParityBottom, _) => ParityBottom
       case (_, ParityBottom) => ParityBottom
       case (Odd, Odd) => Even
+      case (Odd, Even) => Odd
       case (_, _) => ParityTop
-      /*
+      /* Because...
+        (_, Even) => Top
         (Even, Odd) => Top
         (ParityTop, Odd) => Top
         (_, ParityTop) => Top
-        (_, Even) => Top
       */
     }
   }

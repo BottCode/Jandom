@@ -2,13 +2,17 @@ package it.unipd.jandom.domains.numerical.constant
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
-trait Constant
-// constant value
-case class Const (num : Int) extends Constant
-// no accurate info available for variable
-case object ConstantTop extends Constant
-// no possible value
-case object ConstantBottom extends Constant
+object Constant {
+  trait Constant
+  // constant value
+  case class Const (num : Int) extends Constant
+  // no accurate info available for variable
+  case object ConstantTop extends Constant
+  // no possible value
+  case object ConstantBottom extends Constant
+}
+
+import Constant._
 
 /**
   * Constant domain, i.e. the one which tells if a given variable is constant (and equal to a value `n`) in a program

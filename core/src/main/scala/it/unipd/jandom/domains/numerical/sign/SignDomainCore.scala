@@ -24,10 +24,7 @@ case object SignBottom extends Sign
 object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
   /**
-    * Factory method for signs (i.e. abstraction).
-    *
-    * @param n number that has to be converted to sign
-    * @return sign of `n`
+    * @inheritdoc
     */
   override def alpha(n : Int) : Sign =
     if(n < 0)
@@ -53,11 +50,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       Zero
 
   /**
-    * Returns the sum of two sign variables.
-    *
-    * @param s the first term of the addition
-    * @param t the second term of the addition
-    * @return the result of the addition
+    * @inheritdoc
     */
   def sum(s: Sign, t: Sign) : Sign =
     (s,t) match {
@@ -73,11 +66,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the multiplication of two sign variables.
-    *
-    * @param s the first factor of the multiplication
-    * @param t the second factor of the multiplication
-    * @return the result of the multiplication
+    * @inheritdoc
     */
   def mult(s: Sign, t : Sign) : Sign =
     (s,t) match {
@@ -91,10 +80,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Performs the (-) prefix operation.
-    *
-    * @param s sign that will be inverted
-    * @return the inverse of `s`
+    * @inheritdoc
     */
   def inverse(s: Sign) : Sign =
     s match {
@@ -104,11 +90,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the division of two sign variables.
-    *
-    * @param s the numerator of the division
-    * @param t the denominator of the division
-    * @return the result of the division
+    * @inheritdoc
     */
   def division(s : Sign, t : Sign) : Sign =
     (s, t) match {
@@ -122,11 +104,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the result of the modulo operation between two sign variables.
-    *
-    * @param s number put under modulo operation
-    * @param t modulus
-    * @return the remainder of the modulo operation
+    * @inheritdoc
     */
   def remainder(s : Sign, t : Sign) : Sign =
     (s,t) match {
@@ -138,11 +116,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the least upper bound between two sign variables.
-    *
-    * @param s first term of the lub
-    * @param t second term of the lub
-    * @return the lub of `s` and `t`
+    * @inheritdoc
     */
   def lub(s : Sign, t : Sign) : Sign =
     (s, t) match {
@@ -154,11 +128,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Returns the greatest lower bound between two sign variables.
-    *
-    * @param s first term of the glb
-    * @param t second term of the glb
-    * @return the glb of `s` and `t`
+    * @inheritdoc
     */
   def glb(s : Sign, t : Sign) : Sign =
       (s,t) match {
@@ -170,11 +140,7 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       }
 
   /**
-    * Performs a Java-like comparison (same behaviour as Java's compareTo) between two signs.
-    *
-    * @param s left hand side
-    * @param t right hand side
-    * @return 1 if `s` > `t` -- 0 if `s` = `t` -- -1 if `s` < `t`
+    * @inheritdoc
     */
   def compare(s: Sign, t:Sign): Option[Int] =
     (s, t) match {
@@ -188,14 +154,12 @@ object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
     }
 
   /**
-    * Maximum element of this lattice.
-    * @return the top element
+    * @inheritdoc
     */
   override def top: Sign = SignTop
 
   /**
-    * Least element of this lattice.
-    * @return the bottom element
+    * @inheritdoc
     */
   override def bottom: Sign = SignBottom
 

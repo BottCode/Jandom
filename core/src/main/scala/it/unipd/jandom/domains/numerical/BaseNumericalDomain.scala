@@ -40,12 +40,12 @@ abstract class BaseNumericalDomain
   /**
     * @inheritdoc
     */
-  def bottom(n: Int)  = createProperty(Array.fill(n)(core.bottom))
+  def bottom(n: Int): Property = createProperty(Array.fill(n)(core.bottom))
 
   /**
     * @inheritdoc
     */
-  def top(n: Int)  = createProperty(Array.fill(n)(core.top))
+  def top(n: Int): Property = createProperty(Array.fill(n)(core.top))
 
   /**
     * @inheritdoc

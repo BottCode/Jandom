@@ -1,7 +1,7 @@
 package it.unipd.jandom.domains.numerical.constant
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
+import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 /**
   * Constant domain, i.e. the domain composed of constant values. SignTop and SignBottom complete the lattice, providing
   * a greatest and a least element for this set.

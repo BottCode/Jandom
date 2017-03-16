@@ -19,7 +19,6 @@
 package it.unipd.jandom.domains.numerical.parity
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical
 import it.unipd.jandom.domains.numerical.{parity, _}
 
 /**

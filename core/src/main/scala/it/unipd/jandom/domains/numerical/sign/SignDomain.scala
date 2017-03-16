@@ -20,7 +20,7 @@ package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.sign.Sign._
-import it.unipd.jandom.domains.numerical.{sign, _}
+import it.unipd.jandom.domains.numerical._
 
 /**
   * Sign domain, i.e. the domain composed of the elements Minus (negative numbers), Plus (positive numbers) and

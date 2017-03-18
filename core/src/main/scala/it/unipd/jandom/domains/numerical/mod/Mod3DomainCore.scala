@@ -58,7 +58,17 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
     }
   }
 
+<<<<<<< Updated upstream
   override def inverse(m : Mod3) : Mod3 = m
+=======
+  override def inverse(m : Mod3) : Mod3 = {
+    m match {
+      case RestClass(1) => RestClass(2) //-1 mod 3 = -1 -> -1 \equiv [2]
+      case RestClass(2) => RestClass(1) //-2 mod 3 = -2 -> -2 \equiv [1]
+      case _ => m
+    }
+  }
+>>>>>>> Stashed changes
 
   override def division(m : Mod3, n : Mod3) : Mod3 = {
     (m,n) match {

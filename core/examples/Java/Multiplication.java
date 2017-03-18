@@ -15,4 +15,14 @@ public class Multiplication {
         while(a <= 0)
             a = 1;
     }
+    @SuppressWarnings("ALL")
+    static void filter() {
+    	int a = 2;
+    	a += -12;
+    	if(a < 0)
+    		a++;
+    	else
+    		a--;
+    	
+    }
 }

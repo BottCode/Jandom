@@ -303,7 +303,7 @@ abstract class BaseNumericalDomain
       * @param homcoeffs homogeneous coefficients of a linear form
       * @return the result (istantiated to the correct type T) of the linear evaluation of a linear form
       */
-    private def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
+    protected def linearEvaluation(known: Int, homcoeffs: Array[Int]): T = {
       require(homcoeffs.length <= dimension)
       if (unreachable && homcoeffs.exists { _ != 0 })
         return core.top

@@ -16,7 +16,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
   val six = Const(6)
   val zero = Const(0)
 
-  "ConstantDomain.inverse" should
+  "ConstantDomainCore.inverse" should
     " - return the inverse of the constant value given as input" in {
     val minusSix = Const(-6)
 
@@ -27,7 +27,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(inverse(zero) === zero)
   }
 
-  "ConstantDomain.lub" should
+  "ConstantDomainCore.lub" should
     " - return the lub of the constant values given as input" in {
     // ConstantTop
     assert(lub(ConstantTop, six) === ConstantTop)
@@ -45,7 +45,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(lub(zero, zero) === zero)
   }
 
-  "ConstantDomain.glb" should
+  "ConstantDomainCore.glb" should
     " - return the glb of the constant values given as input" in {
     // ConstantBottom
     assert(glb(ConstantBottom, ConstantTop) === ConstantBottom)
@@ -63,7 +63,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(glb(zero, zero) === zero)
   }
 
-  "ConstantDomain.sum" should
+  "ConstantDomainCore.sum" should
     " - return the sum of the constant values given as input" in {
     val twelve = Const(12)
 
@@ -83,7 +83,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(sum(six, six) === twelve)
   }
 
-  "ConstantDomain.mult" should
+  "ConstantDomainCore.mult" should
     " - return the product of the constant values given as input" in {
     val multPositive=
       six match {
@@ -109,7 +109,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(mult(six, six) === multPositive)
   }
 
-  "ConstantDomain.division" should
+  "ConstantDomainCore.division" should
     " - return the division of the constant values given as input" in {
     val one = Const(1)
 
@@ -132,7 +132,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(division(six, six) === one)
   }
 
-  "ConstantDomain.remainder" should
+  "ConstantDomainCore.remainder" should
     " - return the remainder (modulo) of the constant values given as input" in
     {
       // ConstantBottom
@@ -154,7 +154,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
       assert(remainder(six, six) === zero)
     }
 
-  "ConstantDomain.compare" should
+  "ConstantDomainCore.compare" should
     " - return the comparison between the constant values given as input" in {
     // ConstantTop
     assert(compare(ConstantTop, ConstantTop) === Option(0))

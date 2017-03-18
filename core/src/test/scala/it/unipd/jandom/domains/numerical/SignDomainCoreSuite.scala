@@ -1,7 +1,6 @@
 package it.unipd.jandom.domains.numerical
 
 import it.unipd.jandom.domains.numerical.sign.SignDomainCore._
-import it.unipd.jandom.domains.numerical.sign.Sign._
 import org.scalatest.FlatSpec
 
 /**
@@ -17,7 +16,7 @@ class SignDomainCoreSuite extends FlatSpec {
   val zero = alpha(0)
   val neg = alpha(-6)
 
-  "SignDomain.inverse" should
+  "SignDomainCore.inverse" should
     " - return the inverse of the sign value given as input" in {
     assert(inverse(top) === top)
     assert(inverse(bottom) === bottom)
@@ -27,7 +26,7 @@ class SignDomainCoreSuite extends FlatSpec {
     assert(inverse(zero) === zero)
   }
 
-  "SignDomain.lub" should
+  "SignDomainCore.lub" should
     " - return the lub of the sign values given as input" in {
     // top
     assert(lub(top, plus) === top)
@@ -60,7 +59,7 @@ class SignDomainCoreSuite extends FlatSpec {
     assert(lub(neg, neg) === neg)
   }
 
-  "SignDomain.glb" should
+  "SignDomainCore.glb" should
     " - return the glb of the sign values given as input" in {
     // top
     assert(glb(top, plus) === plus)
@@ -93,7 +92,7 @@ class SignDomainCoreSuite extends FlatSpec {
     assert(glb(neg, neg) === neg)
   }
 
-  "SignDomain.sum" should
+  "SignDomainCore.sum" should
     " - return the sum of the sign values given as input" in {
     // top
     assert(sum(top, plus) === top)
@@ -126,7 +125,7 @@ class SignDomainCoreSuite extends FlatSpec {
     assert(sum(neg, neg) === neg)
   }
 
-  "SignDomain.mult" should
+  "SignDomainCore.mult" should
     " - return the product of the sign values given as input" in {
     // top
     assert(mult(top, plus) === top)
@@ -159,7 +158,7 @@ class SignDomainCoreSuite extends FlatSpec {
     assert(mult(neg, neg) === plus)
   }
 
-  "SignDomain.division" should
+  "SignDomainCore.division" should
     " - return the division of the sign values given as input" in {
     // top
     assert(division(top, plus) === top)
@@ -192,7 +191,7 @@ class SignDomainCoreSuite extends FlatSpec {
     assert(division(neg, neg) === top)
   }
 
-  "SignDomain.remainder" should
+  "SignDomainCore.remainder" should
     " - return the remainder (modulo) of the sign values given as input" in {
       // top
       assert(remainder(top, plus) === top)
@@ -225,7 +224,7 @@ class SignDomainCoreSuite extends FlatSpec {
       assert(remainder(neg, neg) === top)
     }
 
-  "SignDomain.compare" should
+  "SignDomainCore.compare" should
     " - return the comparison between the sign values given as input" in {
     // top
     assert(compare(top, plus) === Option(1))

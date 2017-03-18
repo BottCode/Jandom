@@ -5,7 +5,7 @@ import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 import it.unipd.jandom.domains.numerical.constant.Constant._
 
 /**
-  * Constant domain, i.e. the domain composed of constant values. 
+  * Constant domain, i.e. the domain composed of constant values.
   * ConstantTop and ConstantBottom complete the lattice, providing
   * a greatest and a least element for this set.
   *

@@ -15,9 +15,21 @@ public class UniPDTests {
         while(a <= 0)
             a = 1;
     }
+<<<<<<< HEAD:core/examples/Java/UniPDTests.java
 
     static void reduceOddAndGeq() {
         int x = 1;
         x = x % 2;
+=======
+    @SuppressWarnings("ALL")
+    static void filter() {
+    	int a = 2;
+    	a += -12;
+    	if(a < 0)
+    		a++;
+    	else
+    		a--;
+    	
+>>>>>>> Taken changes from other brancheTaken changes from other branchess:core/examples/Java/Multiplication.java
     }
 }

@@ -22,11 +22,11 @@ class ConstantDomainCoreSuite extends FlatSpec {
   "ConstantDomain.inverse" should
     " - return the inverse of the constant value given as input" in {
 
-    val inversePositive = Const(-6)
+    val minusSix = Const(-6)
 
     assert(inverse(ConstantTop) === ConstantTop)
     assert(inverse(ConstantBottom) === ConstantBottom)
-    assert(inverse(six) === inversePositive)
+    assert(inverse(six) === minusSix)
     // corner case
     assert(inverse(zero) === zero)
   }

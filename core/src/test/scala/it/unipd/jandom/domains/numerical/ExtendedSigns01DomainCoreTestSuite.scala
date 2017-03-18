@@ -5,7 +5,11 @@ import org.scalatest.FunSuite
 
 /**
   * Note: hereafter, ES01 will stand for ExtendedSigns01Domain.
-  * Test class for ES01's core.
+  * Unit Test - Sign Domain extended with 0, 1.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ExtendedSigns01DomainCoreTestSuite extends FunSuite {
 

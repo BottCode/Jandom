@@ -1,14 +1,11 @@
 package it.unipd.jandom.domains.numerical.mod
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
+import Mod3._
 
 /**
   * @author $assume
   */
-trait Mod3
-case class RestClass(num : Int) extends Mod3
-case object Mod3Bottom extends Mod3
-case object Mod3Top extends Mod3
 
 object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
 

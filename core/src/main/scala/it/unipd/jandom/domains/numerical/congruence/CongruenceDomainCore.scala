@@ -20,12 +20,14 @@ case object CongruenceBottom extends Congruence //Corresponds to the empty set
 object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   with IntOperator[Congruence] with Abstraction[Int, Congruence]{
 
-  override def top: Congruence = Mod(Some(1),0)
-
-  override def bottom: Congruence = CongruenceBottom
-
+  /**
+    * @inheritdoc
+    */
   override def alpha(num: Int): Congruence =  Mod(Some(0), num)
 
+  /**
+    * @inheritdoc
+    */
   def remainder(_c: Congruence, _d: Congruence): Congruence = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -39,6 +41,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def leq(_c: Congruence, _d: Congruence): Option[Boolean] = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -54,6 +59,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def compare(_c: Congruence, _d: Congruence): Option[Int] = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -81,6 +89,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def lub(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -94,6 +105,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def glb(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -115,6 +129,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def sum(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -128,6 +145,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def inverse(c : Congruence) : Congruence = {
     c match {
       case CongruenceBottom => CongruenceBottom
@@ -136,6 +156,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def mult(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -155,6 +178,9 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
+  /**
+    * @inheritdoc
+    */
   def division(c: Congruence, d: Congruence): Congruence =
     (c, d) match {
       case (CongruenceBottom, _) => CongruenceBottom
@@ -162,31 +188,33 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (_, _) => Mod(Some(1), 0) //top element
     }
 
-    def getString(c: Congruence): String = {
-      c match {
-        case CongruenceBottom => "Empty Set"
-        case Mod(a, b) =>
-          var s: String = ""
-          if (!(a.isEmpty)) {
-            if (a != Option(1))
-              s += a
-            s += "Z"
-            if (b != 0) {
-              s += b
-            }
-          } else {
+
+  /**
+    * @inheritdoc
+    */
+  override def top: Congruence = Mod(Some(1),0)
+
+  /**
+    * @inheritdoc
+    */
+  override def bottom: Congruence = CongruenceBottom
+
+  def getString(c: Congruence): String = {
+    c match {
+      case CongruenceBottom => "Empty Set"
+      case Mod(a, b) =>
+        var s: String = ""
+        if (!(a.isEmpty)) {
+          if (a != Option(1))
+            s += a
+          s += "Z"
+          if (b != 0) {
             s += b
           }
-          s
-      }
+        } else {
+          s += b
+        }
+        s
     }
-
-
-
-
-
-
-
-
-}
-
+  }
+} // end of CongruenceDomainCore

@@ -84,8 +84,8 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
     (m,n) match {
       case (Mod3Bottom, _) => Mod3Bottom
       case (_, Mod3Bottom) => Mod3Bottom
-      case (_, RestClass(0)) => Mod3Bottom
-      case (RestClass(0), _) => RestClass(0)
+      case (_, RestClass(0)) => Mod3Top
+      case (RestClass(0), _) => Mod3Top
       case (_, Mod3Top) => Mod3Top
       case (Mod3Top, _) => Mod3Top
       case (RestClass(m1), RestClass(n1)) => alpha(m1%n1)

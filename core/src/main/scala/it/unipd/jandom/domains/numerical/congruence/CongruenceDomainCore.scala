@@ -2,7 +2,6 @@ package it.unipd.jandom.domains.numerical.congruence
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
-
 trait Congruence
 case class Mod(a : Option[Int], b : Int) extends Congruence {
   require(a match { // Checking if the value is bigger than 0 as in Mine02
@@ -11,8 +10,6 @@ case class Mod(a : Option[Int], b : Int) extends Congruence {
   })
 }
 case object CongruenceBottom extends Congruence //Corresponds to the empty set
-
-
 
 /**
   * Created by mirko on 3/9/17.
@@ -56,6 +53,7 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
 
     }
   }
+
   def compare(_c: Congruence, _d: Congruence): Option[Int] = {
     val c = standardForm(_c)
     val d = standardForm(_d)
@@ -78,12 +76,10 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   def standardForm(c : Congruence) : Congruence = {
     c match {
       case CongruenceBottom => CongruenceBottom
-      case Mod(None,_) => c
-      case Mod(Some(a),b) => Mod(Some(a), b % a)
+      case Mod(None, _) => c
+      case Mod(Some(a), b) => Mod(Some(a), b % a)
     }
   }
-
-
 
   def lub(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
@@ -98,9 +94,7 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
-
-
-  def glb(_c : Congruence, _d : Congruence) :Congruence = {
+  def glb(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
     val d = standardForm(_d)
     (c,d) match {
@@ -108,12 +102,16 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
        if(ExtendedMathematicalOperation.isCongruent(b0, b1, ExtendedMathematicalOperation.gcd(a0,a1))){
-          val a = ExtendedMathematicalOperation.gcd(a0, a1)
-          val b = b1 //TODO USE BEZOUT'S THEOREM AS IN MINE02
-          Mod(a, b)
-       } else {
+         val a = ExtendedMathematicalOperation.gcd(a0, a1)
+         val bOpt = ExtendedMathematicalOperation.lcm(a0, a1)  // Bezout theorem
+         bOpt match {
+           case Some(lcmA0A1) =>
+             val b = b0 % lcmA0A1                              // Bezout theorem
+             Mod(a, b)
+           case _ => bottom
+         }
+       } else
          CongruenceBottom
-       }
     }
   }
 
@@ -137,7 +135,6 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
        Mod(a, -b)
     }
   }
-
 
   def mult(_c : Congruence, _d : Congruence) : Congruence = {
     val c = standardForm(_c)
@@ -164,11 +161,6 @@ object CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (_, CongruenceBottom) => CongruenceBottom
       case (_, _) => Mod(Some(1), 0) //top element
     }
-
-
-
-
-
 
     def getString(c: Congruence): String = {
       c match {

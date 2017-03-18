@@ -20,6 +20,7 @@ package it.unipd.jandom.domains.numerical.mod
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
+import Mod3._
 
 class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore.type](Mod3DomainCore) {
 

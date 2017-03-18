@@ -63,6 +63,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(glb(ConstantTop, ConstantTop) === ConstantTop)
     // Const
     assert(glb(six, zero) === ConstantBottom)
+    assert(glb(zero, six) === ConstantBottom)
     assert(glb(zero, zero) === zero)
   }
 

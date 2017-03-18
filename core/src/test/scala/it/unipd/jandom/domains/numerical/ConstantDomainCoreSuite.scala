@@ -45,6 +45,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(lub(ConstantBottom, ConstantBottom) === ConstantBottom)
     // Const
     assert(lub(six, zero) === ConstantTop)
+    assert(lub(zero, six) === ConstantTop)
     assert(lub(zero, zero) === zero)
   }
 

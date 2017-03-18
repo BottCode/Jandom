@@ -1,6 +1,8 @@
 package it.unipd.jandom.domains.numerical
 
-import it.unipd.jandom.domains.ConstantDomainCore.{ConstantBottom, ConstantTop, _}
+
+import it.unipd.jandom.domains.numerical.constant.ConstantDomainCore._
+import it.unipd.jandom.domains.numerical.constant.Constant._
 import org.scalatest.FlatSpec
 
 /**
@@ -14,7 +16,7 @@ import org.scalatest.FlatSpec
 
 class ConstantDomainCoreSuite extends FlatSpec {
 
-  val positive = Const(6)
+  val six = Const(6)
   val zero = Const(0)
 
   "ConstantDomain.inverse" should
@@ -24,7 +26,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
     assert(inverse(ConstantTop) === ConstantTop)
     assert(inverse(ConstantBottom) === ConstantBottom)
-    assert(inverse(positive) === inversePositive)
+    assert(inverse(six) === inversePositive)
     // corner case
     assert(inverse(zero) === zero)
   }
@@ -32,17 +34,17 @@ class ConstantDomainCoreSuite extends FlatSpec {
   "ConstantDomain.lub" should
     " - return the lub of the constant values given as input" in {
     // ConstantTop
-    assert(lub(ConstantTop, positive) === ConstantTop)
-    assert(lub(positive, ConstantTop) === ConstantTop)
+    assert(lub(ConstantTop, six) === ConstantTop)
+    assert(lub(six, ConstantTop) === ConstantTop)
     assert(lub(ConstantTop, ConstantBottom) === ConstantTop)
     assert(lub(ConstantBottom, ConstantTop) === ConstantTop)
     assert(lub(ConstantTop, ConstantTop) === ConstantTop)
     // ConstantBottom
-    assert(lub(ConstantBottom, positive) === positive)
-    assert(lub(positive, ConstantBottom) === positive)
+    assert(lub(ConstantBottom, six) === six)
+    assert(lub(six, ConstantBottom) === six)
     assert(lub(ConstantBottom, ConstantBottom) === ConstantBottom)
     // Const
-    assert(lub(positive, zero) === ConstantTop)
+    assert(lub(six, zero) === ConstantTop)
     assert(lub(zero, zero) === zero)
   }
 
@@ -50,127 +52,127 @@ class ConstantDomainCoreSuite extends FlatSpec {
     " - return the glb of the constant values given as input" in {
     // ConstantBottom
     assert(glb(ConstantBottom, ConstantTop) === ConstantBottom)
-    assert(glb(ConstantBottom, positive) === ConstantBottom)
+    assert(glb(ConstantBottom, six) === ConstantBottom)
     assert(glb(ConstantTop, ConstantBottom) === ConstantBottom)
-    assert(glb(positive, ConstantBottom) === ConstantBottom)
+    assert(glb(six, ConstantBottom) === ConstantBottom)
     assert(glb(ConstantBottom, ConstantBottom) === ConstantBottom)
     // ConstantTop
-    assert(glb(ConstantTop, positive) === positive)
-    assert(glb(positive, ConstantTop) === positive)
+    assert(glb(ConstantTop, six) === six)
+    assert(glb(six, ConstantTop) === six)
     assert(glb(ConstantTop, ConstantTop) === ConstantTop)
     // Const
-    assert(glb(positive, zero) === ConstantBottom)
+    assert(glb(six, zero) === ConstantBottom)
     assert(glb(zero, zero) === zero)
   }
 
   "ConstantDomain.sum" should
     " - return the sum of the constant values given as input" in {
     // ConstantBottom
-    assert(sum(ConstantBottom, positive) === ConstantBottom)
+    assert(sum(ConstantBottom, six) === ConstantBottom)
     assert(sum(ConstantBottom, ConstantTop) === ConstantBottom)
-    assert(sum(positive, ConstantBottom) === ConstantBottom)
+    assert(sum(six, ConstantBottom) === ConstantBottom)
     assert(sum(ConstantTop, ConstantBottom) === ConstantBottom)
     assert(sum(ConstantBottom, ConstantBottom) === ConstantBottom)
     // ConstantTop
-    assert(sum(ConstantTop, positive) === ConstantTop)
-    assert(sum(positive, ConstantTop) === ConstantTop)
+    assert(sum(ConstantTop, six) === ConstantTop)
+    assert(sum(six, ConstantTop) === ConstantTop)
     assert(sum(ConstantTop, ConstantTop) === ConstantTop)
     // Const
-    assert(sum(positive, zero) === positive)
+    assert(sum(six, zero) === six)
   }
 
   "ConstantDomain.mult" should
     " - return the product of the constant values given as input" in {
 
     val multPositive=
-      positive match {
+      six match {
         case Const(value) => Const(value*value)
       }
 
     // ConstantBottom
-    assert(mult(ConstantBottom, positive) === ConstantBottom)
+    assert(mult(ConstantBottom, six) === ConstantBottom)
     assert(mult(ConstantBottom, ConstantTop) === ConstantBottom)
-    assert(mult(positive, ConstantBottom) === ConstantBottom)
+    assert(mult(six, ConstantBottom) === ConstantBottom)
     assert(mult(ConstantTop, ConstantBottom) === ConstantBottom)
     // Const(0)
     assert(mult(ConstantTop, zero) === zero)
     assert(mult(zero, ConstantTop) === zero)
-    assert(mult(zero, positive) === zero)
-    assert(mult(positive, zero) === zero)
+    assert(mult(zero, six) === zero)
+    assert(mult(six, zero) === zero)
     assert(mult(zero, zero) === zero)
     // ConstantTop
-    assert(mult(ConstantTop, positive) === ConstantTop)
-    assert(mult(positive, ConstantTop) === ConstantTop)
+    assert(mult(ConstantTop, six) === ConstantTop)
+    assert(mult(six, ConstantTop) === ConstantTop)
     assert(mult(ConstantTop, ConstantTop) === ConstantTop)
     // Const
-    assert(mult(positive, positive) === multPositive)
+    assert(mult(six, six) === multPositive)
   }
 
   "ConstantDomain.division" should
     " - return the division of the constant values given as input" in {
 
     val divisionPositive=
-      positive match {
+      six match {
         case Const(value) => Const(value/value)
       }
 
     // ConstantBottom
-    assert(division(ConstantBottom, positive) === ConstantBottom)
+    assert(division(ConstantBottom, six) === ConstantBottom)
     assert(division(ConstantBottom, ConstantTop) === ConstantBottom)
-    assert(division(positive, ConstantBottom) === ConstantBottom)
+    assert(division(six, ConstantBottom) === ConstantBottom)
     assert(division(ConstantTop, ConstantBottom) === ConstantBottom)
     // Const(0)
     assert(division(ConstantTop, zero) === ConstantBottom)
     assert(division(zero, ConstantTop) === zero)
-    assert(division(zero, positive) === zero)
-    assert(division(positive, zero) === ConstantBottom)
+    assert(division(zero, six) === zero)
+    assert(division(six, zero) === ConstantBottom)
     assert(division(zero, zero) === ConstantBottom)
     // ConstantTop
-    assert(division(ConstantTop, positive) === ConstantTop)
-    assert(division(positive, ConstantTop) === ConstantTop)
+    assert(division(ConstantTop, six) === ConstantTop)
+    assert(division(six, ConstantTop) === ConstantTop)
     assert(division(ConstantTop, ConstantTop) === ConstantTop)
     // Const
-    assert(division(positive, positive) === divisionPositive)
+    assert(division(six, six) === divisionPositive)
   }
 
   "ConstantDomain.remainder" should
     " - return the remainder (modulo) of the constant values given as input" in
     {
       // ConstantBottom
-      assert(remainder(ConstantBottom, positive) === ConstantBottom)
+      assert(remainder(ConstantBottom, six) === ConstantBottom)
       assert(remainder(ConstantBottom, ConstantTop) === ConstantBottom)
-      assert(remainder(positive, ConstantBottom) === ConstantBottom)
+      assert(remainder(six, ConstantBottom) === ConstantBottom)
       assert(remainder(ConstantTop, ConstantBottom) === ConstantBottom)
       // Const(0)
       assert(remainder(ConstantTop, zero) === ConstantBottom)
       assert(remainder(zero, ConstantTop) === zero)
-      assert(remainder(zero, positive) === zero)
-      assert(remainder(positive, zero) === ConstantBottom)
+      assert(remainder(zero, six) === zero)
+      assert(remainder(six, zero) === ConstantBottom)
       assert(remainder(zero, zero) === ConstantBottom)
       // ConstantTop
-      assert(remainder(ConstantTop, positive) === ConstantTop)
-      assert(remainder(positive, ConstantTop) === ConstantTop)
+      assert(remainder(ConstantTop, six) === ConstantTop)
+      assert(remainder(six, ConstantTop) === ConstantTop)
       assert(remainder(ConstantTop, ConstantTop) === ConstantTop)
       // Const
-      assert(remainder(positive, positive) === zero)
+      assert(remainder(six, six) === zero)
     }
 
   "ConstantDomain.compare" should
     " - return the comparison between the constant values given as input" in {
     // ConstantTop
     assert(compare(ConstantTop, ConstantTop) === Option(0))
-    assert(compare(ConstantTop, positive) === Option(1))
+    assert(compare(ConstantTop, six) === Option(1))
     assert(compare(ConstantTop, ConstantBottom) === Option(1))
-    assert(compare(positive, ConstantTop) === Option(-1))
+    assert(compare(six, ConstantTop) === Option(-1))
     assert(compare(ConstantBottom, ConstantTop) === Option(-1))
     // ConstantBottom
     assert(compare(ConstantBottom, ConstantBottom) === Option(0))
     assert(compare(ConstantBottom, ConstantTop) === Option(-1))
-    assert(compare(ConstantBottom, positive) === Option(-1))
+    assert(compare(ConstantBottom, six) === Option(-1))
     assert(compare(ConstantTop, ConstantBottom) === Option(1))
-    assert(compare(positive, ConstantBottom) === Option(1))
+    assert(compare(six, ConstantBottom) === Option(1))
     // Const
-    assert(compare(positive, zero) === Option.empty)
-    assert(compare(positive, positive) === Option(0))
+    assert(compare(six, zero) === Option.empty)
+    assert(compare(six, six) === Option(0))
   }
 }

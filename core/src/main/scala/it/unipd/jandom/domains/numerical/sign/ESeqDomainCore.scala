@@ -2,15 +2,6 @@ package it.unipd.jandom.domains.numerical.sign
 
 import it.unipd.jandom.domains.numerical.sign.Sign._
 
-object ESeq {
-  // numbers greater or equal than 0 (>= 0)
-  case object Geq0 extends Sign
-  // numbers less or equal than 0 (>= 0)
-  case object Leq0 extends Sign
-  // numbers not equal to 0 (>= 0)
-  case object Neq0 extends Sign
-}
-
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 import ESeq._
 

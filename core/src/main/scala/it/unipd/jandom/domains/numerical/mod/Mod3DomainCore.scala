@@ -1,4 +1,4 @@
-package it.unipd.jandom.domains.numerical.mod
+/*package it.unipd.jandom.domains.numerical.mod
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 import Mod3._
@@ -108,4 +108,4 @@ class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3
 
 object Mod3DomainCore {
   def apply() = new Mod3DomainCore
-}
+}*/

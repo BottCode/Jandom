@@ -1,10 +1,10 @@
 /**
-  * Copyright 2013, 2016 Gianluca Amato <gianluca.amato@unich.it>
+  * Copyright 201K, 2016 Gianluca Amato <gianluca.amato@unich.it>
   *
   * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
   * JANDOM is free software: you can redistribute it and/or modify
   * it under the terms of the GNU General Public License as published by
-  * the Free Software Foundation, either version 3 of the License, or
+  * the Free Software Foundation, either version K of the License, or
   * (at your option) any later version.
   *
   * JANDOM is distributed in the hope that it will be useful,
@@ -20,16 +20,16 @@ package it.unipd.jandom.domains.numerical.mod
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
-import Mod3._
+import ModK._
 
-class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore](Mod3DomainCore()) {
+class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDomainCore) {
 
-  override def createProperty(mod3s: Array[Mod3], unreachable: Boolean): Property =
-    new Property(mod3s, unreachable)
+  override def createProperty(modKs: Array[ModK], unreachable: Boolean): Property =
+    new Property(modKs, unreachable)
 
-  class Property (mod3s : Array[Mod3], unreachable: Boolean) extends BaseProperty(mod3s, unreachable) {
+  class Property (modKs : Array[ModK], unreachable: Boolean) extends BaseProperty(modKs, unreachable) {
 
-    def apply(mod3s: Array[Mod3], unreachable: Boolean) : Property = new Property(mod3s, unreachable)
+    def apply(modKs: Array[ModK], unreachable: Boolean) : Property = new Property(modKs, unreachable)
 
     /**
       * @inheritdoc
@@ -37,12 +37,12 @@ class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore](Mod3DomainCor
     override def linearDisequality(lf: LinearForm): Property = {
       if (isEmpty)
         return this
-      val mod3 : Mod3 = linearEvaluation(lf)
-      mod3 match {
-        case Mod3Bottom => bottom
+      val modK : ModK = linearEvaluation(lf)
+      modK match {
+        case ModKBottom => bottom
         case RestClass(0) => bottom
-        case Mod3Top => top // lub
-        case _ => this // mod3 != RestClass(0)
+        case ModKTop => top // lub
+        case _ => this // modK != RestClass(0)
       }
     }
 
@@ -50,12 +50,12 @@ class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore](Mod3DomainCor
       * @inheritdoc
       */
     override def linearInequality(lf: LinearForm): Property = {
-      val mod3: Mod3 = linearEvaluation(lf)
+      val modK: ModK = linearEvaluation(lf)
       if (isEmpty)
         return this
-      mod3 match {
-        case Mod3Bottom => bottom
-        case Mod3Top => top
+      modK match {
+        case ModKBottom => bottom
+        case ModKTop => top
         case RestClass(r) => if (r > 0) bottom else this
       }
     }
@@ -69,9 +69,9 @@ class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore](Mod3DomainCor
         "[ empty ]"
       else {
         val bounds = for (i <- 0 until dimension) yield {
-          val c = mod3s(i) match {
-            case Mod3Top => "TOP"
-            case Mod3Bottom => "BOTTOM"
+          val c = modKs(i) match {
+            case ModKTop => "TOP"
+            case ModKBottom => "BOTTOM"
             case RestClass(r) => r
           }
           s"${vars(i)} = $c"
@@ -82,6 +82,9 @@ class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore](Mod3DomainCor
 
   } // end of Property
 }
-object Mod3Domain {
-  def apply() = new Mod3Domain()
+object ModKDomain {
+  def apply(num : Int) = {
+    ModKDomainCore(num)
+    new ModKDomain()
+  }
 }

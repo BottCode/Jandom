@@ -27,7 +27,7 @@ import it.unipd.jandom.domains.numerical.parity.Parity._
   * SignBottom complete the lattice, providing a greatest and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *
   */

@@ -82,7 +82,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
       case (_, ModKBottom) => ModKBottom
       case (ModKTop, _) => ModKTop
       case (_, ModKTop) => ModKTop
-      case (_, _) => ModKTop 
+      case (_, _) => ModKTop
     }
   }
 

@@ -1,6 +1,5 @@
 package it.unipd.jandom.domains.numerical
 
-
 import it.unipd.jandom.domains.numerical.constant.ConstantDomainCore._
 import it.unipd.jandom.domains.numerical.constant.Constant._
 import org.scalatest.FlatSpec
@@ -11,10 +10,7 @@ import org.scalatest.FlatSpec
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *
-  *
   */
-
 class ConstantDomainCoreSuite extends FlatSpec {
 
   val six = Const(6)
@@ -22,7 +18,6 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
   "ConstantDomain.inverse" should
     " - return the inverse of the constant value given as input" in {
-
     val minusSix = Const(-6)
 
     assert(inverse(ConstantTop) === ConstantTop)
@@ -90,7 +85,6 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
   "ConstantDomain.mult" should
     " - return the product of the constant values given as input" in {
-
     val multPositive=
       six match {
         case Const(value) => Const(value*value)

@@ -12,7 +12,11 @@ case object Mod3Top extends Mod3
 
 object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
 
-  override def alpha(t : Int) : Mod3 = RestClass(t % 3)
+  override def alpha(t : Int) : Mod3 =
+    if(t % 3 < 0)
+      RestClass(3 + (t % 3))
+    else
+      RestClass(t % 3)
 
   override def sum(m : Mod3, n : Mod3) : Mod3 = {
     (m, n) match {

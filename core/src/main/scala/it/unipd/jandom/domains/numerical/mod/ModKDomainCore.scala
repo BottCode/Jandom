@@ -15,7 +15,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def sum(m : ModK, n : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m, n) match {
       case (ModKBottom, _) => ModKBottom
       case (_, ModKBottom) => ModKBottom
@@ -28,7 +28,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def lub(m : ModK, n : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m,n) match {
       case (ModKTop, _) => ModKTop
       case (_, ModKTop) => ModKTop
@@ -40,7 +40,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def glb(m : ModK, n : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m, n) match {
       case (ModKBottom, _) => ModKBottom
       case (_, ModKBottom) => ModKBottom
@@ -52,7 +52,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def mult(m : ModK, n : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m, n) match {
       case (ModKBottom, _) => ModKBottom
       case (_, ModKBottom) => ModKBottom
@@ -67,7 +67,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def inverse(m : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     m match {
       case RestClass(n) => RestClass((divisor - n) % divisor)
       case _ => m
@@ -76,7 +76,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def division(m : ModK, n : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m,n) match {
       case (ModKBottom, _) => ModKBottom
       case (_, ModKBottom) => ModKBottom
@@ -88,7 +88,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def remainder(m : ModK, n : ModK) : ModK = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m,n) match {
       case (ModKBottom, _) => ModKBottom
       case (_, ModKBottom) => ModKBottom
@@ -102,7 +102,7 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   override def compare(m : ModK, n : ModK) : Option[Int] = {
     if(divisor == 0)
-      return ModKBottom
+      return ModKTop
     (m,n) match {
       case (ModKTop, ModKTop) => Option(0)
       case (ModKTop, _) => Option(1)

@@ -2,18 +2,6 @@ package it.unipd.jandom.domains.numerical.parity
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 
-object Parity {
-  trait Parity
-  // multiples of 2
-  case object Even extends Parity
-  // multiples of 2 plus 1
-  case object Odd extends Parity
-  // no accurate info available for variable
-  case object ParityTop extends Parity
-  // no possible value
-  case object ParityBottom extends Parity
-}
-
 import Parity._
 
 /**

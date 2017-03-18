@@ -126,8 +126,8 @@ object DomainTransformation {
     def apply(src: SignDomain, dst: ParityDomain): src.Property => dst.Property = {
       (p) => {
         dst.createProperty(p.elements.map {
-          case Zero => Even
-          case _ => ParityTop
+          case Zero => Parity.Even
+          case _ => Parity.ParityTop
         })
       }
     }

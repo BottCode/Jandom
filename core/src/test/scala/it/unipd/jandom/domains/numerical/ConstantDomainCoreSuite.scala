@@ -8,8 +8,9 @@ import org.scalatest.FlatSpec
 /**
   * Unit Test - Constant Domain Core
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *
   *
   */
@@ -69,6 +70,8 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
   "ConstantDomain.sum" should
     " - return the sum of the constant values given as input" in {
+    val twelve = Const(12)
+
     // ConstantBottom
     assert(sum(ConstantBottom, six) === ConstantBottom)
     assert(sum(ConstantBottom, ConstantTop) === ConstantBottom)
@@ -81,6 +84,8 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(sum(ConstantTop, ConstantTop) === ConstantTop)
     // Const
     assert(sum(six, zero) === six)
+    assert(sum(zero, six) === six)
+    assert(sum(six, six) === twelve)
   }
 
   "ConstantDomain.mult" should
@@ -112,11 +117,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
 
   "ConstantDomain.division" should
     " - return the division of the constant values given as input" in {
-
-    val divisionPositive=
-      six match {
-        case Const(value) => Const(value/value)
-      }
+    val one = Const(1)
 
     // ConstantBottom
     assert(division(ConstantBottom, six) === ConstantBottom)
@@ -134,7 +135,7 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(division(six, ConstantTop) === ConstantTop)
     assert(division(ConstantTop, ConstantTop) === ConstantTop)
     // Const
-    assert(division(six, six) === divisionPositive)
+    assert(division(six, six) === one)
   }
 
   "ConstantDomain.remainder" should
@@ -177,4 +178,4 @@ class ConstantDomainCoreSuite extends FlatSpec {
     assert(compare(six, zero) === Option.empty)
     assert(compare(six, six) === Option(0))
   }
-}
+} // end of ConstantDomainCoreSuite

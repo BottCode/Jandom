@@ -34,31 +34,12 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
     /**
       * @inheritdoc
       */
-    override def linearDisequality(lf: LinearForm): Property = {
-      if (isEmpty)
-        return this
-      val modK : ModK = linearEvaluation(lf)
-      modK match {
-        case ModKBottom => bottom
-        case RestClass(0) => bottom
-        case ModKTop => top // lub
-        case _ => this // modK != RestClass(0)
-      }
-    }
+    override def linearDisequality(lf: LinearForm): Property = this
 
     /**
       * @inheritdoc
       */
-    override def linearInequality(lf: LinearForm): Property = {
-      val modK: ModK = linearEvaluation(lf)
-      if (isEmpty)
-        return this
-      modK match {
-        case ModKBottom => bottom
-        case ModKTop => top
-        case RestClass(r) => if (r > 0) bottom else this
-      }
-    }
+    override def linearInequality(lf: LinearForm): Property = this
 
     /**
       * @inheritdoc

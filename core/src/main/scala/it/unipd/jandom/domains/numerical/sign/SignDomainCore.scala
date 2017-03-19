@@ -153,3 +153,7 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
   override def bottom: Sign = SignBottom
 
 } // end object SignDomainCore
+
+object SignDomainCore {
+  def apply() : SignDomainCore = new SignDomainCore
+} // end SignDomainCore companion object

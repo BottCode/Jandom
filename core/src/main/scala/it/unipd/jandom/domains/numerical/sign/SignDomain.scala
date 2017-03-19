@@ -31,7 +31,7 @@ import it.unipd.jandom.domains.numerical._
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *
  */
-class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore.type](sign.SignDomainCore) {
+class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore](sign.SignDomainCore()) {
 
   // this class uses the operations defined in SignDomainCore
 

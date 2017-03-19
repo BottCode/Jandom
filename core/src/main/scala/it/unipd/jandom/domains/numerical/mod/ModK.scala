@@ -1,7 +1,7 @@
 package it.unipd.jandom.domains.numerical.mod
 
-object ModK{
-	private var k=1;
+object ModK {
+	private var k = 1
 
 	trait ModK
 	case class RestClass(num : Int) extends ModK
@@ -9,8 +9,8 @@ object ModK{
 	case object ModKTop extends ModK
 
 	def apply(num : Int) {
-		k = num;
+		k = num
 	}
 
-	def divisor = k
+	def divisor: Int = k
 }

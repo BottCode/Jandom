@@ -65,7 +65,7 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
       case (Zero, _) => Zero
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
-      case (a, b) => if(a == b) Plus else Minus
+      case (_, _) => if(s == t) Plus else Minus
     }
 
   /**
@@ -75,7 +75,7 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
     s match {
       case Plus => Minus
       case Minus => Plus
-      case a => a
+      case _ => s
     }
 
   /**
@@ -111,9 +111,9 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
     (s, t) match {
       case (SignTop, _) => SignTop
       case (_, SignTop) => SignTop
-      case (SignBottom, a) => a
-      case (a, SignBottom) => a
-      case (a, b) => if (a == b) a else SignTop
+      case (SignBottom, _) => t
+      case (_, SignBottom) => s
+      case (_, _) => if (s == t) s else SignTop
     }
 
   /**
@@ -121,11 +121,11 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
     */
   def glb(s : Sign, t : Sign) : Sign =
       (s,t) match {
-        case (SignTop, a) => a
-        case (a, SignTop) => a
+        case (SignTop, _) => t
+        case (_, SignTop) => s
         case (_, SignBottom) => SignBottom
         case (SignBottom, _) => SignBottom
-        case (a, b) => if(a == b) a else SignBottom
+        case (_, _) => if(s == t) s else SignBottom
       }
 
   /**
@@ -139,7 +139,7 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
       case (SignBottom, SignBottom) => Option(0)
       case (SignBottom, _) => Option(-1)
       case (_, SignBottom) => Option(1)
-      case (a, b) => if (a.equals(b)) Option(0) else Option.empty
+      case (_, _) => if (s.equals(t)) Option(0) else Option.empty
     }
 
   /**

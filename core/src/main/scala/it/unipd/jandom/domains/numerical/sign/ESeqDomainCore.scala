@@ -31,44 +31,36 @@ object ESeqDomainCore extends SignDomainCore {
       }
     return result
   }
+  
   /**
     * @inheritdoc
     */
   override def mult(s: Sign, t : Sign) : Sign = {
     val result=super.mult(s,t)
-    if(result == SignTop)
+    //  if result == Top => s==Top || t==Top
+    if(result == Plus || result == Minus)
       (s,t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (_, Zero) => Zero
-        case (Zero, _) => Zero
-        case (SignTop, _) => SignTop
-        case (_, SignTop) => SignTop
-        case (Plus, a) => a
-        case (a, Plus) => a
-        case (Minus, a) => inverse(a)
-        case (a, Minus) => inverse(a)
+        case (Plus, _) => t
+        case (_, Plus) => s
+        case (Minus, _) => inverse(t)
+        case (_, Minus) => inverse(s)
         case (Leq0, Geq0) => Leq0
         case (Geq0, Leq0) => Leq0
         case _ => SignTop
       }
     return result
   }
+
   /**
     * @inheritdoc
     */
-  override def inverse(s: Sign) : Sign = {
-    val result=super.inverse(s)
-    if(result == SignTop)
-      s match {
-        case Plus => Minus
-        case Minus => Plus
+  override def inverse(s: Sign) : Sign =
+    super.inverse(s) match {
         case Leq0 => Geq0
         case Geq0 => Leq0
         case a => a
       }
-    return result
-  }
+
   /**
     * @inheritdoc
     */
@@ -76,11 +68,7 @@ object ESeqDomainCore extends SignDomainCore {
     val result=super.division(s,t)
     if(result == SignTop)
       (s, t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (_, Zero) => SignBottom
         case (SignTop, _) => SignTop
-        case (Zero, _) => Zero
         case (_, SignTop) => SignTop
         case (Plus, Minus) => Leq0
         case (Minus, Plus) => Leq0
@@ -94,11 +82,11 @@ object ESeqDomainCore extends SignDomainCore {
         case (Leq0, Minus) => Geq0
         case (Leq0, Geq0) => Leq0
         case (Geq0, Leq0) => Leq0
-          // TODO: Check if something is missing
-        case (a, b) => if (a.equals(b)) Geq0 else SignTop
+        case (_, _) => if (s.equals(t)) Geq0 else SignTop
       }
     return result
   }
+
   /**
     * @inheritdoc
     */
@@ -106,10 +94,6 @@ object ESeqDomainCore extends SignDomainCore {
     val result=super.remainder(s,t)
     if(result == SignTop)
       (s, t) match {
-        case (SignBottom, _) => SignBottom
-        case (_, SignBottom) => SignBottom
-        case (_, Zero) => SignBottom
-        case (Zero, _) => Zero
         case (Plus, _) => Geq0
         case (Geq0, _) => Geq0
         case (Minus, _) => Leq0
@@ -118,6 +102,7 @@ object ESeqDomainCore extends SignDomainCore {
       }
     return result
   }
+
   /**
     * @inheritdoc
     */

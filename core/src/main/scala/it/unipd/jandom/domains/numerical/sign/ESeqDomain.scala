@@ -13,7 +13,7 @@ import it.unipd.jandom.domains.numerical.sign.ESeq._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDomainCore) {
+class ESeqDomain extends SignDomain {
 
   override def createProperty(elements: Array[Sign], unreachable: Boolean): Property =
     new Property(elements, unreachable)
@@ -23,17 +23,8 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDoma
     * @param sign array of sign variables
     * @param unreachable tells if the point of the CFG is unreachable
     */
-  class Property (sign : Array[Sign], unreachable : Boolean) extends BaseProperty(sign, unreachable) {
+  class Property (sign : Array[Sign], unreachable : Boolean) extends SignDomain.Property {
 
-    /**
-      * @inheritdoc
-      */
-    override def linearInequality(lf: LinearForm) : Property = this
-
-    /**
-      * @inheritdoc
-      */
-    override def linearDisequality(lf: LinearForm) : Property = this
   } // end class Property
 } // end class ESeqDomain
 

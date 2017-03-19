@@ -1,7 +1,6 @@
 package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 import it.unipd.jandom.domains.numerical.sign.Sign._
 import it.unipd.jandom.domains.numerical.sign.ESeq._
 /**
@@ -18,12 +17,15 @@ class ESeqDomain extends SignDomain {
   override def createProperty(elements: Array[Sign], unreachable: Boolean): Property =
     new Property(elements, unreachable)
 
+
   /**
     * Property of a point in the CFG for the ESeq domain.
     * @param sign array of sign variables
     * @param unreachable tells if the point of the CFG is unreachable
     */
-  class Property (sign : Array[Sign], unreachable : Boolean) extends SignDomain.Property {
+  class ESeqDomainProperty (sign : Array[Sign], unreachable : Boolean) extends SignProperty(sign, unreachable) {
+
+    self: Property =>
 
   } // end class Property
 } // end class ESeqDomain

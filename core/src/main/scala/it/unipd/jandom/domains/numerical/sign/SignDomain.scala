@@ -46,7 +46,9 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore](sign.SignDoma
     * @param sign array of the variables' signs
     * @param unreachable tells if a given program point is unreachable
     */
-  class Property (sign : Array[Sign], unreachable: Boolean) extends BaseProperty(sign, unreachable) {
+  type Property = SignProperty
+
+  class SignProperty (sign : Array[Sign], unreachable: Boolean) extends BaseProperty(sign, unreachable) {
 
     /**
       * @inheritdoc
@@ -109,4 +111,6 @@ object SignDomain {
     * Ctor for SignDomain.
     */
   def apply() = new SignDomain()
+
+
 } // end of SignDomain's companion object

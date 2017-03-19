@@ -1,8 +1,6 @@
 package it.unipd.jandom.domains.numerical.sign
 
 import it.unipd.jandom.domains.numerical.sign.Sign._
-
-import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 import ESeq._
 
 /**
@@ -12,131 +10,114 @@ import ESeq._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
+object ESeqDomainCore extends SignDomainCore {
 
   /**
     * @inheritdoc
     */
-  override def alpha(num: Int): Sign =
-    if(num < 0)
-      Minus
-    else if(num == 0)
-      Zero
-    else
-      Plus
-
-  /**
-    * Factory method for signs.
-    *
-    * @param num number that has to be converted to sign
-    * @return sign of `num`
-    */
-  // stale
-  def toSign(num : Double): Sign =
-    if(num > 0)
-      Plus
-    else if(num < 0)
-      Minus
-    else
-      Zero
-
+  override def sum(s: Sign, t: Sign) : Sign = {
+    val result=super.sum(s,t)
+    if(result == SignTop)
+      (s,t) match {
+        case (SignTop, _) => SignTop
+        case (_, SignTop) => SignTop
+        case (Geq0, Geq0) => Geq0
+        case (Geq0, Plus) => Plus
+        case (Plus, Geq0) => Plus
+        case (Leq0, Leq0) => Leq0
+        case (Leq0, Minus) => Minus
+        case (Minus, Leq0) => Minus
+        case _ => SignTop
+      }
+    return result
+  }
   /**
     * @inheritdoc
     */
-  def sum(s: Sign, t: Sign) : Sign =
-    (s,t) match {
-      case (SignBottom, _) => SignBottom
-      case (_, SignBottom) => SignBottom
-      case (SignTop, _) => SignTop
-      case (_, SignTop) => SignTop
-      case (a, Zero) => a
-      case (Zero, a) => a
-      case (Plus, Plus) => Plus
-      case (Minus, Minus) => Minus
-      case (Geq0, Geq0) => Geq0
-      case (Geq0, Plus) => Plus
-      case (Plus, Geq0) => Plus
-      case (Leq0, Leq0) => Leq0
-      case (Leq0, Minus) => Minus
-      case (Minus, Leq0) => Minus
-      case _ => SignTop
-    }
-
+  override def mult(s: Sign, t : Sign) : Sign = {
+    val result=super.mult(s,t)
+    if(result == SignTop)
+      (s,t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (_, Zero) => Zero
+        case (Zero, _) => Zero
+        case (SignTop, _) => SignTop
+        case (_, SignTop) => SignTop
+        case (Plus, a) => a
+        case (a, Plus) => a
+        case (Minus, a) => inverse(a)
+        case (a, Minus) => inverse(a)
+        case (Leq0, Geq0) => Leq0
+        case (Geq0, Leq0) => Leq0
+        case _ => SignTop
+      }
+    return result
+  }
   /**
     * @inheritdoc
     */
-  def mult(s: Sign, t : Sign) : Sign =
-    (s,t) match {
-      case (SignBottom, _) => SignBottom
-      case (_, SignBottom) => SignBottom
-      case (_, Zero) => Zero
-      case (Zero, _) => Zero
-      case (SignTop, _) => SignTop
-      case (_, SignTop) => SignTop
-      case (Plus, a) => a
-      case (a, Plus) => a
-      case (Minus, a) => inverse(a)
-      case (a, Minus) => inverse(a)
-      case (Leq0, Geq0) => Leq0
-      case (Geq0, Leq0) => Leq0
-      case _ => SignTop
-    }
-
+  override def inverse(s: Sign) : Sign = {
+    val result=super.inverse(s)
+    if(result == SignTop)
+      s match {
+        case Plus => Minus
+        case Minus => Plus
+        case Leq0 => Geq0
+        case Geq0 => Leq0
+        case a => a
+      }
+    return result
+  }
   /**
     * @inheritdoc
     */
-  def inverse(s: Sign) : Sign =
-    s match {
-      case Plus => Minus
-      case Minus => Plus
-      case Leq0 => Geq0
-      case Geq0 => Leq0
-      case a => a
-    }
-
+  override def division(s : Sign, t : Sign) : Sign = {
+    val result=super.division(s,t)
+    if(result == SignTop)
+      (s, t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (_, Zero) => SignBottom
+        case (SignTop, _) => SignTop
+        case (Zero, _) => Zero
+        case (_, SignTop) => SignTop
+        case (Plus, Minus) => Leq0
+        case (Minus, Plus) => Leq0
+        case (Plus, Geq0) => Geq0
+        case (Geq0, Plus) => Geq0
+        case (Minus, Geq0) => Leq0
+        case (Geq0, Minus) => Leq0
+        case (Plus, Leq0) => Leq0
+        case (Leq0, Plus) => Leq0
+        case (Minus, Leq0) => Geq0
+        case (Leq0, Minus) => Geq0
+        case (Leq0, Geq0) => Leq0
+        case (Geq0, Leq0) => Leq0
+          // TODO: Check if something is missing
+        case (a, b) => if (a.equals(b)) Geq0 else SignTop
+      }
+    return result
+  }
   /**
     * @inheritdoc
     */
-  def division(s : Sign, t : Sign) : Sign =
-    (s, t) match {
-      case (SignBottom, _) => SignBottom
-      case (_, SignBottom) => SignBottom
-      case (_, Zero) => SignBottom
-      case (SignTop, _) => SignTop
-      case (Zero, _) => Zero
-      case (_, SignTop) => SignTop
-      case (Plus, Minus) => Leq0
-      case (Minus, Plus) => Leq0
-      case (Plus, Geq0) => Geq0
-      case (Geq0, Plus) => Geq0
-      case (Minus, Geq0) => Leq0
-      case (Geq0, Minus) => Leq0
-      case (Plus, Leq0) => Leq0
-      case (Leq0, Plus) => Leq0
-      case (Minus, Leq0) => Geq0
-      case (Leq0, Minus) => Geq0
-      case (Leq0, Geq0) => Leq0
-      case (Geq0, Leq0) => Leq0
-        // TODO: Check if something is missing
-      case (a, b) => if (a.equals(b)) Geq0 else SignTop
-    }
-
-  /**
-    * @inheritdoc
-    */
-  def remainder(s : Sign, t : Sign) : Sign =
-    (s, t) match {
-      case (SignBottom, _) => SignBottom
-      case (_, SignBottom) => SignBottom
-      case (_, Zero) => SignBottom
-      case (Zero, _) => Zero
-      case (Plus, _) => Geq0
-      case (Geq0, _) => Geq0
-      case (Minus, _) => Leq0
-      case (Leq0, _) => Leq0
-      case (_, _) => SignTop
-    }
-
+  override def remainder(s : Sign, t : Sign) : Sign = {
+    val result=super.remainder(s,t)
+    if(result == SignTop)
+      (s, t) match {
+        case (SignBottom, _) => SignBottom
+        case (_, SignBottom) => SignBottom
+        case (_, Zero) => SignBottom
+        case (Zero, _) => Zero
+        case (Plus, _) => Geq0
+        case (Geq0, _) => Geq0
+        case (Minus, _) => Leq0
+        case (Leq0, _) => Leq0
+        case (_, _) => SignTop
+      }
+    return result
+  }
   /**
     * @inheritdoc
     */
@@ -205,13 +186,4 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (a, b) => if (a.equals(b)) Option(0) else Option.empty
     }
 
-  /**
-    * @inheritdoc
-    */
-  override def top: Sign = SignTop
-
-  /**
-    * @inheritdoc
-    */
-  override def bottom: Sign = SignBottom
 } // end object ESeqDomainCore

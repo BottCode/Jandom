@@ -10,7 +10,7 @@ import Sign._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
+class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {
 
   /**
     * @inheritdoc

@@ -40,26 +40,10 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
   /**
     * @inheritdoc
     */
-  override def lub(m : ModK, n : ModK) : ModK = {
-    (m,n) match {
-      case (ModKTop, _) => ModKTop
-      case (_, ModKTop) => ModKTop
-      case (ModKBottom, _) => n
-      case (_, ModKBottom) => m
-      case (_, _) => if(m == n) m else ModKTop
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
-  override def glb(m : ModK, n : ModK) : ModK = {
-    (m, n) match {
-      case (ModKBottom, _) => ModKBottom
-      case (_, ModKBottom) => ModKBottom
-      case (ModKTop, _) => n
-      case (_, ModKTop) => m
-      case (_, _) => if(m == n) m else ModKBottom
+  override def inverse(m : ModK) : ModK = {
+    m match {
+      case RestClass(n) => alpha((divisor - n) % divisor)
+      case _ => m
     }
   }
 
@@ -76,16 +60,6 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
       case (_, ModKTop) => ModKTop
       case (RestClass(m1), RestClass(n1)) =>
         alpha(m1*n1)
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
-  override def inverse(m : ModK) : ModK = {
-    m match {
-      case RestClass(n) => alpha((divisor - n) % divisor)
-      case _ => m
     }
   }
 
@@ -114,6 +88,32 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
       case (_, ModKTop) => ModKTop
       case (ModKTop, _) => ModKTop
       case (RestClass(m1), RestClass(n1)) => alpha(m1%n1)
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  override def lub(m : ModK, n : ModK) : ModK = {
+    (m,n) match {
+      case (ModKTop, _) => ModKTop
+      case (_, ModKTop) => ModKTop
+      case (ModKBottom, _) => n
+      case (_, ModKBottom) => m
+      case (_, _) => if(m == n) m else ModKTop
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  override def glb(m : ModK, n : ModK) : ModK = {
+    (m, n) match {
+      case (ModKBottom, _) => ModKBottom
+      case (_, ModKBottom) => ModKBottom
+      case (ModKTop, _) => n
+      case (_, ModKTop) => m
+      case (_, _) => if(m == n) m else ModKBottom
     }
   }
 

@@ -79,9 +79,9 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
         bounds.mkString("[ ", " , ", " ]")
       }
     }
-
   } // end of Property
-}
+} // end of ModKDomain class
+
 object ModKDomain {
   private var n = 1
 
@@ -90,4 +90,4 @@ object ModKDomain {
     n = num
     new ModKDomain()
   }
-}
+} // end of ModKDomain companion object

@@ -26,7 +26,7 @@ class ESeqDomain extends SignDomain {
   class ESeqDomainProperty (sign : Array[Sign], unreachable : Boolean) extends SignProperty(sign, unreachable) {
 
     self: Property =>
-
+    
   } // end class Property
 } // end class ESeqDomain
 

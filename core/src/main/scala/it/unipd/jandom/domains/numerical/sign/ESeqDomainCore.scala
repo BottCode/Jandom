@@ -10,7 +10,7 @@ import ESeq._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object ESeqDomainCore extends SignDomainCore {
+class ESeqDomainCore extends SignDomainCore {
 
   /**
     * @inheritdoc
@@ -181,3 +181,6 @@ object ESeqDomainCore extends SignDomainCore {
   }
 
 } // end object ESeqDomainCore
+object ESeqDomainCore {
+  def apply() = new ESeqDomainCore
+}

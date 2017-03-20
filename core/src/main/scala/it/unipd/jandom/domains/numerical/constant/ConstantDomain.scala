@@ -13,7 +13,7 @@ import it.unipd.jandom.domains.numerical.constant.Constant._
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
-class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore.type](ConstantDomainCore) {
+class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](ConstantDomainCore()) {
 
   /**
     * @inheritdoc

@@ -31,7 +31,7 @@ import it.unipd.jandom.domains.numerical.parity.Parity._
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *
   */
-class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore.type](parity.ParityDomainCore) {
+class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore](ParityDomainCore()) {
 
   // this class uses the operations defined in ParityDomainCore
 
@@ -58,8 +58,8 @@ class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore.type](pa
       p match {
         case Even => this
         case Odd => this
-        case ParityTop => createProperty(Array.fill(dimension)(ParityDomainCore.top), unreachable = false)
-        case ParityBottom => createProperty(Array.fill(dimension)(ParityDomainCore.top), unreachable = true)
+        case ParityTop => createProperty(Array.fill(dimension)(ParityDomainCore().top), unreachable = false)
+        case ParityBottom => createProperty(Array.fill(dimension)(ParityDomainCore().top), unreachable = true)
       }
     }
 

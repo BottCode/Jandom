@@ -14,7 +14,7 @@ import it.unipd.jandom.domains.numerical.sign.ES01._
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ExtendedSigns01Domain
-  extends BaseNumericalDomain[ExtendedSign01, ExtendedSigns01DomainCore.type](ExtendedSigns01DomainCore) {
+  extends BaseNumericalDomain[ExtendedSign01, ExtendedSigns01DomainCore](ExtendedSigns01DomainCore()) {
 
   // this class uses the operations defined in ExtendedSign01DomainCore
 

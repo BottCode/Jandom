@@ -151,6 +151,6 @@ class ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[
 } // end ParityDomainCore
 
 object ParityDomainCore {
-  def apply() = new ParityDomainCore.
+  def apply() = new ParityDomainCore
 }
 

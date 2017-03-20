@@ -22,7 +22,7 @@ import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 import Mod3._
 
-class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore.type](Mod3DomainCore) {
+class Mod3Domain extends BaseNumericalDomain[Mod3, Mod3DomainCore](Mod3DomainCore()) {
 
   override def createProperty(mod3s: Array[Mod3], unreachable: Boolean): Property =
     new Property(mod3s, unreachable)

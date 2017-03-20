@@ -19,11 +19,17 @@ class SumSignParityDomain(val dom1: SignDomain, val dom2: ParityDomain) extends 
     */
   class SumSignParity(val p1: dom1.Property, val p2: dom2.Property) extends Sum { }
 
+  /**
+    * Class constructor
+    */
   def apply(p1: dom1.Property, p2: dom2.Property) = new SumSignParity(p1, p2)
 } // end SumSignParityDomain class
 
 object SumSignParityDomain {
-  private lazy val v = new SumSignParityDomain(SignDomain(), ParityDomain())
+  private lazy val domain = new SumSignParityDomain(SignDomain(), ParityDomain())
 
-  def apply() : SumSignParityDomain = v
+  /**
+    * Factory method
+    */
+  def apply() : SumSignParityDomain = domain
 } // end SumSignParityDomain companion object

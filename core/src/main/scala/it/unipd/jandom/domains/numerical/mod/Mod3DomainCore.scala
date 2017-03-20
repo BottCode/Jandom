@@ -7,7 +7,7 @@ import Mod3._
   * @author $assume
   */
 
-object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
+class Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod3] with Abstraction[Int, Mod3]{
 
   override def alpha(t : Int) : Mod3 =
     if(t % 3 < 0)
@@ -104,4 +104,8 @@ object Mod3DomainCore extends CompleteLatticeOperator[Mod3] with IntOperator[Mod
   override def top: Mod3 = Mod3Top
 
   override def bottom: Mod3 = Mod3Bottom
+} //end class Mod3DOmainCore
+
+object Mod3DomainCore {
+  def apply() = new Mod3DomainCore
 }

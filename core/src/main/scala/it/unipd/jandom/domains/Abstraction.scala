@@ -4,7 +4,7 @@ package it.unipd.jandom.domains
   * Interface for domains which provide an abstraction operation.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 trait Abstraction[ConcreteType, AbstractType] {

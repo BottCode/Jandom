@@ -7,39 +7,39 @@ package it.unipd.jandom.domains
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-trait NumOperator [T] extends UniPDAnnotation {
+trait NumOperator[AbstractType] extends UniPDAnnotation {
   /**
     * Performs the (-) prefix operation.
     *
     * @param x variable that will be inverted
     * @return the inverse of `x`
     */
-  def inverse(x : T) : T
+  def inverse(x : AbstractType) : AbstractType
 
   /**
     * Returns the sum of two domain variables.
     *
-    * @param x the first term of the addition
-    * @param y the second term of the addition
+    * @param x the first addend
+    * @param y the second addend
     * @return the result of the addition
     */
-  def sum(x : T, y : T) : T
+  def sum(x : AbstractType, y : AbstractType) : AbstractType
 
   /**
     * Returns the multiplication of two domain variables.
     *
-    * @param x the first factor of the multiplication
-    * @param y the second factor of the multiplication
-    * @return the result of the multiplication
+    * @param x the first factor
+    * @param y the second factor
+    * @return the product
     */
-  def mult(x : T, y : T) : T
+  def mult(x : AbstractType, y : AbstractType) : AbstractType
 
   /**
     * Returns the division of two domain variables.
     *
-    * @param x the numerator of the division
-    * @param y the denominator of the division
+    * @param x the dividend
+    * @param y the divisor
     * @return the result of the division
     */
-  def division(x : T, y : T) : T
+  def division(x : AbstractType, y : AbstractType) : AbstractType
 }

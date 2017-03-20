@@ -154,32 +154,6 @@ object ESeqDomainCore extends SignDomainCore {
       result;
     }
 
-  /**
-    * @inheritdoc
-    */
-  def compare(s: Sign, t:Sign): Option[Int] =
-    (s, t) match {
-      case (SignTop, SignTop) => Option(0)
-      case (SignTop, _) => Option(1)
-      case (_, SignTop) => Option(-1)
-      case (SignBottom, SignBottom) => Option(0)
-      case (SignBottom, _) => Option(-1)
-      case (_, SignBottom) => Option(1)
-      case (Zero, Geq0) => Option(-1)
-      case (Plus, Geq0) => Option(-1)
-      case (Zero, Leq0) => Option(-1)
-      case (Minus, Leq0) => Option(-1)
-      case (Plus, Neq0) => Option(-1)
-      case (Minus, Neq0) => Option(-1)
-      case (Geq0, Zero) => Option(1)
-      case (Geq0, Plus) => Option(1)
-      case (Leq0, Zero) => Option(1)
-      case (Leq0, Minus) => Option(1)
-      case (Neq0, Plus) => Option(1)
-      case (Neq0, Minus) => Option(1)
-      case (a, b) => if (a.equals(b)) Option(0) else Option.empty
-    }
-
   override def compare(s: Sign, t:Sign): Option[Int] = {
     val result=super.compare(s,t)
     if(result.isEmpty)

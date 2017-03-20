@@ -12,7 +12,7 @@ import Constant._
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object ConstantDomainCore extends CompleteLatticeOperator[Constant]
+class ConstantDomainCore extends CompleteLatticeOperator[Constant]
   with IntOperator[Constant] with Abstraction[Int, Constant]{
 
   /**
@@ -141,4 +141,8 @@ object ConstantDomainCore extends CompleteLatticeOperator[Constant]
     * @inheritdoc
     */
   override def bottom: Constant = ConstantBottom
+}
+
+object ConstantDomainCore {
+  def apply() = new ConstantDomainCore
 }

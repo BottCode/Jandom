@@ -59,8 +59,7 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore](sign.SignDoma
         return this
       s match {
         case Plus => bottom
-        case SignTop => top //IS this the best correct approximation???? //TODO Maybe we can improve this result Case Top????
-        case SignBottom => bottom //TODO Check it
+        case SignBottom => bottom
         case _ => this
       }
     }
@@ -73,11 +72,9 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore](sign.SignDoma
         return this
       val s : Sign = linearEvaluation(lf)
       s match {
-        case Plus => this
-        case Minus => this
         case Zero => bottom
-        case SignTop => top //lub(Plus, Minus)
         case SignBottom => bottom
+        case _ => this
       }
     }
 

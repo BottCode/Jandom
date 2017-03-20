@@ -157,7 +157,6 @@ object ESeqDomainCore extends SignDomainCore {
   /**
     * @inheritdoc
     */
-<<<<<<< HEAD
   def compare(s: Sign, t:Sign): Option[Int] =
     (s, t) match {
       case (SignTop, SignTop) => Option(0)

@@ -3,6 +3,7 @@ package it.unipd.jandom.domains.numerical.sign
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.sign.Sign._
 import it.unipd.jandom.domains.numerical.sign.ESeq._
+
 /**
   * Extended sign domain, i.e. the domain composed of the elements Minus (negative numbers), Plus (positive numbers),
   * Zero (0), Geq0 (>=0), Leq0 (<=0) and Neq0 (!=0). SignTop and SignBottom complete the lattice, providing a greatest
@@ -16,7 +17,6 @@ class ESeqDomain extends SignDomain {
 
   override def createProperty(elements: Array[Sign], unreachable: Boolean): Property =
     new Property(elements, unreachable)
-
 
   /**
     * Property of a point in the CFG for the ESeq domain.

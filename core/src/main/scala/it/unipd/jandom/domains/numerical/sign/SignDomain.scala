@@ -111,6 +111,4 @@ object SignDomain {
     * Ctor for SignDomain.
     */
   def apply() = new SignDomain()
-
-
 } // end of SignDomain's companion object

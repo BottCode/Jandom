@@ -100,49 +100,56 @@ object ESeqDomainCore extends SignDomainCore {
         case (Leq0, _) => Leq0
         case (_, _) => SignTop
       }
+    else
+      result
+  }
+
+  /**
+    * @inheritdoc
+    */
+  override def lub(s : Sign, t : Sign) : Sign = {
+    val result=super.lub(s,t)
+    if(result == SignTop)
+      (s, t) match {
+        case (SignTop, _) => SignTop
+        case (_, SignTop) => SignTop
+        case (Zero, Plus) => Geq0
+        case (Plus, Zero) => Geq0
+        case (Zero, Minus) => Leq0
+        case (Minus, Zero) => Leq0
+        case (Plus, Minus) => Neq0
+        case (Minus, Plus) => Neq0
+        case (s, t) => compare(s, t) match {
+          case Some(1) => s
+          case Some(0) => s
+          case Some(-1) => t
+          case _ => top
+        }
+      }
     return result
   }
 
   /**
     * @inheritdoc
     */
-  def lub(s : Sign, t : Sign) : Sign =
-    (s, t) match {
-      case (SignTop, _) => SignTop
-      case (_, SignTop) => SignTop
-      case (SignBottom, a) => a
-      case (a, SignBottom) => a
-      case (Zero, Plus) => Geq0
-      case (Plus, Zero) => Geq0
-      case (Zero, Minus) => Leq0
-      case (Minus, Zero) => Leq0
-      case (Plus, Minus) => Neq0
-      case (Minus, Plus) => Neq0
-      case (a, b) => compare(a, b) match {
-        case Some(1) => a
-        case Some(0) => a
-        case Some(-1) => b
-        case _ => top
-     }
-    }
 
-  /**
-    * @inheritdoc
-    */
-  def glb(s : Sign, t : Sign) : Sign =
-    (s, t) match {
-      case (SignTop, a) => a
-      case (a, SignTop) => a
-      case (_, SignBottom) => SignBottom
-      case (SignBottom, _) => SignBottom
-      case (Geq0, Leq0) => Zero
-      case (Leq0, Geq0) => Zero
-      case (a, b) => compare(a, b) match {
-        case Some(-1) => a
-        case Some(0) => a
-        case Some(1) => b
-        case _ => top
+  override def glb(s : Sign, t : Sign) : Sign = {
+    val result = super.glb(s,t)
+    if(result == SignTop)
+      (s, t) match {
+        case (SignTop, _) => t
+        case (_, SignTop) => s
+        case (Geq0, Leq0) => Zero
+        case (Leq0, Geq0) => Zero
+        case (_, _) => compare(s, t) match {
+          case Some(-1) => s
+          case Some(0) => s
+          case Some(1) => t
+          case _ => bottom
+        }
       }
+    else
+      result;
     }
 
   /**

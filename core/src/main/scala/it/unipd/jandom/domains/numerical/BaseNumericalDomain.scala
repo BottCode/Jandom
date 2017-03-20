@@ -6,15 +6,15 @@ import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 import spire.ClassTag
 import spire.math.Rational
-
 import scala.math.PartiallyOrdered
 
 /**
-  * @note CoreType is the trait of the XDomainCore object (e.g. Sign, Constant, etc.). By employing the template method
-  *       pattern, it is possible to specify only some behaviours in the subclasses.
+  * Base abstract class for numerical domains. It contains the default implementation
+  * of most of methods inherited from NumericalDomain. The implementations 
+  * refers to Non-Relation Abstract Numerical Domains.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 abstract class BaseNumericalDomain
@@ -102,6 +102,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
+    // forget function
     override def nonDeterministicAssignment(n: Int): Property = {
       if (unreachable)
         return this
@@ -179,8 +180,6 @@ abstract class BaseNumericalDomain
       this
     }
 
-    def getElements : Array[T] = elements
-
     /**
       * @inheritdoc
       */
@@ -207,8 +206,6 @@ abstract class BaseNumericalDomain
       }
     }
 
-
-
     /**
       * @inheritdoc
       */
@@ -224,7 +221,6 @@ abstract class BaseNumericalDomain
         bounds.mkString("[ ", " , ", " ]")
       }
     }
-
 
     /**
       * @inheritdoc
@@ -256,9 +252,9 @@ abstract class BaseNumericalDomain
     /**
       * Performs the comparison between two properties.
       * @param that the right hand side of the comparison
-      * @param evidence$1 dk
+      * @param evidence$1 implicit parameter which istantiates B to PartiallyOrdered
       * @tparam B actual type of the right hand side
-      * @return a Scala Option which can contain {-1 = the first property is less defined than the second one; 0 = perfectly equal properties; 1 = the first property is better defined than the second one}
+      * @return 1 if `x` > `y` -- 0 if `x` = `y` -- -1 if `x` < `y`
       */
     override def tryCompareTo[B >: Property](that: B)(implicit evidence$1: (B) => PartiallyOrdered[B]): Option[Int] = that match {
 
@@ -301,19 +297,21 @@ abstract class BaseNumericalDomain
     }
 
     /**
-      * Compute the minimum and maximum value of a linear form in a box.
+      * Converts coefficient to integer and computes the linear evaluation of the
+      * linear form
       *
       * @param lf a linear form
       * @return  the result (istantiated to the correct type T) of the linear evaluation of `lf`
       */
     protected def linearEvaluation(lf: LinearForm): T = {
-      val known = lf.known.toDouble.toInt
-      val homcoeffs = lf.homcoeffs.map(_.toDouble.toInt).toArray
+      val known = lf.known.toInt
+      val homcoeffs = lf.homcoeffs.map(_.toInt).toArray
       linearEvaluation(known, homcoeffs)
     }
 
     /**
-      * Compute the minimum and maximum value of a linear form in a box.
+      * Compute the sum of the coefficient of the linear form (absolute values)
+      * if the CFG point is reachable, top if unreachable and not-constant lf (to keep soundness)
       *
       * @param known the known term of a linear form
       * @param homcoeffs homogeneous coefficients of a linear form
@@ -340,8 +338,7 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    // narrowing to be sound
-    override def narrowing(that: Property): Property = this
+    override def narrowing(that: Property): Property = intersection(that)
 
     /**
       * Type used by superclass.
@@ -349,7 +346,7 @@ abstract class BaseNumericalDomain
     override type Domain = BaseNumericalDomain[T, CoreType]
 
     /**
-      * Returns the abstract domain corresponding to this property.
+      * @return the abstract domain corresponding to this property
       */
     override def domain: Domain = BaseNumericalDomain.this
   }

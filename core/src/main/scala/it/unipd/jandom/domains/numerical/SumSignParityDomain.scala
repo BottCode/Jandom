@@ -7,6 +7,9 @@ import it.unipd.jandom.domains.numerical.sign.SignDomain
 /**
   * Instantiation of the sum domain using the Sign domain and the Parity domain.
   *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   * @param dom1 the first abstract domain
   * @param dom2 the second abstract domain
   */

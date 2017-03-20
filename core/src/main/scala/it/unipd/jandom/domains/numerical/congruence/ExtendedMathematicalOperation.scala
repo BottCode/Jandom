@@ -6,7 +6,8 @@ package it.unipd.jandom.domains.numerical.congruence
   * to simulate the numbers
   */
 
-object ExtendedMathematicalOperation {
+class ExtendedMathematicalOperation {
+
   def isDivisor(y: Option[Int], y1: Option[Int]): Boolean =
     (y, y1) match {
       case (_, None) => true
@@ -59,4 +60,30 @@ object ExtendedMathematicalOperation {
     }
   }
 
+  /**
+    * Implementation of the extended gcd. Conversion of the pseudo-code exposed in
+    * https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+    * @param a
+    * @param b
+    * @return
+    */
+  def extendedGcd(a : Int, b : Int) : (Int, Int, Int) = {
+      var s : Int = 0; var old_s : Int = 1;
+      var t : Int = 0; var old_t : Int = 0;
+      var r : Int = b; var old_r : Int = a;
+      while(r != 0){
+        var quotient : Int = old_r / r;
+        (old_r, r) = (r, old_r - quotient * r)
+        (old_s, s) = (s, old_s - quotient * s)
+        (old_t, t) = (t, old_t - quotient * t)
+
+      }
+      (old_r, old_s, old_t) //greatest common divisor, bezout's coefficient 1, bezozt's coefficient 2
+  }
+
+
+
+}
+object ExtendedMathematicalOperation{
+  def apply() = new ExtendedMathematicalOperation()
 }

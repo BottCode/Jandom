@@ -152,7 +152,12 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (Minus, Zero) => Leq0
       case (Plus, Minus) => Neq0
       case (Minus, Plus) => Neq0
-      case (a, b) => if (a == b) a else SignTop
+      case (a, b) => compare(a, b) match {
+        case Some(1) => a
+        case Some(0) => a
+        case Some(-1) => b
+        case _ => top
+     }
     }
 
   /**
@@ -166,7 +171,12 @@ object ESeqDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sig
       case (SignBottom, _) => SignBottom
       case (Geq0, Leq0) => Zero
       case (Leq0, Geq0) => Zero
-      case (a, b) => if(a == b) a else SignBottom
+      case (a, b) => compare(a, b) match {
+        case Some(-1) => a
+        case Some(0) => a
+        case Some(1) => b
+        case _ => top
+      }
     }
 
   /**

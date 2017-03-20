@@ -28,33 +28,12 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore.type](ESeqDoma
     /**
       * @inheritdoc
       */
-    override def linearInequality(lf: LinearForm) : Property = {
-      val s : Sign = linearEvaluation(lf)
-      if (isEmpty)
-        return this
-      s match {
-        case Plus => bottom
-        case SignTop => top
-        case SignBottom => bottom
-        case _ => this
-      }
-    }
+    override def linearInequality(lf: LinearForm) : Property = this
 
     /**
       * @inheritdoc
       */
-    override def linearDisequality(lf: LinearForm) : Property = {
-      if (isEmpty)
-        return this
-      val s : Sign = linearEvaluation(lf)
-      s match {
-        case Plus => this
-        case Minus => this
-        case Zero => bottom
-        case SignTop => top //lub(Plus, Minus)
-        case SignBottom => bottom
-      }
-    }
+    override def linearDisequality(lf: LinearForm) : Property = this
   } // end class Property
 } // end class ESeqDomain
 

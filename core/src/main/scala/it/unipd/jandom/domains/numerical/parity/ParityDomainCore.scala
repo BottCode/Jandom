@@ -12,7 +12,7 @@ import Parity._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[Parity] with Abstraction[Int, Parity] {
+class ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[Parity] with Abstraction[Int, Parity] {
 
   /**
     * Factory method for parities (i.e. abstraction).
@@ -148,4 +148,9 @@ object ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator
     * @inheritdoc
     */
   override def bottom: Parity = ParityBottom
-} // end ParityDomainCore object
+} // end ParityDomainCore
+
+object ParityDomainCore {
+  def apply() = new ParityDomainCore.
+}
+

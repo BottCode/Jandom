@@ -11,7 +11,7 @@ import ES01._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
+class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
   with IntOperator[ExtendedSign01] with CompleteLatticeOperator[ExtendedSign01] {
 
   /**
@@ -163,3 +163,7 @@ object ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
     */
   override def bottom: ExtendedSign01 = ES01Bottom
 } // end object ExtendedSigns01DomainCore
+
+object ExtendedSigns01DomainCore {
+  def apply() = new ExtendedSigns01DomainCore
+}

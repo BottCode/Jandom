@@ -86,7 +86,7 @@ class ParityDomainCoreSuite extends FlatSpec {
     assert(core.remainder(Odd, Odd).equals(Even))
     assert(core.remainder(ParityTop, ParityTop).equals(ParityTop))
     assert(core.remainder(ParityBottom, ParityBottom).equals(ParityBottom))
-    assert(core.remainder(Odd, Even).equals(ParityTop))
+    assert(core.remainder(Odd, Even).equals(Odd))
     assert(core.remainder(Even, Odd).equals(ParityTop))
     assert(core.remainder(ParityTop, Even).equals(ParityTop))
     assert(core.remainder(Even, ParityTop).equals(ParityTop))

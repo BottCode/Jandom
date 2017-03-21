@@ -117,6 +117,13 @@ class ExtendedMathematicalOperation {
     }
   }
 
+  def division(y : Option[Int], z : Option[Int]) : Option[Int] = {
+    (y, z) match {
+      case (None, _) => None
+      case (_, None) => None
+      case (Some(a), Some(b)) => Some(a/b)
+    }
+  }
 
 
 

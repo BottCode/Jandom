@@ -275,8 +275,11 @@ class ESeqDomainCoreSuite extends FlatSpec {
     // top
     for (s <- List(plus, neg, Geq0, Leq0, Neq0, dc.top))
       assert(dc.remainder(dc.top, s) === dc.top)
-    for (s <- List(plus, neg, Geq0, Leq0, Neq0))
-      assert(dc.remainder(s, dc.top) === dc.top)
+    assert(dc.remainder(plus, dc.top) === Geq0)
+    assert(dc.remainder(Geq0, dc.top) === Geq0)
+    assert(dc.remainder(neg, dc.top) === Leq0)
+    assert(dc.remainder(Leq0, dc.top) === Leq0)
+    assert(dc.remainder(Neq0, dc.top) === dc.top)
     // bottom
     for (s <- List(plus, neg, Geq0, Leq0, Neq0, dc.top, dc.bottom))
       assert(dc.remainder(dc.bottom, s) === dc.bottom)
@@ -292,9 +295,9 @@ class ESeqDomainCoreSuite extends FlatSpec {
     assert(dc.remainder(plus, Neq0) === Geq0)
     assert(dc.remainder(Neq0, plus) === dc.top)
     // Different signs: zero
-    for (s <- List(zero, plus, neg, Geq0, Leq0, Neq0, dc.top))
+    for (s <- List(plus, neg, Geq0, Leq0, Neq0, dc.top))
       assert(dc.remainder(zero, s) === zero)
-    for (s <- List(plus, neg, Geq0, Leq0, Neq0))
+    for (s <- List(zero, plus, neg, Geq0, Leq0, Neq0))
       assert(dc.remainder(s, zero) === dc.bottom)
     // Different signs: neg
     assert(dc.remainder(neg, Geq0) === Leq0)

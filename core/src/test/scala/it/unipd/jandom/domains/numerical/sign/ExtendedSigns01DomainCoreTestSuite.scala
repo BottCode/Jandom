@@ -1,7 +1,6 @@
-package it.unipd.jandom.domains.numerical
+package it.unipd.jandom.domains.numerical.sign
 
 import it.unipd.jandom.domains.numerical.sign.ES01._
-import it.unipd.jandom.domains.numerical.sign.ExtendedSigns01DomainCore
 import org.scalatest.FunSuite
 
 /**

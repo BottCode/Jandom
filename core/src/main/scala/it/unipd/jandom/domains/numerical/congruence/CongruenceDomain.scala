@@ -3,8 +3,8 @@ package it.unipd.jandom.domains.numerical.congruence
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 /**
-  * Congruence domain as described in Mine 2002 https://hal.archives-ouvertes.fr/hal-00136663/document.
-  * The multiplication and remainder operator was taken and adapted from http://www.dsi.unive.it/~avp/domains.pdf.
+  * Congruence domain as described in Mine 2002 [[https://hal.archives-ouvertes.fr/hal-00136663/document]].
+    * The multiplication and remainder operator was taken and adapted from [[http://www.dsi.unive.it/~avp/domains.pdf]].
   * We based on these works because we could not retrieve the original paper by Granger [1989].
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
@@ -58,10 +58,6 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
 
 object CongruenceDomain {
 
-  /**
-    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
-    * double arithmetic, according to the parameter `overReals`.
-    */
   def apply() = new CongruenceDomain()
 
 } // end of CongruenceDomain (companion object)

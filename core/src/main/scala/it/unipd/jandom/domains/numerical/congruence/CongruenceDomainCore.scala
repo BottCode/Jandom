@@ -19,20 +19,6 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
 
   def mathematicalOperation = ExtendedMathematicalOperation()
 
-
-  /**
-    * Reduce the congruence abstract domain, thus making (alpha, C, A, gamma) 
-    * a Galois Insertion.
-    * aZ+b with a > 0 and a > b
-    */
-  private def standardForm(c : Congruence) : Congruence = {
-    c match {
-      case CongruenceBottom => CongruenceBottom
-      case Mod(None, _) => c
-      case Mod(Some(a), b) => Mod(Some(a), b % a)
-    }
-  }
-
   /**
     * @inheritdoc
     */
@@ -116,44 +102,6 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * @inheritdoc
     */
-  def leq(c: Congruence, d: Congruence): Option[Boolean] = {
-    (c, d) match {
-      case (CongruenceBottom, _) => Some(true)
-      case (_, CongruenceBottom) => Some(false) //TODO or none?
-      case (Mod(a0, b0), Mod(a1, b1)) =>
-        if (mathematicalOperation.isDivisor(a1, a0) &&
-          mathematicalOperation.isCongruent(b0, b1, a1))
-          Some(true)
-        else
-          None
-
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
-  def compare(c: Congruence, d: Congruence): Option[Int] = {
-    val r = leq(c, d)
-    val l = leq(d, c)
-    (l, r) match {
-      case (None, None) => Option.empty
-      case (None, Some(a)) =>
-        if(a) Option(-1) else Option(1)
-        //throw new RuntimeException("It is not possible that a cannot compare to b but b can compare with a" + c + " " + d)
-      case (Some(a), None) =>
-        if(a) Option(1) else Option(-1)
-        //throw new RuntimeException("It is not possible that c cannot compare to d but d can compare with c" + c + " " +d)
-      case (Some(true), Some(false)) => Option(1)
-      case (Some(true), Some(true)) => Option(0)
-      case (Some(false), Some(true)) => Option(-1)
-      case (_, _) => throw new RuntimeException("It is not possible that c leq d and d leq c have the same value" + c + " " + d)
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
   def lub(c : Congruence, d : Congruence) : Congruence = {
     (c,d) match {
       case (CongruenceBottom, _) => d
@@ -191,10 +139,36 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
           }
 
           alpha(a, b2)
-        } else {
+        } 
+        else
           CongruenceBottom
-        }
+    }
+  }
 
+  /**
+    * @inheritdoc
+    */
+  def compare(c: Congruence, d: Congruence): Option[Int] = {
+    (c, d) match {
+      // Top = Mod(Some(1),0)
+      case (Mod(Some(1),0), Mod(Some(1),0)) => Option(0)
+      case (Mod(Some(1),0), _) => Option(1)
+      case (_, Mod(Some(1),0)) => Option(-1)
+      case (CongruenceBottom, CongruenceBottom) => Option(0)
+      case (CongruenceBottom, _) => Option(-1)
+      case (_, CongruenceBottom) => Option(1)
+      case (Mod(a0, b0), Mod(a1, b1)) => {
+          // c == d
+          if ((a0 == a1) && 
+              mathematicalOperation.isCongruent(b0,b1,a1) &&
+              mathematicalOperation.isCongruent(b1,b0,a0))
+            Option(0)
+          // c < d (check Miné definition)
+          if (mathematicalOperation.isDivisor(a1, a0) && mathematicalOperation.isCongruent(b0, b1, a1))
+            Option(-1)
+          // c > d
+          Option(1)
+        }
     }
   }
 
@@ -207,6 +181,19 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     * @inheritdoc
     */
   override def bottom: Congruence = CongruenceBottom
+
+  /**
+    * Reduce the congruence abstract domain, thus making (alpha, C, A, gamma) 
+    * a Galois Insertion.
+    * aZ+b with a > 0 and a > b
+    */
+  private def standardForm(c : Congruence) : Congruence = {
+    c match {
+      case CongruenceBottom => CongruenceBottom
+      case Mod(None, _) => c
+      case Mod(Some(a), b) => Mod(Some(a), b % a)
+    }
+  }
 
 } // end of CongruenceDomainCore
 

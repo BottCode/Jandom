@@ -21,6 +21,7 @@ package it.unich.jandom.domains
 import it.unich.jandom.domains.numerical._
 import it.unich.jandom.utils.breeze.RationalForBreeze._
 import it.unich.jandom.utils.numberext.RationalExt
+import it.unipd.jandom.domains.numerical.mod._
 import it.unipd.jandom.domains.numerical.sign.Sign.Zero
 import it.unipd.jandom.domains.numerical.sign.SignDomain
 import it.unipd.jandom.domains.numerical.parity._
@@ -133,10 +134,25 @@ object DomainTransformation {
     }
   }
 
+
   implicit object ParityToSign extends DomainTransformation[ParityDomain, SignDomain] {
       def apply(src: ParityDomain, dst: SignDomain): src.Property => dst.Property = { p => dst.top(p.dimension) }
   }
 
+  implicit object SignToModK extends DomainTransformation[SignDomain, ModKDomain] {
+    def apply(src: SignDomain, dst: ModKDomain): src.Property => dst.Property = {
+      (p) => {
+        dst.createProperty(p.elements.map {
+          case Zero => ModK.RestClass(0)
+          case _ => ModK.ModKTop
+        })
+      }
+    }
+  }
+
+  implicit object ModKToSign extends DomainTransformation[ModKDomain, SignDomain] {
+    def apply(src: ModKDomain, dst: SignDomain): src.Property => dst.Property = { p => dst.top(p.dimension) }
+  }
 
   /**
    * This is a class for domain transformations which transform every object of the souece domin into the top object of the

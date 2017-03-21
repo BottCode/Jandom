@@ -7,7 +7,7 @@ package it.unipd.jandom.domains
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-trait NumOperator[AbstractType] extends UniPDAnnotation {
+trait NumOperator[AbstractType]{
   /**
     * Performs the (-) prefix operation.
     *

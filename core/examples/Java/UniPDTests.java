@@ -32,4 +32,9 @@ public class UniPDTests {
     	
 >>>>>>> Taken changes from other brancheTaken changes from other branchess:core/examples/Java/Multiplication.java
     }
+    static void divisonByZero() {
+    	int x = 0;
+    	int y = 2;
+    	int z = y / x;
+    }
 }

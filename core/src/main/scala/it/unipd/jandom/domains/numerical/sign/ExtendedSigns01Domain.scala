@@ -42,7 +42,6 @@ class ExtendedSigns01Domain
       s match {
         case One => bottom
         case GTOne => bottom
-        case ES01Top => top
         case ES01Bottom => bottom
         case _ => this
       }
@@ -57,17 +56,14 @@ class ExtendedSigns01Domain
       val s : ExtendedSign01 = linearEvaluation(lf)
       s match {
         case Zero => bottom
-        case One => this
-        case GTOne => this
-        case Negative => this
-        case ES01Top => top
         case ES01Bottom => bottom
+        case _ => this
       }
     }
 
     /**
       * @inheritdoc
-    // * @throws IllegalArgumentException
+      * @throws IllegalArgumentException
       */
     override def mkString(vars: Seq[String]): String = {
       require(vars.length >= dimension)
@@ -76,12 +72,12 @@ class ExtendedSigns01Domain
       else {
         val bounds = for (i <- 0 until dimension) yield {
           val h = sign(i) match {
-            case ES01Top => "TOP"
-            case ES01Bottom => "BOTTOM"
-            case GTOne => "Gt1"
+            case ES01Top => "\u22A4"
+            case ES01Bottom => "\u22A5"
+            case GTOne => "GT1"
             case Negative => "NEG"
-            case Zero => "Zero"
-            case One => "One"
+            case Zero => "ZERO"
+            case One => "ONE"
           }
           s"${vars(i)} = $h"
         }
@@ -93,7 +89,7 @@ class ExtendedSigns01Domain
 
 object ExtendedSigns01Domain {
   /**
-    * Ctor for Exte
+    * Ctor for ExtendedSigns01Domain
     */
   def apply(): ExtendedSigns01Domain = new ExtendedSigns01Domain()
 } // end of ES01Domain's companion object

@@ -33,8 +33,8 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
       case (_, ES01Bottom) => ES01Bottom
       case (ES01Top, _) => ES01Top
       case (_, ES01Top) => ES01Top
-      case (a, Zero) => a
-      case (Zero, a) => a
+      case (_, Zero) => s
+      case (Zero, _) => t
       case (One, One) => GTOne
       case (GTOne, One) => GTOne
       case (One, GTOne) => GTOne
@@ -50,10 +50,10 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
     (s, t) match {
       case (ES01Bottom, _) => ES01Bottom
       case (_, ES01Bottom) => ES01Bottom
-      case (a, Zero) => Zero
-      case (Zero, a) => Zero
-      case (a, One) => a
-      case (One, a) => a
+      case (_, Zero) => Zero
+      case (Zero, _) => Zero
+      case (_, One) => s
+      case (One, _) => t
       case (Negative, Negative) => ES01Top
       case (Negative, GTOne) => Negative
       case (GTOne, Negative) => Negative
@@ -70,7 +70,7 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
         case GTOne => Negative
         case One => Negative
         case Negative => ES01Top
-        case a => a
+        case _ => s
       }
   }
 
@@ -85,7 +85,7 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
       // we already took care of a / 0
       case (Zero, _) => Zero
         // a / 1 = a
-      case (a, One) => a
+      case (_, One) => s
       case (One, GTOne) => Zero
       // (2 / 5) = 0   ---   (5 / 5) = 1   ---   (10 / 5) = 2
       case (_, GTOne) => ES01Top
@@ -119,9 +119,9 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
     (s,t) match {
       case (ES01Top, _) => ES01Top
       case (_, ES01Top) => ES01Top
-      case (a, ES01Bottom) => a
-      case (ES01Bottom, a) => a
-      case (a, b) => if (a.equals(b)) a else ES01Top
+      case (_, ES01Bottom) => s
+      case (ES01Bottom, _) => t
+      case (_, _) => if (s.equals(t)) s else ES01Top
     }
   }
 
@@ -130,11 +130,11 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
     */
   def glb(s : ExtendedSign01, t : ExtendedSign01) : ExtendedSign01 = {
     (s,t) match {
-      case (ES01Top, a) => a
-      case (a, ES01Top) => a
+      case (ES01Top, _) => t
+      case (_, ES01Top) => s
       case (_, ES01Bottom) => ES01Bottom
       case (ES01Bottom, _) => ES01Bottom
-      case (a,b) => if(a.equals(b)) a else ES01Bottom
+      case (_,_) => if(s.equals(t)) s else ES01Bottom
     }
   }
 
@@ -149,7 +149,7 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
       case (_, ES01Top) => Option(-1)
       case (ES01Bottom, _) => Option(-1)
       case (_, ES01Bottom) => Option(1)
-      case (a,b) => if(a.equals(b)) Option(0) else Option.empty
+      case (_,_) => if(s.equals(t)) Option(0) else Option.empty
     }
   }
 

@@ -111,9 +111,7 @@ class ESeqDomainCore extends SignDomainCore {
     * @inheritdoc
     */
   override def lub(s : Sign, t : Sign) : Sign = {
-    println(s"Entering Lub")
     val result = super.lub(s,t)
-    println(s"Lub between $s and $t: $result")
     if(result == SignTop)
       (s, t) match {
         case (SignTop, _) => SignTop

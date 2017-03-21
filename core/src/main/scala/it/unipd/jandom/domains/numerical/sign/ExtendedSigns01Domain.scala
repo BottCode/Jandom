@@ -10,7 +10,7 @@ import it.unipd.jandom.domains.numerical.sign.ES01._
   * and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ExtendedSigns01Domain

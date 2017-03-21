@@ -1,5 +1,13 @@
 package it.unipd.jandom.domains.numerical.sign
 
+
+/**
+  * The elements of the extended sign domain with 0 and 1,
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  */
 object ES01 {
   trait ExtendedSign01
   // negative numbers (< 0)

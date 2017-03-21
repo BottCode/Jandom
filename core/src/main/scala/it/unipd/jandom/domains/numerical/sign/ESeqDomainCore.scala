@@ -7,7 +7,7 @@ import ESeq._
   * Operations on the extended domain of signs with >=0, <=0 and !=0.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ESeqDomainCore extends SignDomainCore {

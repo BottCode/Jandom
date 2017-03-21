@@ -8,7 +8,7 @@ import ES01._
   * This domain is intended to be used for analysis on integer variables.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]

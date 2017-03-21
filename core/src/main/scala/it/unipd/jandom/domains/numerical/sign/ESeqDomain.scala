@@ -11,7 +11,7 @@ import it.unipd.jandom.domains.numerical.sign.ESeq._
   * and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>,
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore](ESeqDomainCore()) {
@@ -32,7 +32,6 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore](ESeqDomainCor
     /**
       * Intersection with the half-plane `lf <= 0`.
       *
-      * @todo $TODOGEN
       */
     override def linearInequality(lf: LinearForm): Property = {
       val s : Sign = linearEvaluation(lf)
@@ -48,7 +47,6 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore](ESeqDomainCor
     /**
       * Intersection with `lf != 0`.
       *
-      * @todo $TODOGEN
       */
     override def linearDisequality(lf: LinearForm): Property = {
       if (isEmpty)
@@ -60,11 +58,7 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore](ESeqDomainCor
         case _ => this
       }
     }
-} // end class Property
-  /**
-    * @inheritdoc
-    * For numerical domains, properties needs to be instances of [[it.unich.jandom.domains.NumericalProperty]].
-    */
+  } // end class Property
 
 } // end class ESeqDomain
 

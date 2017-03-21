@@ -138,7 +138,6 @@ class ESeqDomainCore extends SignDomainCore {
   /**
     * @inheritdoc
     */
-
   override def glb(s : Sign, t : Sign) : Sign = {
     val result = super.glb(s,t)
     if(result == SignTop)
@@ -158,6 +157,9 @@ class ESeqDomainCore extends SignDomainCore {
       result;
     }
 
+  /**
+    * @inheritdoc
+    */
   override def compare(s: Sign, t:Sign): Option[Int] = {
     val result=super.compare(s,t)
     if(result.isEmpty)
@@ -181,6 +183,7 @@ class ESeqDomainCore extends SignDomainCore {
   }
 
 } // end object ESeqDomainCore
+
 object ESeqDomainCore {
   def apply() = new ESeqDomainCore
 }

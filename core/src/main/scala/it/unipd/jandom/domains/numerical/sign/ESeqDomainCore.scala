@@ -139,13 +139,17 @@ class ESeqDomainCore extends SignDomainCore {
     * @inheritdoc
     */
   override def glb(s : Sign, t : Sign) : Sign = {
-    val result = super.glb(s,t)
-    if(result == SignTop)
+    val result = super.glb(s, t)
+    if(result == bottom)
       (s, t) match {
         case (SignTop, _) => t
         case (_, SignTop) => s
         case (Geq0, Leq0) => Zero
         case (Leq0, Geq0) => Zero
+        case (Geq0, Neq0) => Plus
+        case (Neq0, Geq0) => Plus
+        case (Leq0, Neq0) => Minus
+        case (Neq0, Leq0) => Minus
         case (_, _) => compare(s, t) match {
           case Some(-1) => s
           case Some(0) => s

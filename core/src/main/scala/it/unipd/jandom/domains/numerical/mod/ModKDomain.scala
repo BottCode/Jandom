@@ -22,6 +22,16 @@ import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 import ModK._
 
+/**
+  * Module K domain, i.e. the domain composed of the elements of 
+  * the rest class of K {0,..,K-1}.
+  * It is a non-relational flat domain. ModKTop and ModKBottom complete 
+  * the lattice, providing a greatest and a least element for this set.
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  */
 class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDomainCore) {
 
   override def createProperty(modKs: Array[ModK], unreachable: Boolean): Property =
@@ -64,6 +74,11 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
 } // end of ModKDomain class
 
 object ModKDomain {
+
+  /**
+    * Factory method for ModKDomain.
+    * Sets the divisor K to num invoking ModKDomainCore
+    */
   def apply(num : Int) = {
     ModKDomainCore(num)
     new ModKDomain()

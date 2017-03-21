@@ -2,6 +2,7 @@ package it.unipd.jandom.domains.numerical.congruence
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
+import it.unipd.jandom.domains.numerical.congruence.Congruence._
 /**
   * Congruence domain as described in Mine 2002 [[https://hal.archives-ouvertes.fr/hal-00136663/document]].
     * The multiplication and remainder operator was taken and adapted from [[http://www.dsi.unive.it/~avp/domains.pdf]].

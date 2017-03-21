@@ -53,7 +53,7 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
           val c = modKs(i) match {
             case ModKTop => "TOP"
             case ModKBottom => "BOTTOM"
-            case RestClass(r) => s"$r mod ${ModKDomain.n}"
+            case RestClass(r) => s"$r mod ${divisor}"
           }
           s"${vars(i)} = $c"
         }
@@ -64,11 +64,8 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
 } // end of ModKDomain class
 
 object ModKDomain {
-  private var n = 1
-
   def apply(num : Int) = {
     ModKDomainCore(num)
-    n = num
     new ModKDomain()
   }
 } // end of ModKDomain companion object

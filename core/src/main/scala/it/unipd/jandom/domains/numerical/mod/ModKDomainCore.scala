@@ -10,7 +10,6 @@ import ModK._
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-
 object ModKDomainCore extends CompleteLatticeOperator[ModK] 
   with IntOperator[ModK] with Abstraction[Int, ModK]{
 

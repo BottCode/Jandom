@@ -218,24 +218,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     */
   override def bottom: Congruence = CongruenceBottom
 
-  def getString(c: Congruence): String = {
-    c match {
-      case CongruenceBottom => "Empty Set"
-      case Mod(a, b) =>
-        var s: String = ""
-        if (!(a.isEmpty)) {
-          if (a != Option(1))
-            s += a
-          s += "Z"
-          if (b != 0) {
-            s += b
-          }
-        } else {
-          s += b
-        }
-        s
-    }
-  }
+
 } // end of CongruenceDomainCore
 object CongruenceDomainCore {
   def apply() = new CongruenceDomainCore

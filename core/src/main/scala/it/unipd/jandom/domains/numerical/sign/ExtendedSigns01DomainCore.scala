@@ -33,6 +33,7 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
       case (_, ES01Bottom) => ES01Bottom
       case (ES01Top, _) => ES01Top
       case (_, ES01Top) => ES01Top
+      case (Negative, Negative) => Negative
       case (_, Zero) => s
       case (Zero, _) => t
       case (One, One) => GTOne

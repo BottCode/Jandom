@@ -87,6 +87,7 @@ class ESeqDomainCore extends SignDomainCore {
         case (Leq0, Minus) => Geq0
         case (Leq0, Geq0) => Leq0
         case (Geq0, Leq0) => Leq0
+        case (Neq0, Neq0) => top
         case (_, _) => if (s.equals(t)) Geq0 else SignTop
       }
     else

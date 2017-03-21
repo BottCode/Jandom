@@ -57,6 +57,51 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * @inheritdoc
     */
+  def inverse(c : Congruence) : Congruence = {
+    c match {
+      case CongruenceBottom => CongruenceBottom
+      case Mod(a, b) => alpha(a, -b)
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  def mult(c : Congruence, d : Congruence) : Congruence = {
+    (c, d) match {
+      case (CongruenceBottom, _) => CongruenceBottom
+      case (_, CongruenceBottom) => CongruenceBottom
+      case (Mod(a0, b0), Mod(a1, b1)) =>
+        if (a0 == a1 && a0.isEmpty)
+          alpha(None, b0 * b1)
+        else {
+          val a = mathematicalOperation.gcd(mathematicalOperation.*(a0, a1),
+            mathematicalOperation.*(a0, Some(b1)), mathematicalOperation.*(a1, Some(b0)))
+          val b = b0 * b1
+          alpha(a, b)
+        }
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  def division(c: Congruence, d: Congruence): Congruence =
+    (c, d) match {
+      case (CongruenceBottom, _) => CongruenceBottom
+      case (_, CongruenceBottom) => CongruenceBottom
+      case (_, Mod(None,0)) => CongruenceBottom
+      case (Mod(a0, b0), Mod(None, b1)) =>
+        if(mathematicalOperation.isDivisor(Some(b1),a0) && mathematicalOperation.isDivisor(Some(b1), Some(b0)))
+          alpha(mathematicalOperation.division(a0,Some(b1.abs)), b0/b1)
+        else
+          alpha(Some(1), 0) //top element
+      case (_, _) => alpha(Some(1), 0) //top element
+    }
+
+  /**
+    * @inheritdoc
+    */
   def remainder(c: Congruence, d: Congruence): Congruence = {
     (c, d) match {
       case (CongruenceBottom, _) => CongruenceBottom
@@ -152,53 +197,6 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
 
     }
   }
-
-  /**
-    * @inheritdoc
-    */
-  def inverse(c : Congruence) : Congruence = {
-    c match {
-      case CongruenceBottom => CongruenceBottom
-      case Mod(a, b) => alpha(a, -b)
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
-  def mult(c : Congruence, d : Congruence) : Congruence = {
-    (c, d) match {
-      case (CongruenceBottom, _) => CongruenceBottom
-      case (_, CongruenceBottom) => CongruenceBottom
-      case (Mod(a0, b0), Mod(a1, b1)) =>
-        if (a0 == a1 && a0.isEmpty)
-          alpha(None, b0 * b1)
-        else {
-          val a = mathematicalOperation.gcd(mathematicalOperation.*(a0, a1),
-            mathematicalOperation.*(a0, Some(b1)), mathematicalOperation.*(a1, Some(b0)))
-          val b = b0 * b1
-          alpha(a, b)
-        }
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
-  def division(c: Congruence, d: Congruence): Congruence =
-    (c, d) match {
-      case (CongruenceBottom, _) => CongruenceBottom
-      case (_, CongruenceBottom) => CongruenceBottom
-      case (Mod(None, a), Mod(None, b)) =>
-        if(b == 0)
-          CongruenceBottom
-        else if(a % b == 0)
-          alpha(None, a/b)
-        else
-          alpha(Some(1), 0)
-      case (_, _) => alpha(Some(1), 0) //top element
-    }
-
 
   /**
     * @inheritdoc

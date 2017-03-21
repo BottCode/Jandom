@@ -154,7 +154,7 @@ class ESeqDomainCore extends SignDomainCore {
         }
       }
     else
-      result;
+      result
     }
 
   /**

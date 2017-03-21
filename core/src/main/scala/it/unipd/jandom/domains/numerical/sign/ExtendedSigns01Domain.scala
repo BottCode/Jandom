@@ -63,7 +63,6 @@ class ExtendedSigns01Domain
 
     /**
       * @inheritdoc
-      * @throws IllegalArgumentException
       */
     override def mkString(vars: Seq[String]): String = {
       require(vars.length >= dimension)

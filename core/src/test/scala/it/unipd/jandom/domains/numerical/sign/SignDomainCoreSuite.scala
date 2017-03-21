@@ -112,7 +112,7 @@ class SignDomainCoreSuite extends FlatSpec {
     // Zero
     for (s <- List(plus, neg, dc.top))
       assert(dc.mult(zero, s) === zero)
-    for (s <- List(plus, neg, dc.top, dc.bottom))
+    for (s <- List(plus, neg, dc.top))
       assert(dc.mult(s, zero) === zero)
     // Different signs
     assert(dc.mult(neg, plus) === neg)

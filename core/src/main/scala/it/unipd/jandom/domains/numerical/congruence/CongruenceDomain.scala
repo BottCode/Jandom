@@ -27,7 +27,7 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
       val congruence : Congruence = linearEvaluation(lf)
       congruence match {
         case CongruenceBottom => bottom
-        case Mod(Some(0),0) => bottom
+        case Mod(None,0) => bottom
         case _ => this // congruence != Const(0)
       }
     }
@@ -41,7 +41,7 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
         return this
       congruence match {
         case CongruenceBottom => bottom
-        case Mod(Some(0), b) => if (b > 0) bottom else this
+        case Mod(None, b) => if (b > 0) bottom else this
         case _ => this
       }
     }

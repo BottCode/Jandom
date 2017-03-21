@@ -10,9 +10,8 @@ case class Mod(a : Option[Int], b : Int) extends Congruence {
   })
 
   override def toString: String = {
-
     (a, b) match {
-      case (None, 0) => ""
+      case (None, 0) => "0"
       case (None, x) => x + ""
       case (Some(1), 0) => "Z"
       case (Some(1), x) => "Z + " + x
@@ -22,7 +21,7 @@ case class Mod(a : Option[Int], b : Int) extends Congruence {
   }
 }
 case object CongruenceBottom extends Congruence {  //Corresponds to the empty set
-  override def toString: String = "BOTTOM"
+  override def toString: String = "\u22A5"
 }
 
 

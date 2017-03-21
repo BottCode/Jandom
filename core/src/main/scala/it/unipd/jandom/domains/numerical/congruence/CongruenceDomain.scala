@@ -8,7 +8,7 @@ import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
   */
-class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainCore.type](CongruenceDomainCore) {
+class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainCore](CongruenceDomainCore()) {
 
 
   override def createProperty(congruences: Array[Congruence], unreachable: Boolean): Property =
@@ -27,8 +27,7 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
       val congruence : Congruence = linearEvaluation(lf)
       congruence match {
         case CongruenceBottom => bottom
-        case Mod(0,0) => bottom
-        case Mod(1,0) => top // lub(Const)
+        case Mod(Some(0),0) => bottom
         case _ => this // congruence != Const(0)
       }
     }
@@ -42,8 +41,8 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
         return this
       congruence match {
         case CongruenceBottom => bottom
-        case Mod(1,0) => top
-        case Mod(0, b) => if (b > 0) bottom else this
+        case Mod(Some(0), b) => if (b > 0) bottom else this
+        case _ => this
       }
     }
 

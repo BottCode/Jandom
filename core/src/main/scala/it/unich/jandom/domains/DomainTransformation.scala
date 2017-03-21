@@ -25,7 +25,6 @@ import it.unipd.jandom.domains.numerical.sign.Zero
 import it.unipd.jandom.domains.numerical._
 import it.unipd.jandom.domains.numerical.sign.SignDomain
 import it.unipd.jandom.domains.numerical.parity._
-import it.unipd.jandom.domains.numerical.parity.Parity._
 
 
 /**

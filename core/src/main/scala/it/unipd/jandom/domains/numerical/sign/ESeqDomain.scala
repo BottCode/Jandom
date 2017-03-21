@@ -2,12 +2,7 @@ package it.unipd.jandom.domains.numerical.sign
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.BaseNumericalDomain
-<<<<<<< Updated upstream
 
-=======
-import it.unipd.jandom.domains.numerical.sign.Sign._
-import it.unipd.jandom.domains.numerical.sign.ESeq._
->>>>>>> Stashed changes
 /**
   * Extended sign domain, i.e. the domain composed of the elements Minus (negative numbers), Plus (positive numbers),
   * Zero (0), Geq0 (>=0), Leq0 (<=0) and Neq0 (!=0). SignTop and SignBottom complete the lattice, providing a greatest

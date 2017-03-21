@@ -45,6 +45,8 @@ class ESeqDomainCore extends SignDomainCore {
         case (_, Plus) => s
         case (Minus, _) => inverse(t)
         case (_, Minus) => inverse(s)
+        case (Geq0, Geq0) => Geq0
+        case (Leq0, Leq0) => Geq0
         case (Leq0, Geq0) => Leq0
         case (Geq0, Leq0) => Leq0
         case _ => SignTop

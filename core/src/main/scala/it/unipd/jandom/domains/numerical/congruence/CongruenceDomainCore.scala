@@ -198,7 +198,9 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(None, a), Mod(None, b)) =>
-        if(a % b == 0)
+        if(b == 0)
+          CongruenceBottom
+        else if(a % b == 0)
           Mod(None, a/b)
         else
           Mod(Some(1), 0)

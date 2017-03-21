@@ -297,7 +297,7 @@ abstract class BaseNumericalDomain
     }
 
     /**
-      * Converts coefficient to integer and computes the linear evaluation of the
+      * Converts coefficients to integer and computes the linear evaluation of the
       * linear form
       *
       * @param lf a linear form
@@ -310,7 +310,7 @@ abstract class BaseNumericalDomain
     }
 
     /**
-      * Compute the sum of the coefficient of the linear form (absolute values)
+      * Compute the sum of the coefficients of the linear form (absolute values)
       * if the CFG point is reachable, top if unreachable and not-constant lf (to keep soundness)
       *
       * @param known the known term of a linear form

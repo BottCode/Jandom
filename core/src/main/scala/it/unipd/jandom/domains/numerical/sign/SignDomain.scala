@@ -27,7 +27,7 @@ import it.unipd.jandom.domains.numerical._
   * Zero (0). SignTop and SignBottom complete the lattice, providing a greatest and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   *
  */
@@ -88,11 +88,11 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore](sign.SignDoma
       else {
         val bounds = for (i <- 0 until dimension) yield {
           val h = sign(i) match {
-            case SignTop => "TOP"
-            case SignBottom => "BOTTOM"
+            case SignTop => "\u22A4"
+            case SignBottom => "\u22A5"
             case Plus => "PLUS"
-            case Minus => "Minus"
-            case Zero => "Zero"
+            case Minus => "MINUS"
+            case Zero => "ZERO"
           }
           s"${vars(i)} = $h"
         }

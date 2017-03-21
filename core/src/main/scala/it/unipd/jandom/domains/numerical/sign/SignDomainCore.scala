@@ -7,7 +7,7 @@ import Sign._
   * Operations on the (basic) sign domain.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Stefano Munari <stefano.munari@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign] with Abstraction[Int, Sign] {

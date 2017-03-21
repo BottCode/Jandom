@@ -177,8 +177,9 @@ class ESeqDomainCoreSuite extends FlatSpec {
     assert(dc.sum(Leq0, Neq0) === dc.top)
     assert(dc.sum(Neq0, Leq0) === dc.top)
     // Equal signs
-    for (s <- List(zero, plus, neg, Geq0, Leq0, Neq0, dc.bottom, dc.top))
+    for (s <- List(zero, plus, neg, Geq0, Leq0, dc.bottom, dc.top))
       assert(dc.sum(s, s) === s)
+    assert(dc.sum(Neq0, Neq0) == dc.top)
   }
 
   "ESeqDomainCore.mult" should

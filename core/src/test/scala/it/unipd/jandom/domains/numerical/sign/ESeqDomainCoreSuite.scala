@@ -210,8 +210,8 @@ class ESeqDomainCoreSuite extends FlatSpec {
     for (s <- List(neg, Geq0, Leq0, Neq0))
       assert(dc.mult(s, neg) === dc.inverse(s))
     // Different signs: Geq0
-    assert(dc.mult(Geq0, Leq0) === dc.top)
-    assert(dc.mult(Leq0, Geq0) === dc.top)
+    assert(dc.mult(Geq0, Leq0) === Leq0)
+    assert(dc.mult(Leq0, Geq0) === Leq0)
     assert(dc.mult(Geq0, Neq0) === dc.top)
     assert(dc.mult(Neq0, Geq0) === dc.top)
     // Different signs: Leq0

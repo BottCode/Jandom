@@ -12,10 +12,11 @@ case class Mod(a : Option[Int], b : Int) extends Congruence {
   override def toString: String = {
 
     (a, b) match {
-      case (None, 0) => 0 + ""
+      case (None, 0) => ""
       case (None, x) => x + ""
       case (Some(1), 0) => "Z"
       case (Some(1), x) => "Z + " + x
+      case (Some(a), 0) => a + "Z"
       case (Some(a), x) => a + "Z + " + x
     }
   }

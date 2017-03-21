@@ -105,7 +105,8 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         val a = mathematicalOperation.gcd(a0, a1, Some((b0-b1).abs))
         println("VALUE LUB " + a)
         val b = Math.min(b0,b1)
-        Mod(a, b)
+        standardForm(Mod(a, b))
+
     }
   }
 
@@ -132,7 +133,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
             case Some(x) => x
           }
 
-          Mod(a, b2)
+          standardForm(Mod(a, b2))
         } else {
           CongruenceBottom
         }

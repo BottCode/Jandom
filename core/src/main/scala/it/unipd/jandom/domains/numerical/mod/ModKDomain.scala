@@ -61,8 +61,8 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
       else {
         val bounds = for (i <- 0 until dimension) yield {
           val c = modKs(i) match {
-            case ModKTop => "TOP"
-            case ModKBottom => "BOTTOM"
+            case ModKTop => "\u22A4"
+            case ModKBottom => "\u22A5"
             case RestClass(r) => s"$r mod ${divisor}"
           }
           s"${vars(i)} = $c"
@@ -70,6 +70,7 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
         bounds.mkString("[ ", " , ", " ]")
       }
     }
+    
   } // end of Property
 } // end of ModKDomain class
 

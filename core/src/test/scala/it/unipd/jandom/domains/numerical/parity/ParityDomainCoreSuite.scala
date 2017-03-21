@@ -23,7 +23,7 @@ class ParityDomainCoreSuite extends FlatSpec {
   "ParityDomainCore.core.sum" should
     " - return the core.sum of a couple of parity values given as input" in {
     assert(core.sum(Even, Even).equals(Even))
-    assert(core.sum(Odd, Odd).equals(Odd))
+    assert(core.sum(Odd, Odd).equals(Even))
     assert(core.sum(ParityTop, ParityTop).equals(ParityTop))
     assert(core.sum(ParityBottom, ParityBottom).equals(ParityBottom))
     assert(core.sum(Odd, Even).equals(Odd))

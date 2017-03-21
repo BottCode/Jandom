@@ -24,7 +24,6 @@ import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.numerical.mod._
 import it.unipd.jandom.domains.numerical.sign.Sign.Zero
 import it.unipd.jandom.domains.numerical.sign.SignDomain
-import it.unipd.jandom.domains.numerical.parity._
 
 
 /**
@@ -121,22 +120,6 @@ object DomainTransformation {
 
   implicit object BoxRationalToBoxRational extends DomainTransformation[BoxRationalDomain, BoxRationalDomain] {
     def apply(src: BoxRationalDomain, dst: BoxRationalDomain): src.Property => dst.Property = { (x) => { dst(x.low, x.high) } }
-  }
-
-  implicit object SignToParity extends DomainTransformation[SignDomain, ParityDomain] {
-    def apply(src: SignDomain, dst: ParityDomain): src.Property => dst.Property = {
-      (p) => {
-        dst.createProperty(p.elements.map {
-          case Zero => Parity.Even
-          case _ => Parity.ParityTop
-        })
-      }
-    }
-  }
-
-
-  implicit object ParityToSign extends DomainTransformation[ParityDomain, SignDomain] {
-      def apply(src: ParityDomain, dst: SignDomain): src.Property => dst.Property = { p => dst.top(p.dimension) }
   }
 
   implicit object SignToModK extends DomainTransformation[SignDomain, ModKDomain] {

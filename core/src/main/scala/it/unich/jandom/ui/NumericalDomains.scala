@@ -44,11 +44,11 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers."),
     ParameterValue(SignDomain(), "Sign Domain", "UniPD"),
     ParameterValue(ParityDomain(), "Parity Domain", "UniPD"),
-    ParameterValue(SumSignParityDomain(), "Sum between Parity and Sign Domain", "UniPD"),
     ParameterValue(ConstantDomain(), "Constant domain", "UniPD: Constant propagation "),
     ParameterValue(ModKDomain(3), "Module K domain", "UniPD: Module K propagation "),
     ParameterValue(ExtendedSigns01Domain(), "ES01 Domain", "UniPD: extended sign domain with 0 and 1"),
     ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements"),
+    ParameterValue(SumSignModKDomain(2), "Sum between sign and mod 2", ""),
     ParameterValue(ProductSignModKDomain(2), "Product of sign and mod k with k = 7", "UniPD")
   )
   val default = values.last

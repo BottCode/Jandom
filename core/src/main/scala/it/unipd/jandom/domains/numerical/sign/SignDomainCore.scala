@@ -15,13 +15,11 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
   /**
     * @inheritdoc
     */
-  override def alpha(n : Int) : Sign =
-    if(n < 0)
-      Minus
-    else if(n == 0)
-      Zero
-    else
-      Plus
+  override def alpha(n : Int) : Sign = {
+    if(n < 0) return Minus
+    if(n == 0) return Zero
+    Plus
+  }
 
   /**
     * Factory method for signs.

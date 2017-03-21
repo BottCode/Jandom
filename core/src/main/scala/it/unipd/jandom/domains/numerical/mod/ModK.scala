@@ -2,7 +2,7 @@ package it.unipd.jandom.domains.numerical.mod
 
 
 /**
-  * Domain with values with the form `a + K * Z`.
+  * Domain with values with the form `k * Z + a`.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari@studenti.unipd.it>

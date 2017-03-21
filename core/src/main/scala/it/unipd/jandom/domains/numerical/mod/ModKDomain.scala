@@ -19,7 +19,7 @@
 package it.unipd.jandom.domains.numerical.mod
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
+import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 import ModK._
 
 /**
@@ -63,7 +63,7 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
           val c = modKs(i) match {
             case ModKTop => "\u22A4"
             case ModKBottom => "\u22A5"
-            case RestClass(r) => s"$r mod ${divisor}"
+            case RestClass(r) => s"$r mod $divisor"
           }
           s"${vars(i)} = $c"
         }
@@ -80,7 +80,7 @@ object ModKDomain {
     * Factory method for ModKDomain.
     * Sets the divisor K to num invoking ModKDomainCore
     */
-  def apply(num : Int) = {
+  def apply(num : Int) : ModKDomain = {
     ModKDomainCore(num)
     new ModKDomain()
   }

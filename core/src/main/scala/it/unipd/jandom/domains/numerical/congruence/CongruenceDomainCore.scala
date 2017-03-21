@@ -164,10 +164,11 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
               mathematicalOperation.isCongruent(b1,b0,a0))
             Option(0)
           // c < d (check Miné definition)
-          if (mathematicalOperation.isDivisor(a1, a0) && mathematicalOperation.isCongruent(b0, b1, a1))
+          else if (mathematicalOperation.isDivisor(a1, a0) && mathematicalOperation.isCongruent(b0, b1, a1))
             Option(-1)
           // c > d
-          Option(1)
+          else
+            Option(1)
         }
     }
   }

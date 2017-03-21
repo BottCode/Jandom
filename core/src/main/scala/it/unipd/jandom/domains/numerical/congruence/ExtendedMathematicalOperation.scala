@@ -11,9 +11,6 @@ class ExtendedMathematicalOperation {
   /**
     * Implementation of the extended gcd. Conversion of the pseudo-code exposed in
     * https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
-    * @param _a
-    * @param _b
-    * @return
     */
   def extendedGcd(_a : Option[Int], _b : Option[Int]) : (Int, Option[Int], Option[Int]) = {
     val a = _a match {
@@ -32,7 +29,7 @@ class ExtendedMathematicalOperation {
     var r : Int = b
     var old_r : Int = a
     while(r != 0){
-      val quotient : Int = old_r / r;
+      val quotient : Int = old_r / r
       val (tmp_old_r, tmp_r) = (r, old_r - quotient * r)
       val (tmp_old_s, tmp_s) = (s, old_s - quotient * s)
       val (tmp_old_t, tmp_t) = (t, old_t - quotient * t)
@@ -98,7 +95,7 @@ class ExtendedMathematicalOperation {
   }
 
   def gcd(y : Option[Int], y1 : Option[Int], y2 : Option[Int]) : Option[Int] = {
-    return gcd(y, gcd(y1, y2))
+    gcd(y, gcd(y1, y2))
   }
 
   def *(y : Option[Int], z : Option[Int]): Option[Int] = {

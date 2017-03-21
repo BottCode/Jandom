@@ -1,12 +1,11 @@
 package it.unipd.jandom.domains.numerical.constant
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
-
 import Constant._
 
 /**
-  * Constant domain, i.e. the one which tells if a given variable is constant (and equal to a value `n`) in a program
-  * point or not.
+  * Constant domain, checks if a given variable is constant 
+  * (and equal to a value `num`) in a program point.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
@@ -18,9 +17,7 @@ class ConstantDomainCore extends CompleteLatticeOperator[Constant]
   /**
     * @inheritdoc
     */
-  def alpha(num : Int) : Constant = {
-    Const(num)
-  }
+  def alpha(num : Int) : Constant = Const(num)
 
   /**
     * @inheritdoc
@@ -144,5 +141,8 @@ class ConstantDomainCore extends CompleteLatticeOperator[Constant]
 }
 
 object ConstantDomainCore {
+  /**
+    * Factory method of ConstantDomainCore
+    */
   def apply() = new ConstantDomainCore
 }

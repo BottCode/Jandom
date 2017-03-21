@@ -6,12 +6,13 @@ import it.unipd.jandom.domains.numerical.constant._
 import it.unipd.jandom.domains.numerical.constant.Constant._
 
 /**
-  * Constant domain, i.e. the domain composed of constant values. SignTop and SignBottom complete the lattice, providing
+  * Constant domain, i.e. the domain composed of constant values. 
+  * ConstantTop and ConstantBottom complete the lattice, providing
   * a greatest and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
-  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](ConstantDomainCore()) {
 
@@ -38,7 +39,6 @@ class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](C
       constant match {
         case ConstantBottom => bottom
         case Const(0) => bottom
-        case ConstantTop => top // lub(Const)
         case _ => this // constant != Const(0)
       }
     }
@@ -52,8 +52,8 @@ class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](C
         return this
       constant match {
         case ConstantBottom => bottom
-        case ConstantTop => top
         case Const(c) => if (c > 0) bottom else this
+        case _ => this
       }
     }
 
@@ -67,8 +67,8 @@ class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](C
       else {
         val bounds = for (i <- 0 until dimension) yield {
           val c = constants(i) match {
-            case ConstantTop => "TOP"
-            case ConstantBottom => "BOTTOM"
+            case ConstantTop => "\u22A4"
+            case ConstantBottom => "\u22A5"
             case Const(num) => num
           }
           s"${vars(i)} = $c"
@@ -82,8 +82,7 @@ class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](C
 
 object ConstantDomain {
   /**
-    * Returns an abstract domain for boxes which is correct w.r.t. real arithmetic or
-    * double arithmetic, according to the parameter `overReals`.
+    * Factory method of ConstantDomain
     */
   def apply() = new ConstantDomain()
 } // end of ConstantDomain (companion object)

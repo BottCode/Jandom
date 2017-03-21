@@ -1,45 +1,77 @@
 package it.unipd.jandom.domains.numerical.congruence
 
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
+import Congruence._
 
 /**
-  * Created by mirko on 3/9/17.
-  *
-  * Based on http://www.dsi.unive.it/~avp/domains.pdf, because we could not retrieve the original
-  * paper of Philippe Granger
+  * The Integer Congruence Domain.
+  * B# = { (aZ + b) | a ∈ N^* ∪ {0}, b ∈ Z } ∪ {⊥#}}
+  * It forms a complete lattice with 
+  *   1Z+0 as Top element
+  *   ⊥ as Bottom element
+  * 
+  * Based on: 
+  * http://www.dsi.unive.it/~avp/domains.pdf
+  * https://www-apr.lip6.fr/~mine/publi/article-mine-sas02.pdf
   */
 class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   with IntOperator[Congruence] with Abstraction[Int, Congruence]{
 
   def mathematicalOperation = ExtendedMathematicalOperation()
 
-  /**
-    * @inheritdoc
-    */
-  override def alpha(num: Int): Congruence =  Mod(None , num)
 
   /**
-    * @inheritdoc
+    * Reduce the congruence abstract domain, thus making (alpha, C, A, gamma) 
+    * a Galois Insertion.
+    * aZ+b with a > 0 and a > b
     */
-  def remainder(_c: Congruence, _d: Congruence): Congruence = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
-    (c, d) match {
-      case (CongruenceBottom, _) => CongruenceBottom
-      case (_, CongruenceBottom) => CongruenceBottom
-      case (Mod(a0, b0), Mod(a1, b1)) =>
-        val a = mathematicalOperation.gcd(a0, a1, Some(b1))
-        val b = b0
-        Mod(a, b)
+  private def standardForm(c : Congruence) : Congruence = {
+    c match {
+      case CongruenceBottom => CongruenceBottom
+      case Mod(None, _) => c
+      case Mod(Some(a), b) => Mod(Some(a), b % a)
     }
   }
 
   /**
     * @inheritdoc
     */
-  def leq(_c: Congruence, _d: Congruence): Option[Boolean] = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
+  override def alpha(num: Int): Congruence =  standardForm(Mod(None, num))
+  
+  def alpha(a: Option[Int], b: Int): Congruence =  standardForm(Mod(a, b))
+  
+  /**
+    * @inheritdoc
+    */
+  def sum(c : Congruence, d : Congruence) : Congruence = {
+    (c,d) match {
+      case (CongruenceBottom, _) => CongruenceBottom
+      case (_, CongruenceBottom) => CongruenceBottom
+      case (Mod(a0, b0), Mod(a1, b1)) =>
+         val a = mathematicalOperation.gcd(a0, a1)
+         val b = b0 + b1
+         alpha(a,b)
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  def remainder(c: Congruence, d: Congruence): Congruence = {
+    (c, d) match {
+      case (CongruenceBottom, _) => CongruenceBottom
+      case (_, CongruenceBottom) => CongruenceBottom
+      case (Mod(a0, b0), Mod(a1, b1)) =>
+        val a = mathematicalOperation.gcd(a0, a1, Some(b1))
+        val b = b0
+        alpha(a,b)
+    }
+  }
+
+  /**
+    * @inheritdoc
+    */
+  def leq(c: Congruence, d: Congruence): Option[Boolean] = {
     (c, d) match {
       case (CongruenceBottom, _) => Some(true)
       case (_, CongruenceBottom) => Some(false) //TODO or none?
@@ -56,9 +88,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * @inheritdoc
     */
-  def compare(_c: Congruence, _d: Congruence): Option[Int] = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
+  def compare(c: Congruence, d: Congruence): Option[Int] = {
     val r = leq(c, d)
     val l = leq(d, c)
     (l, r) match {
@@ -77,45 +107,27 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   }
 
   /**
-    * @note reduce the congruence abstract domain, thus making (alpha, C, A, gamma) a GI
-    */
-  def standardForm(c : Congruence) : Congruence = {
-    c match {
-      case CongruenceBottom => CongruenceBottom
-      case Mod(None, _) => c
-      case Mod(Some(a), b) => Mod(Some(a), b % a)
-    }
-  }
-
-  /**
     * @inheritdoc
     */
-  def lub(_c : Congruence, _d : Congruence) : Congruence = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
-
+  def lub(c : Congruence, d : Congruence) : Congruence = {
     (c,d) match {
-      case (CongruenceBottom, a) => a
-      case (a, CongruenceBottom) => a
+      case (CongruenceBottom, _) => d
+      case (_, CongruenceBottom) => c
       case (Mod(a0, b0), Mod(a1,b1)) =>
         if(a0 == a1 && b0 == b1)
-          return Mod(a0, b0)
+          return alpha(a0,b0)
         println("VALUE LUB " + a0 + " " + a1 + " " + b0 + " " + b1)
-
         val a = mathematicalOperation.gcd(a0, a1, Some((b0-b1).abs))
         println("VALUE LUB " + a)
         val b = Math.min(b0,b1)
-        standardForm(Mod(a, b))
-
+        alpha(a,b)
     }
   }
 
   /**
     * @inheritdoc
     */
-  def glb(_c : Congruence, _d : Congruence) : Congruence = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
+  def glb(c : Congruence, d : Congruence) : Congruence = {
     (c,d) match {
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
@@ -128,12 +140,12 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
             mathematicalOperation.*(mathematicalOperation.*(a0, bezout1), a),
             mathematicalOperation.*(mathematicalOperation.*(a1, bezout0), a)
           )
-          val b2 = b match {
+          val b2 : Int = b match {
             case None => 0
             case Some(x) => x
           }
 
-          standardForm(Mod(a, b2))
+          alpha(a, b2)
         } else {
           CongruenceBottom
         }
@@ -144,48 +156,28 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * @inheritdoc
     */
-  def sum(_c : Congruence, _d : Congruence) : Congruence = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
-    (c,d) match {
-      case (CongruenceBottom, _) => CongruenceBottom
-      case (_, CongruenceBottom) => CongruenceBottom
-      case (Mod(a0, b0), Mod(a1, b1)) =>
-         val a = mathematicalOperation.gcd(a0, a1)
-         val b = b0 + b1
-         standardForm(Mod(a, b))
-    }
-  }
-
-  /**
-    * @inheritdoc
-    */
   def inverse(c : Congruence) : Congruence = {
     c match {
       case CongruenceBottom => CongruenceBottom
-      case Mod(a, b) =>
-       Mod(a, -b)
+      case Mod(a, b) => alpha(a, -b)
     }
   }
 
   /**
     * @inheritdoc
     */
-  def mult(_c : Congruence, _d : Congruence) : Congruence = {
-    val c = standardForm(_c)
-    val d = standardForm(_d)
+  def mult(c : Congruence, d : Congruence) : Congruence = {
     (c, d) match {
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        if (a0 == a1 && a0.isEmpty) {
-          Mod(None, b0 * b1)
-        }
+        if (a0 == a1 && a0.isEmpty)
+          alpha(None, b0 * b1)
         else {
           val a = mathematicalOperation.gcd(mathematicalOperation.*(a0, a1),
             mathematicalOperation.*(a0, Some(b1)), mathematicalOperation.*(a1, Some(b0)))
           val b = b0 * b1
-          Mod(a, b)
+          alpha(a, b)
         }
     }
   }
@@ -201,25 +193,25 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         if(b == 0)
           CongruenceBottom
         else if(a % b == 0)
-          Mod(None, a/b)
+          alpha(None, a/b)
         else
-          Mod(Some(1), 0)
-      case (_, _) => Mod(Some(1), 0) //top element
+          alpha(Some(1), 0)
+      case (_, _) => alpha(Some(1), 0) //top element
     }
 
 
   /**
     * @inheritdoc
     */
-  override def top: Congruence = Mod(Some(1),0)
+  override def top: Congruence = alpha(Some(1),0)
 
   /**
     * @inheritdoc
     */
   override def bottom: Congruence = CongruenceBottom
 
-
 } // end of CongruenceDomainCore
+
 object CongruenceDomainCore {
   def apply() = new CongruenceDomainCore
 }

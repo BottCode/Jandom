@@ -245,7 +245,7 @@ class ESeqDomainCoreSuite extends FlatSpec {
     assert(dc.division(plus, Neq0) === dc.top)
     assert(dc.division(Neq0, plus) === dc.top)
     // Different signs: zero
-    for (s <- List(zero, plus, neg, Geq0, Leq0, Neq0, dc.top))
+    for (s <- List(plus, neg, Geq0, Leq0, Neq0, dc.top))
       assert(dc.division(zero, s) === zero)
     for (s <- List(plus, neg, Geq0, Leq0, Neq0))
       assert(dc.division(s, zero) === dc.bottom)

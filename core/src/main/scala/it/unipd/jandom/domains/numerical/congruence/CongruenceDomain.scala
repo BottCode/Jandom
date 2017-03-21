@@ -3,10 +3,14 @@ package it.unipd.jandom.domains.numerical.congruence
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
 /**
-  * Congruence domain
+  * Congruence domain as described in Mine 2002 https://hal.archives-ouvertes.fr/hal-00136663/document.
+  * The multiplication and remainder operator was taken and adapted from http://www.dsi.unive.it/~avp/domains.pdf.
+  * We based on these works because we could not retrieve the original paper by Granger [1989].
   *
-  * @author Mirko Bez <mirko.bez@studenti.unipd.it>, Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
-  *           Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
+  *
   */
 class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainCore](CongruenceDomainCore()) {
 
@@ -27,7 +31,7 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
       val congruence : Congruence = linearEvaluation(lf)
       congruence match {
         case CongruenceBottom => bottom
-        case Mod(None,0) => bottom
+        case Mod(None,0) => bottom //The result is the constant 0
         case _ => this // congruence != Const(0)
       }
     }
@@ -41,7 +45,7 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
         return this
       congruence match {
         case CongruenceBottom => bottom
-        case Mod(None, b) => if (b > 0) bottom else this
+        case Mod(None, b) => if (b > 0) bottom else this //The result is a constant
         case _ => this
       }
     }

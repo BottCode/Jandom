@@ -197,6 +197,11 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     (c, d) match {
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
+      case (Mod(None, a), Mod(None, b)) =>
+        if(a % b == 0)
+          Mod(None, a/b)
+        else
+          Mod(Some(1), 0)
       case (_, _) => Mod(Some(1), 0) //top element
     }
 

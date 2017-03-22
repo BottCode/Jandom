@@ -10,7 +10,7 @@ import ModK._
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
-object ModKDomainCore extends CompleteLatticeOperator[ModK] 
+object ModKDomainCore extends CompleteLatticeOperator[ModK]
   with IntOperator[ModK] with Abstraction[Int, ModK]{
 
   /**
@@ -143,3 +143,4 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
 
   def apply(num : Int) = ModK(num)
 }
+

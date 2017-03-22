@@ -183,6 +183,15 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
+    override def variableRem(n: Int, m : Int): Property = {
+      println(s"REM")
+      elements(n) = core.remainder(elements(n), elements(m))
+      this
+    }
+
+    /**
+      * @inheritdoc
+      */
     override def union(that: Property): Property =  {
       require(dimension == that.dimension)
       that match {

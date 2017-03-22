@@ -24,6 +24,7 @@ import it.unich.jandom.utils.numberext.RationalExt
 import it.unipd.jandom.domains.numerical.mod._
 import it.unipd.jandom.domains.numerical.sign.Sign.Zero
 import it.unipd.jandom.domains.numerical.sign.SignDomain
+import it.unipd.jandom.domains.numerical.sign.ESeqDomain
 
 
 /**
@@ -135,6 +136,15 @@ object DomainTransformation {
 
   implicit object ModKToSign extends DomainTransformation[ModKDomain, SignDomain] {
     def apply(src: ModKDomain, dst: SignDomain): src.Property => dst.Property = { p => dst.top(p.dimension) }
+  }
+
+  implicit object ParityToESeq extends DomainTransformation[ParityDomain, ESeqDomain] {
+    def apply(src: Parity, dst: ESeqDomain): src.Property => dst.Property = { 
+      p => dst.createProperty(p.elements.map {
+          case Odd => ESeqDomain.Neq0
+          case _ => ESeqDomain.Top
+        })
+    }
   }
 
   /**

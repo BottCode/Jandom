@@ -147,6 +147,15 @@ object DomainTransformation {
     }
   }
 
+  implicit object ESeqToParity extends DomainTransformation[ESeqDomain, ParityDomain] {
+    def apply(src: ESeqDomain, dst: Parity): src.Property => dst.Property = { 
+      p => dst.createProperty(p.elements.map {
+          case Zero => Parity.Even
+          case _ => Parity.Top
+        })
+    }
+  }
+
   /**
    * This is a class for domain transformations which transform every object of the souece domin into the top object of the
    * target domain.

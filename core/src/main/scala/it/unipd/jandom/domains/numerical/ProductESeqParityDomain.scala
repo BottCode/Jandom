@@ -30,9 +30,9 @@ class ProductESeqParityDomain(override val dom1 : ESeqDomain, override val dom2 
 
 }  // end ProductESeqParityDomain class
 
-object ProductSignModKDomain {
+object ProductESeqParityDomain {
   /**
     * Factory method
     */
-  def apply(num : Int) : ProductESeqParityDomain = new ProductESeqParityDomain(ESeqDomain(), ParityDomain())
+  def apply() : ProductESeqParityDomain = new ProductESeqParityDomain(ESeqDomain(), ParityDomain())
 } // end ProductESeqParityDomain companion object

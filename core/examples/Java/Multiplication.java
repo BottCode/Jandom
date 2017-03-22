@@ -15,4 +15,9 @@ public class Multiplication {
         while(a <= 0)
             a = 1;
     }
+
+    static void reduceOddAndGeq() {
+        int x = 1;
+        x = x % 2;
+    }
 }

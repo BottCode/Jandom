@@ -1,12 +1,11 @@
-package it.unipd.jandom.domains.numerical.congruence
+package it.unipd.jandom.domains.numerical.utils
 
 /**
   * Created by mirko on 3/18/17.
   * Implementation of the extended mathematical operations defined in Mine02 using the Option[Int]
   * to simulate the N* U infinite
   */
-
-class ExtendedMathematicalOperation {
+object MathLibrary {
 
   /**
     * Implementation of the extended gcd. Conversion of the pseudo-code exposed in
@@ -94,10 +93,6 @@ class ExtendedMathematicalOperation {
     }
   }
 
-  def gcd(y : Option[Int], y1 : Option[Int], y2 : Option[Int]) : Option[Int] = {
-    gcd(y, gcd(y1, y2))
-  }
-
   def *(y : Option[Int], z : Option[Int]): Option[Int] = {
     (y, z) match {
       case (None, _) => None
@@ -121,11 +116,4 @@ class ExtendedMathematicalOperation {
       case (Some(a), Some(b)) => Some(a/b)
     }
   }
-
-
-
-
-}
-object ExtendedMathematicalOperation{
-  def apply() = new ExtendedMathematicalOperation()
 }

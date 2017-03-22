@@ -1,5 +1,6 @@
 package it.unipd.jandom.domains.numerical.congruence
 
+import it.unipd.jandom.domains.numerical.utils.{MathLibrary => M}
 import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
 import Congruence._
 
@@ -17,8 +18,6 @@ import Congruence._
 class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   with IntOperator[Congruence] with Abstraction[Int, Congruence]{
 
-  def mathematicalOperation = ExtendedMathematicalOperation()
-
   /**
     * @inheritdoc
     */
@@ -34,7 +33,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
-         val a = mathematicalOperation.gcd(a0, a1)
+         val a = M.gcd(a0, a1)
          val b = b0 + b1
          alpha(a,b)
     }
@@ -61,8 +60,8 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         if (a0 == a1 && a0.isEmpty)
           alpha(None, b0 * b1)
         else {
-          val a = mathematicalOperation.gcd(mathematicalOperation.*(a0, a1),
-            mathematicalOperation.*(a0, Some(b1)), mathematicalOperation.*(a1, Some(b0)))
+          val a = M.gcd(M.*(a0, a1),
+                    M.gcd(M.*(a0, Some(b1)), M.*(a1, Some(b0))))
           val b = b0 * b1
           alpha(a, b)
         }
@@ -78,8 +77,8 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (_, CongruenceBottom) => CongruenceBottom
       case (_, Mod(None,0)) => CongruenceBottom
       case (Mod(a0, b0), Mod(None, b1)) =>
-        if(mathematicalOperation.isDivisor(Some(b1),a0) && mathematicalOperation.isDivisor(Some(b1), Some(b0)))
-          alpha(mathematicalOperation.division(a0,Some(b1.abs)), b0/b1)
+        if(M.isDivisor(Some(b1),a0) && M.isDivisor(Some(b1), Some(b0)))
+          alpha(M.division(a0,Some(b1.abs)), b0/b1)
         else
           alpha(Some(1), 0) //top element
       case (_, _) => alpha(Some(1), 0) //top element
@@ -93,7 +92,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        val a = mathematicalOperation.gcd(a0, a1, Some(b1))
+        val a = M.gcd(a0,M.gcd(a1, Some(b1)))
         val b = b0
         alpha(a,b)
     }
@@ -109,9 +108,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(a1,b1)) =>
         if(a0 == a1 && b0 == b1)
           return alpha(a0,b0)
-        println("VALUE LUB " + a0 + " " + a1 + " " + b0 + " " + b1)
-        val a = mathematicalOperation.gcd(a0, a1, Some((b0-b1).abs))
-        println("VALUE LUB " + a)
+        val a = M.gcd(a0, M.gcd(a1, Some((b0-b1).abs)))
         val b = Math.min(b0,b1)
         alpha(a,b)
     }
@@ -125,13 +122,13 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        if (mathematicalOperation.isCongruent(b0, b1, mathematicalOperation.gcd(a0, a1))) {
-          val a = mathematicalOperation.lcm(a0, a1)
+        if (M.isCongruent(b0, b1, M.gcd(a0, a1))) {
+          val a = M.lcm(a0, a1)
 
-          val (_, bezout0, bezout1) = mathematicalOperation.extendedGcd(a0, a1)
-          val b = mathematicalOperation.+(
-            mathematicalOperation.*(mathematicalOperation.*(a0, bezout1), a),
-            mathematicalOperation.*(mathematicalOperation.*(a1, bezout0), a)
+          val (_, bezout0, bezout1) = M.extendedGcd(a0, a1)
+          val b = M.+(
+            M.*(M.*(a0, bezout1), a),
+            M.*(M.*(a1, bezout0), a)
           )
           val b2 : Int = b match {
             case None => 0
@@ -160,11 +157,12 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(a1, b1)) => {
           // c == d
           if ((a0 == a1) && 
-              mathematicalOperation.isCongruent(b0,b1,a1) &&
-              mathematicalOperation.isCongruent(b1,b0,a0))
+              M.isCongruent(b0,b1,a1) &&
+              M.isCongruent(b1,b0,a0))
             Option(0)
           // c < d (check Miné definition)
-          else if (mathematicalOperation.isDivisor(a1, a0) && mathematicalOperation.isCongruent(b0, b1, a1))
+          else if (M.isDivisor(a1, a0) && 
+                  M.isCongruent(b0, b1, a1))
             Option(-1)
           // c > d
           else

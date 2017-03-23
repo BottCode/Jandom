@@ -49,4 +49,21 @@ public class UniPDTests {
         }
         // POST CONDITION: sn == 16 || sn == 0
     }
+
+    static void for_infinite_loop_2_true_unreach_call_false_termination() {
+        int i_U = 0;
+        int x = 0;
+        int y = 0;
+        int n = x*y*i_U + 12*3*x*y;
+        if(!(n > 0)) {
+            return;
+        }
+        boolean z = true;
+        for(i_U = 0; z; i_U++) {
+            x++;
+            //verifierAssert(!x ? 1 : 0);
+        }
+        //UNREACHABLE CODE
+        x += 12;
+    }
 }

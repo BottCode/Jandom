@@ -1,4 +1,4 @@
-public class Multiplication {
+public class UniPDTests {
     static void mult() {
 		int a = 10;
 		int b = -2;

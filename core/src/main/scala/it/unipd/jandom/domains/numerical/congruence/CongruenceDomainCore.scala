@@ -60,8 +60,12 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         if (a0 == a1 && a0.isEmpty)
           alpha(None, b0 * b1)
         else {
-          val a = M.gcd(M.*(a0, a1),
-                    M.gcd(M.*(a0, Some(b1)), M.*(a1, Some(b0))))
+          /* note: 
+             gcd(a0*a1, _) must be the first operation performed 
+             because b0 and b1 could be equal to 0 which implies 
+             gcd(0,0) which results in a runtime error */
+          val a = M.gcd(M.*(a0, Some(b1)),
+                    M.gcd(M.*(a0, a1), M.*(a1, Some(b0))))
           val b = b0 * b1
           alpha(a, b)
         }
@@ -91,6 +95,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     (c, d) match {
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
+      case (_, Mod(None, 0)) => CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
         val a = M.gcd(a0,M.gcd(a1, Some(b1)))
         val b = b0
@@ -190,7 +195,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     c match {
       case CongruenceBottom => CongruenceBottom
       case Mod(None, _) => c
-      case Mod(Some(a), b) => Mod(Some(a), b % a)
+      case Mod(Some(a), b) => Mod(Some(a), ((b % a) + a) % a)
     }
   }
 

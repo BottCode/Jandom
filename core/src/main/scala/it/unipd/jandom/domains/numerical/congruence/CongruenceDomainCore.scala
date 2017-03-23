@@ -126,6 +126,9 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     (c,d) match {
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
+      // Top = Mod(Some(1),0)
+      case (Mod(Some(1),0), _) => d
+      case (_,Mod(Some(1),0)) => c
       case (Mod(a0, b0), Mod(a1, b1)) =>
         if (M.isCongruent(b0, b1, M.gcd(a0, a1))) {
           val a = M.lcm(a0, a1)

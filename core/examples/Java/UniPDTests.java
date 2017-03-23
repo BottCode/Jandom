@@ -37,4 +37,16 @@ public class UniPDTests {
     	int y = 2;
     	int z = y / x;
     }
+
+    // taken from sv-benchmarks repository
+    static void sum04_false_unreach_call_true_termination(){
+        int i = 1;
+        int sn = 0;
+        while(i <= 8) {
+            if (i < 4)
+                sn = sn + (2);
+            i = i + 1;
+        }
+        // POST CONDITION: sn == 16 || sn == 0
+    }
 }

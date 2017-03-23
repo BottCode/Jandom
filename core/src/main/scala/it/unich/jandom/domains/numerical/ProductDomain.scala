@@ -199,5 +199,50 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
         case _ => Option.empty
       }
     }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableAdd(n: Int, m: Int): Property = {
+      val q1 = p1.variableAdd(n, m)
+      val q2 = p2.variableAdd(n, m)
+      new Product(q1, q2)
+    }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableMul(n: Int, m: Int): Property = {
+      val q1 = p1.variableMul(n, m)
+      val q2 = p2.variableMul(n, m)
+      new Product(q1, q2)
+    }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableDiv(n : Int, m : Int): Property = {
+      val q1 = p1.variableDiv(n, m)
+      val q2 = p2.variableDiv(n, m)
+      new Product(q1, q2)
+    }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableNeg(n: Int = dimension - 1): Property = {
+      val q1 = p1.variableNeg(n)
+      val q2 = p2.variableNeg(n)
+      new Product(q1, q2)
+    }
+
+    /**
+      * @inheritdoc
+      */
+    override def variableRem(n: Int, m : Int): Property = {
+      val q1 = p1.variableRem(n)
+      val q2 = p2.variableRem(n)
+      new Product(q1, q2)
+    }
   }
 }

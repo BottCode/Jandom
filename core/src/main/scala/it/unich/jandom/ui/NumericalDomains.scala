@@ -49,7 +49,8 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ExtendedSigns01Domain(), "ES01 Domain", "UniPD: extended sign domain with 0 and 1"),
     ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements"),
     ParameterValue(SumSignModKDomain(2), "Sum between sign and mod 2", ""),
-    ParameterValue(ProductSignModKDomain(2), "Product of sign and mod k with k = 7", "UniPD")
+    ParameterValue(ProductSignModKDomain(2), "Product of sign and mod k with k = 2", "UniPD"),
+    ParameterValue(ProductESeqParityDomain(), "Product of extended sign and parity", "UniPD")
   )
   val default = values.last
 

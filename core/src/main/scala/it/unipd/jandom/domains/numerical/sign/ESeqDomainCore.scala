@@ -98,7 +98,7 @@ class ESeqDomainCore extends SignDomainCore {
     * @inheritdoc
     */
   override def remainder(s : Sign, t : Sign) : Sign = {
-    val result=super.remainder(s,t)
+    val result = super.remainder(s,t)
     if(result == SignTop)
       (s, t) match {
         case (Plus, _) => Geq0

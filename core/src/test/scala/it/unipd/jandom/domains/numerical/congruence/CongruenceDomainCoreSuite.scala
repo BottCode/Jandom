@@ -17,6 +17,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
   val twoZzero= Congruence.Mod(Some(2),0) /*2Z+0*/
   val twoZone= Congruence.Mod(Some(2),1) /*2Z+1*/
   val twoZtwo= Congruence.Mod(Some(2),2) /*2Z+2*/
+  val sixZzero= Congruence.Mod(Some(6),0) /*6Z+0*/
   val sixZone= Congruence.Mod(Some(6),1) /*6Z+1*/
   val nineZone= Congruence.Mod(Some(9),1) /*9Z+1*/
   val eightZzero= Congruence.Mod(Some(8),0) /*8Z+0*/
@@ -31,8 +32,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
   val zero= Congruence.Mod(None,0) /*0Z+0*/ 
 
   "CongruenceDomainCore.alpha" should
-    " - return the corresponding abstract value (check reduction aka standardForm)" 
-    in {
+    " - return the corresponding abstract value (check reduction aka standardForm)" in {
       /* reduction (2Z+X*n) = 2Z+X with n in N */
     assert(dc.alpha(Some(2),3) === twoZone)
     assert(dc.alpha(Some(6),7) === sixZone)
@@ -133,7 +133,6 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.remainder(twoZzero, eightZzero) === twoZzero)
   }
 
-
   "CongruenceDomainCore.lub" should
     " - return the least upper bound of the two congruences given as input" in {
     /* BOTTOM */
@@ -149,5 +148,22 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.lub(eightZtwo, twoZzero) === twoZzero)
     assert(dc.lub(twoZone, zero) === dc.top)
     assert(dc.lub(threeZzero, nine) === threeZzero)
+  }
+
+
+  "CongruenceDomainCore.compare" should
+    " - return the comparison between the two congruences given as input" in {
+    /* TOP */
+    assert(dc.compare(dc.top, dc.top) === Some(0))
+    assert(dc.compare(dc.top, three) === Some(1))
+    assert(dc.compare(twoZone, dc.top) === Some(-1))
+    /* BOTTOM */
+    assert(dc.compare(dc.bottom, dc.bottom) === Some(0))
+    assert(dc.compare(dc.bottom, three) === Some(-1))
+    assert(dc.compare(nineZone, dc.bottom) === Some(1))
+    /* BOTTOM < X < TOP */
+    assert(dc.compare(three, three) === Some(0))
+    assert(dc.compare(sixZzero, threeZzero) === Some(-1))
+    assert(dc.compare(threeZzero, sixZzero) === Some(1))
   }
 } // end of CongruenceDomainCoreSuite

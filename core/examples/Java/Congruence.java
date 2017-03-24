@@ -19,4 +19,15 @@ class Congruence {
 			z *= x;
 		}
 	}
+
+	static void mineCongruence() {
+		int x = 0;
+		int y = 2;
+		while(x < 40) {
+			if(x<5)
+				y=y+18;
+			if(x>8)
+				y=y-30;
+		}
+	}
 }

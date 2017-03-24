@@ -56,19 +56,18 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     (c, d) match {
       case (CongruenceBottom, _) => CongruenceBottom
       case (_, CongruenceBottom) => CongruenceBottom
+      case (Mod(None, 0), _) => Mod(None, 0) //0 * something = 0
+      case (_, Mod(None, 0)) => Mod(None, 0) //something * 0 = 0
+      case (Mod(None, c0), Mod(None, c1)) => Mod(None, c0 * c1) //Multiplication between constants
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        if (a0 == a1 && a0.isEmpty)
-          alpha(None, b0 * b1)
-        else {
-          /* note:
-             gcd(a0*a1, _) must be the first operation performed
-             because b0 and b1 could be equal to 0 which implies
-             gcd(0,0) which results in a runtime error */
-          val a = M.gcd(M.*(a0, Some(b1)),
-            M.gcd(M.*(a0, a1), M.*(a1, Some(b0))))
-          val b = b0 * b1
-          alpha(a, b)
-        }
+        /* note:
+           gcd(a0*a1, _) must be the first operation performed
+           because b0 and b1 could be equal to 0 which implies
+           gcd(0,0) which results in a runtime error */
+        val a = M.gcd(M.*(a0, Some(b1)),
+          M.gcd(M.*(a0, a1), M.*(a1, Some(b0))))
+        val b = b0 * b1
+        alpha(a, b)
     }
   }
 
@@ -179,7 +178,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         var dleqc = false
         if(M.isDivisor(a1, a0) && M.isCongruent(b0,b1,a1))
           cleqd = true
-        if(M.isDivisor(a0,a0) && M.isCongruent(b1, b0, a0))
+        if(M.isDivisor(a0,a1) && M.isCongruent(b1, b0, a0))
           dleqc = true
 
         if(cleqd && dleqc)

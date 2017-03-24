@@ -33,13 +33,13 @@ class CongruenceDomainCoreSuite extends FlatSpec {
   val threeZzero= Congruence.Mod(Some(3),0) /*3Z+0*/
   val three= Congruence.Mod(None,3) /*0Z+3*/
   val nine= Congruence.Mod(None,9) /*0Z+9*/
-  val zero= Congruence.Mod(None,0) /*0Z+0*/ 
-  val ttfZzero= Congruence.Mod(Some(240),0) /*240Z+0*/ 
-  val fsZzero= Congruence.Mod(Some(46),0) /*46Z+0*/ 
+  val zero= Congruence.Mod(None,0) /*0Z+0*/
+  val ttfZzero= Congruence.Mod(Some(240),0) /*240Z+0*/
+  val fsZzero= Congruence.Mod(Some(46),0) /*46Z+0*/
 
   "CongruenceDomainCore.alpha" should
     " - return the corresponding abstract value (check reduction aka standardForm)" in {
-      /* reduction (2Z+X*n) = 2Z+X with n in N */
+    /* reduction (2Z+X*n) = 2Z+X with n in N */
     assert(dc.alpha(Some(2),3) === twoZone)
     assert(dc.alpha(Some(6),7) === sixZone)
     assert(dc.alpha(Some(9),19) === nineZone)
@@ -73,10 +73,10 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.inverse(twoZone) === twoZone)
   }
 
-/* 
-  Note: we always consider the standardForm in the result. 
-        So, each result is in the form aZ+b with a>0 and b >= 0
-*/
+  /*
+    Note: we always consider the standardForm in the result.
+          So, each result is in the form aZ+b with a>0 and b >= 0
+  */
   "CongruenceDomainCore.mult" should
     " - return the mult of the two congruences given as input" in {
     /* BOTTOM */
@@ -94,14 +94,14 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.mult(twoZone, twoZzero) === twoZzero)
   }
 
-/*
-  division returns always top if it is not a "corner case" 
-  (i.e. bottom, division by zero, division between constants): 
-  example -
-  2Z+0 = {..-2,0,2,4,6...}
-  2Z+2 = {..-2,0,2,4,6...}
-  2Z+0/2Z+2= {...-1,0,1,2,3...} = 1Z+0 = TOP
-*/
+  /*
+    division returns always top if it is not a "corner case"
+    (i.e. bottom, division by zero, division between constants):
+    example -
+    2Z+0 = {..-2,0,2,4,6...}
+    2Z+2 = {..-2,0,2,4,6...}
+    2Z+0/2Z+2= {...-1,0,1,2,3...} = 1Z+0 = TOP
+  */
   "CongruenceDomainCore.division" should
     " - return the division of the two congruences given as input" in {
     /* BOTTOM */
@@ -189,5 +189,9 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.compare(three, three) === Some(0))
     assert(dc.compare(sixZzero, threeZzero) === Some(-1))
     assert(dc.compare(threeZzero, sixZzero) === Some(1))
+
+    /* NOT COMPARABLE TEST */
+    assert(dc.compare(twoZone, twoZzero).isEmpty)
+    assert(dc.compare(threeZone, twoZone).isEmpty)
   }
 } // end of CongruenceDomainCoreSuite

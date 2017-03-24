@@ -172,7 +172,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.glb(nineZthree, sixZthree) === etZthree)
     assert(dc.glb(threeZone, Congruence.Mod(Some(5),0)) === Congruence.Mod(Some(15),10))
     assert(dc.glb(twoZone, Congruence.Mod(Some(5),0)) === Congruence.Mod(Some(10),5))
-    assert(dc.glb(twoZzero, threeZzero) === Congruence.Mod(None,6))
+    assert(dc.glb(twoZzero, threeZzero) === Congruence.Mod(Some(6),0))
   }
 
   "CongruenceDomainCore.compare" should

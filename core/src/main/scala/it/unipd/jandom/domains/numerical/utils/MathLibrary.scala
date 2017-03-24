@@ -11,45 +11,15 @@ object MathLibrary {
     * Implementation of the extended gcd. Conversion of the pseudo-code exposed in
     * https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
     */
-  def extendedGcd(_a : Option[Int], _b : Option[Int]) : (Int, Option[Int], Option[Int]) = {
-    val a = _a match {
-      case None => 0
-      case Some(x) => x
+  def extendedGcd(a : Int, b : Int) : (Int, Int, Int) = {
+    require(a >= b)
+    if(b == 0)
+      return (a,1,0)
+    else{
+      val (d,a1,b1) = extendedGcd(b, (a % b))
+      /* (gcd(x,y), bezout_max, bezout_min) */
+      return (d, b1, a1 - Math.floorDiv(a,b)*b1) 
     }
-    val b = _b match {
-      case None => 0
-      case Some(x) => x
-    }
-    // REAL ALGORITHM
-    var s : Int = 0
-    var old_s : Int = 1
-    var t : Int = 0
-    var old_t : Int = 0
-    var r : Int = b
-    var old_r : Int = a
-    while(r != 0){
-      val quotient : Int = old_r / r
-      val (tmp_old_r, tmp_r) = (r, old_r - quotient * r)
-      val (tmp_old_s, tmp_s) = (s, old_s - quotient * s)
-      val (tmp_old_t, tmp_t) = (t, old_t - quotient * t)
-
-      old_r = tmp_old_r
-      r = tmp_r
-      old_s = tmp_old_s
-      s = tmp_s
-      old_t = tmp_old_t
-      t = tmp_t
-    }
-
-    val res_s = old_s match {
-      case 0 => None
-      case _ => Some(old_s)
-    }
-    val res_t = old_t match {
-      case 0 => None
-      case _ => Some(old_t)
-    }
-    (old_r, res_s, res_t) //greatest common divisor, bezout's coefficient 1, bezozt's coefficient 2
   }
 
 

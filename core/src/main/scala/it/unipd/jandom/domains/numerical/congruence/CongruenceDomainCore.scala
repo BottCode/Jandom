@@ -134,13 +134,34 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(None,x)) => if(M.isCongruent(x, b0, a0)) d else CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
         if (M.isCongruent(b0, b1, M.gcd(a0, a1))) {
-          require(M.gcd(a0,a1) == Some(1))
           val a = M.lcm(a0, a1)
-
-          val (_, bezout0, bezout1)= M.extendedGcd(a0,a1)
-          val x= b0*bezout0*a1.get+b1*bezout1*a0.get
-          println(s"x: $x")
-          alpha(a,x)
+          /* coprime test */
+          if(M.gcd(a0,a1) == Some(1)){
+            var x0=a0.get;
+            var x1=a1.get;
+            var y0=b0;
+            var y1=b1;
+            if(Math.max(a0.get,a1.get) == a0.get){
+              x1=a0.get;
+              x0=a1.get;
+              y0=b1;
+              y1=b0;
+            }
+            val (_, bezout0, bezout1)= M.extendedGcd(x1,x0)
+            val x= y0*bezout0*x1+y1*bezout1*x0
+                        println(s"y0: $y0")
+                                    println(s"bezout0: $bezout0")
+                                                println(s"x1: $x1")
+                                                            println(s"y1: $y1")
+                                                                        println(s"bezout1: $bezout1")
+                                                                                    println(s"x0: $x0")
+            println(s"x: $x")
+            alpha(a,x)
+          }
+          else if(b0 == b1)
+            alpha(a, b0)
+          else
+            CongruenceBottom          
         } 
         else
           CongruenceBottom

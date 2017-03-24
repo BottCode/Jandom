@@ -149,13 +149,6 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
             }
             val (_, bezout0, bezout1)= M.extendedGcd(x1,x0)
             val x= y0*bezout0*x1+y1*bezout1*x0
-                        println(s"y0: $y0")
-                                    println(s"bezout0: $bezout0")
-                                                println(s"x1: $x1")
-                                                            println(s"y1: $y1")
-                                                                        println(s"bezout1: $bezout1")
-                                                                                    println(s"x0: $x0")
-            println(s"x: $x")
             alpha(a,x)
           }
           else if(b0 == b1)

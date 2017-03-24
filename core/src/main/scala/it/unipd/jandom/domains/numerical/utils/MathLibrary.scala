@@ -9,16 +9,16 @@ object MathLibrary {
 
   /**
     * Implementation of the extended gcd. Conversion of the pseudo-code exposed in
-    * https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm
+    * [[http://www.math.unipd.it/~colussi/CompAlgoritmi_2015-16/Primi%20Random.pdf]]
     */
   def extendedGcd(a : Int, b : Int) : (Int, Int, Int) = {
     require(a >= b)
     if(b == 0)
-      return (a,1,0)
+      (a,1,0)
     else{
-      val (d,a1,b1) = extendedGcd(b, (a % b))
+      val (d,a1,b1) = extendedGcd(b, a % b)
       /* (gcd(x,y), bezout_max, bezout_min) */
-      return (d, b1, a1 - Math.floorDiv(a,b)*b1) 
+      (d, b1, a1 - Math.floorDiv(a,b)*b1)
     }
   }
 

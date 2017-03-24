@@ -129,21 +129,18 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       // Top = Mod(Some(1),0)
       case (Mod(Some(1),0), _) => d
       case (_,Mod(Some(1),0)) => c
+      case (Mod(None,x), Mod(None,y)) => if(x == y) c else CongruenceBottom
+      case (Mod(None,x), Mod(a0, b0)) => if(M.isCongruent(x, b0, a0)) c else CongruenceBottom
+      case (Mod(a0, b0), Mod(None,x)) => if(M.isCongruent(x, b0, a0)) d else CongruenceBottom
       case (Mod(a0, b0), Mod(a1, b1)) =>
         if (M.isCongruent(b0, b1, M.gcd(a0, a1))) {
+          require(M.gcd(a0,a1) == Some(1))
           val a = M.lcm(a0, a1)
 
-          val (_, bezout0, bezout1) = M.extendedGcd(a0, a1)
-          val b = M.+(
-            M.*(M.*(a0, bezout1), a),
-            M.*(M.*(a1, bezout0), a)
-          )
-          val b2 : Int = b match {
-            case None => 0
-            case Some(x) => x
-          }
-
-          alpha(a, b2)
+          val (_, bezout0, bezout1)= M.extendedGcd(a0,a1)
+          val x= b0*bezout0*a1.get+b1*bezout1*a0.get
+          println(s"x: $x")
+          alpha(a,x)
         } 
         else
           CongruenceBottom

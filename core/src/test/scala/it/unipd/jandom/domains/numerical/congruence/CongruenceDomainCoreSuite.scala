@@ -19,17 +19,23 @@ class CongruenceDomainCoreSuite extends FlatSpec {
   val twoZtwo= Congruence.Mod(Some(2),2) /*2Z+2*/
   val sixZzero= Congruence.Mod(Some(6),0) /*6Z+0*/
   val sixZone= Congruence.Mod(Some(6),1) /*6Z+1*/
+  val sixZthree= Congruence.Mod(Some(6),3) /*6Z+3*/
   val nineZone= Congruence.Mod(Some(9),1) /*9Z+1*/
+  val nineZthree= Congruence.Mod(Some(9),3) /*9Z+3*/
+  val etZthree= Congruence.Mod(Some(18),3) /*18Z+3*/
   val eightZzero= Congruence.Mod(Some(8),0) /*8Z+0*/
   val eightZone= Congruence.Mod(Some(8),1) /*8Z+1*/
   val eightZtwo= Congruence.Mod(Some(8),2) /*8Z+2*/
   val threeZnone= Congruence.Mod(Some(3),-1) /*3Z-1*/
   val threeZone= Congruence.Mod(Some(3),1) /*3Z+1*/
   val threeZtwo= Congruence.Mod(Some(3),2) /*3Z+2*/
+  val threeZthree= Congruence.Mod(Some(3),3) /*3Z+3*/
   val threeZzero= Congruence.Mod(Some(3),0) /*3Z+0*/
   val three= Congruence.Mod(None,3) /*0Z+3*/
   val nine= Congruence.Mod(None,9) /*0Z+9*/
   val zero= Congruence.Mod(None,0) /*0Z+0*/ 
+  val ttfZzero= Congruence.Mod(Some(240),0) /*240Z+0*/ 
+  val fsZzero= Congruence.Mod(Some(46),0) /*46Z+0*/ 
 
   "CongruenceDomainCore.alpha" should
     " - return the corresponding abstract value (check reduction aka standardForm)" in {
@@ -150,6 +156,24 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.lub(threeZzero, nine) === threeZzero)
   }
 
+  "CongruenceDomainCore.glb" should
+    " - return the greatest lower bound between the two congruences given as input" in {
+    /* BOTTOM */
+    assert(dc.glb(dc.bottom, dc.bottom) === dc.bottom)
+    assert(dc.glb(dc.bottom, three) === dc.bottom)
+    assert(dc.glb(nineZone, dc.bottom) === dc.bottom)
+    /* TOP */
+    assert(dc.glb(dc.top, dc.top) === dc.top)
+    assert(dc.glb(dc.top, three) ===  three)
+    assert(dc.glb(twoZone, dc.top) === twoZone)
+
+    /* BOTTOM < X < TOP */
+    assert(dc.glb(twoZone, threeZzero) === sixZthree)
+    assert(dc.glb(nineZthree, sixZthree) === etZthree)
+    assert(dc.glb(threeZone, Congruence.Mod(Some(5),0)) === Congruence.Mod(Some(15),10))
+    assert(dc.glb(twoZone, Congruence.Mod(Some(5),0)) === Congruence.Mod(Some(10),5))
+    assert(dc.glb(twoZzero, threeZzero) === Congruence.Mod(None,6))
+  }
 
   "CongruenceDomainCore.compare" should
     " - return the comparison between the two congruences given as input" in {

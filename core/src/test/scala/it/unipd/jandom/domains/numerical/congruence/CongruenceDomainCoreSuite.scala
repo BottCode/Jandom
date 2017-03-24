@@ -92,6 +92,10 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.mult(three, three) === nine)
     assert(dc.mult(twoZone, twoZone) === twoZone)
     assert(dc.mult(twoZone, twoZzero) === twoZzero)
+
+    /* */
+    assert(dc.mult(zero, twoZone) === zero)
+    assert(dc.mult(threeZone, zero) === zero)
   }
 
   /*

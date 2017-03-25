@@ -26,15 +26,6 @@ class ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[
     else
       Odd
 
-  // stale
-  def toParity(n : Double) : Parity = {
-    // if (n != n.floor) return ParityTop
-    if (n.toInt % 2 == 0)
-      Even
-    else
-      Odd
-  }
-
   /**
     * @inheritdoc
     */

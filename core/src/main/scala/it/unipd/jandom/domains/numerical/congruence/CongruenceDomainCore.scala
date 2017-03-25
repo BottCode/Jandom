@@ -30,7 +30,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * overloaded abstraction function: 
     * it is necessary to convert all the aZ+b formS 
-    * in standard forms a'Z+b' with a' > 0 and b' < a'.
+    * in standard forms a'Z+b' with a' > 0 and 0 <= b' < a'.
     * All the methods of this class have to use alpha 
     * to construct abstract elements of this domain in the standard form.
     */
@@ -235,7 +235,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * Reduce the congruence abstract domain, thus making (alpha, C, A, gamma)
     * a Galois Insertion. So gamma becomes an injective function.
-    * aZ+b with a > 0 and a > b
+    * aZ+b with a > 0 and 0<= b < a
     */
   private def standardForm(c : Congruence) : Congruence = {
     c match {

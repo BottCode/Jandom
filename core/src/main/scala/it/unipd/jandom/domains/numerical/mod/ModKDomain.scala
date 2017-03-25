@@ -20,7 +20,7 @@ package it.unipd.jandom.domains.numerical.mod
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.BaseNumericalDomain
-import ModK._
+import ModK.ModK
 
 /**
   * Module K domain, i.e. the domain composed of the elements of
@@ -50,26 +50,6 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
       * @inheritdoc
       */
     override def linearInequality(lf: LinearForm): Property = this
-
-    /**
-      * @inheritdoc
-      */
-    override def mkString(vars: Seq[String]): String = {
-      require(vars.length >= dimension)
-      if (unreachable)
-        "[ empty ]"
-      else {
-        val bounds = for (i <- 0 until dimension) yield {
-          val c = modKs(i) match {
-            case ModKTop => "\u22A4"
-            case ModKBottom => "\u22A5"
-            case RestClass(r) => s"$r mod $divisor"
-          }
-          s"${vars(i)} = $c"
-        }
-        bounds.mkString("[ ", " , ", " ]")
-      }
-    }
 
   } // end of Property
 } // end of ModKDomain class

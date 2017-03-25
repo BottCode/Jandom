@@ -13,9 +13,21 @@ object ModK {
 
 	trait ModK
 	/** Represents the elements in the equivalence class num modulo k */
-	case class RestClass(num : Int) extends ModK
-	case object ModKBottom extends ModK
-	case object ModKTop extends ModK
+	case class RestClass(num : Int) extends ModK {
+    override def toString: String = k match {
+      case 2 => num match {
+        case 0 => "Even"
+        case 1 => "Odd"
+      }
+      case _ => num + " mod " + k
+    }
+	}
+	case object ModKBottom extends ModK {
+    override def toString: String = "\u22A5"
+  }
+	case object ModKTop extends ModK {
+    override def toString: String = "\u22A4"
+  }
 
 	/**
 	  * Singleton object constructor. Sets k to num

@@ -67,9 +67,6 @@ class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainC
         }
       }), this.isEmpty && that.isEmpty)
 
-
-
-
   } // end of Property
 
 } // end of CongruenceDomain (class)

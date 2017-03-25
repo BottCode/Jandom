@@ -10,4 +10,4 @@ object Parity {
   case object ParityTop extends Parity
   // no possible value
   case object ParityBottom extends Parity
-}
+} // end of Parity object

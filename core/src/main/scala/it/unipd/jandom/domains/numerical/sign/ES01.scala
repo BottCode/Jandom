@@ -35,4 +35,4 @@ object ES01 {
   case object ES01Bottom extends ExtendedSign01 {
     override def toString: String = "= \u22A5"
   }
-}
+} // end of ES01 object

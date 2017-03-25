@@ -8,7 +8,6 @@ package it.unipd.jandom.domains
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 trait Abstraction[ConcreteType, AbstractType] {
-
   /**
     * Factory method for domain values (i.e. abstraction).
     *

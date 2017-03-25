@@ -163,8 +163,8 @@ class ExtendedSigns01DomainCore extends Abstraction[Int, ExtendedSign01]
     * @inheritdoc
     */
   override def bottom: ExtendedSign01 = ES01Bottom
-} // end object ExtendedSigns01DomainCore
+} // end of ExtendedSigns01DomainCore class
 
 object ExtendedSigns01DomainCore {
   def apply() = new ExtendedSigns01DomainCore
-}
+} // end of ExtendedSigns01DomainCore companion object

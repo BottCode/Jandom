@@ -25,7 +25,6 @@ object MathLibrary {
     }
   }
 
-
   def isDivisor(y: Option[Int], y1: Option[Int]): Boolean =
     (y, y1) match {
       case (_, None) => true

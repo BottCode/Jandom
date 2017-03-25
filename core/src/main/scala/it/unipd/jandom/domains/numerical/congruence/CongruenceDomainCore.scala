@@ -245,8 +245,8 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
     }
   }
 
-} // end of CongruenceDomainCore
+} // end of CongruenceDomainCore class
 
 object CongruenceDomainCore {
   def apply() = new CongruenceDomainCore
-}
+} // end of CongruenceDomainCore companion object

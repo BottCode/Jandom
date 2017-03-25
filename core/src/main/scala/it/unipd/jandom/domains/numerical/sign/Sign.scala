@@ -29,4 +29,4 @@ object Sign {
   case object SignBottom extends Sign  {
     override def toString: String = "= \u22A5"
   }
-}
+} // end of Sign object

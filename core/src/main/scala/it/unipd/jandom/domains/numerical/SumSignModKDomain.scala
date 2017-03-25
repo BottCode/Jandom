@@ -34,4 +34,4 @@ object SumSignModKDomain {
     * Factory method
     */
   def apply(num : Int) : SumSignModKDomain = new SumSignModKDomain(SignDomain(), ModKDomain(num))
-} // end SumSignModKDomain companion object
+} // end of SumSignModKDomain companion object

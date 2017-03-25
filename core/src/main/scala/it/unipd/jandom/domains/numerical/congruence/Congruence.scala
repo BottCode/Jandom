@@ -4,7 +4,6 @@ package it.unipd.jandom.domains.numerical.congruence
   * The elements of the congruence domain.
   * It is a non-relational domain composed of values in the form `aZ + b` (Mod) and bottom (CongruenceBottom)
   *
-  *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
@@ -15,8 +14,8 @@ object Congruence {
   /**
     * Represents the elements of the domain of the form aZ + b.
     * Invariant: a = None (infinite) or a = Some(x) with x > 0
-    * @param a
-    * @param b
+    * @param a modulus
+    * @param b offset
     */
   case class Mod(a : Option[Int], b : Int) extends Congruence {
     /**Checks if `a` belongs to the set `N* U {∞}` as described in
@@ -52,4 +51,4 @@ object Congruence {
     override def toString: String = "\u22A5"
   }
 
-}
+} // end of Congruence object

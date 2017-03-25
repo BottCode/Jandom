@@ -138,11 +138,12 @@ class ConstantDomainCore extends CompleteLatticeOperator[Constant]
     * @inheritdoc
     */
   override def bottom: Constant = ConstantBottom
-}
+
+} // end of ConstantDomainCore class
 
 object ConstantDomainCore {
   /**
     * Factory method of ConstantDomainCore
     */
   def apply() = new ConstantDomainCore
-}
+} // end of ConstantDomainCore companion object

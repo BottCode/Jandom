@@ -21,4 +21,4 @@ object ESeq {
   case object Neq0 extends Sign {
     override def toString: String = "\u2260 0"
   }
-}
+} // end of ESeq object

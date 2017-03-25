@@ -139,9 +139,9 @@ class ParityDomainCore extends CompleteLatticeOperator[Parity] with IntOperator[
     * @inheritdoc
     */
   override def bottom: Parity = ParityBottom
-} // end ParityDomainCore
+
+} // end of ParityDomainCore class
 
 object ParityDomainCore {
   def apply() = new ParityDomainCore
-}
-
+} // end of ParityDomainCore companion object

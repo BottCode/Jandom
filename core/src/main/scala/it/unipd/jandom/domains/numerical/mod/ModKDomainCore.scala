@@ -142,5 +142,5 @@ object ModKDomainCore extends CompleteLatticeOperator[ModK]
   override def bottom: ModK = ModKBottom
 
   def apply(num : Int) = ModK(num)
-}
 
+} // end of ModKDomainCore companion object

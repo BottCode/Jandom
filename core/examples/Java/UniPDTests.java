@@ -17,11 +17,11 @@ public class UniPDTests {
             a = 1;
     }
 
-
     static void reduceOddAndGeq() {
         int x = 1;
         x = x % 2;
     }
+
     @SuppressWarnings("ALL")
     static void filter() {
     	int a = 2;

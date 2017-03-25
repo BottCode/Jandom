@@ -48,4 +48,5 @@ trait CompleteLatticeOperator[AbstractType] {
     * @return the bottom element
     */
   def bottom : AbstractType
+
 }

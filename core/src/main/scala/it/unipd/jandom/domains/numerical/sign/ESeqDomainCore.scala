@@ -188,8 +188,8 @@ class ESeqDomainCore extends SignDomainCore {
       result
   }
 
-} // end object ESeqDomainCore
+} // end of ESeqDomainCore class
 
 object ESeqDomainCore {
   def apply() = new ESeqDomainCore
-}
+} // end of ESeqDomainCore companion object

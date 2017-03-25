@@ -8,6 +8,7 @@ package it.unipd.jandom.domains
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 trait NumOperator[AbstractType]{
+
   /**
     * Performs the (-) prefix operation.
     *
@@ -42,4 +43,5 @@ trait NumOperator[AbstractType]{
     * @return the result of the division
     */
   def division(x : AbstractType, y : AbstractType) : AbstractType
+
 }

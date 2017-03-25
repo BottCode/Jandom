@@ -364,6 +364,6 @@ abstract class BaseNumericalDomain
       * @return the abstract domain corresponding to this property
       */
     override def domain: Domain = BaseNumericalDomain.this
+
   }
 }
-

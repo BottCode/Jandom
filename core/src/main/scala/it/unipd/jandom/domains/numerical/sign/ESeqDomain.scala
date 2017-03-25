@@ -59,7 +59,7 @@ class ESeqDomain extends BaseNumericalDomain[Sign, ESeqDomainCore](ESeqDomainCor
     }
   } // end class Property
 
-} // end class ESeqDomain
+} // end of ESeqDomain class
 
 object ESeqDomain {
   def apply() = new ESeqDomain()

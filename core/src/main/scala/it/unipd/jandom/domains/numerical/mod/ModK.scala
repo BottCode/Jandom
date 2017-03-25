@@ -1,6 +1,5 @@
 package it.unipd.jandom.domains.numerical.mod
 
-
 /**
   * Domain with values with the form `k * Z + a`.
   *
@@ -43,4 +42,5 @@ object ModK {
 	  * @return the divisor k
 	  */
 	def divisor: Int = k
-}
+
+} // end of ModK object

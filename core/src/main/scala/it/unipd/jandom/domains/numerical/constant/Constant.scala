@@ -17,7 +17,7 @@ object Constant {
   }
   // no accurate info available for variable
   case object ConstantTop extends Constant {
-    override def toString() : String = "\u22a4"
+    override def toString() : String = "= \u22a4"
   }
   // no possible value
   case object ConstantBottom extends Constant {

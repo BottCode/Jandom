@@ -169,7 +169,10 @@ abstract class BaseNumericalDomain
       */
     override def variableDiv(n : Int, m : Int): Property = {
       elements(n) = core.division(elements(n), elements(m))
-      this
+      if(elements(n) == core.bottom) //Run-Time Error occured while performing the division
+        bottom
+      else
+        this
     }
 
     /**
@@ -185,7 +188,11 @@ abstract class BaseNumericalDomain
       */
     override def variableRem(n: Int, m : Int): Property = {
       elements(n) = core.remainder(elements(n), elements(m))
-      this
+      elements(n) = core.division(elements(n), elements(m))
+      if(elements(n) == core.bottom) //Run-Time Error occured while performing the remainder
+        bottom
+      else
+        this
     }
 
     /**

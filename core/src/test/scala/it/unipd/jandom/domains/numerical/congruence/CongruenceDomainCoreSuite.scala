@@ -12,34 +12,41 @@ import org.scalatest.FlatSpec
 class CongruenceDomainCoreSuite extends FlatSpec {
 
   val dc = CongruenceDomainCore()
+  /* note: this elements does not exists, by design
+     only standard forms are allowed to exists */
   val twoZnone= Congruence.Mod(Some(2),-1) /*2Z-1*/
-  /* standard form */
-  val twoZzero= Congruence.Mod(Some(2),0) /*2Z+0*/
-  val twoZone= Congruence.Mod(Some(2),1) /*2Z+1*/
-  val twoZtwo= Congruence.Mod(Some(2),2) /*2Z+2*/
-  val sixZzero= Congruence.Mod(Some(6),0) /*6Z+0*/
-  val sixZone= Congruence.Mod(Some(6),1) /*6Z+1*/
-  val sixZthree= Congruence.Mod(Some(6),3) /*6Z+3*/
-  val nineZone= Congruence.Mod(Some(9),1) /*9Z+1*/
-  val nineZthree= Congruence.Mod(Some(9),3) /*9Z+3*/
-  val etZthree= Congruence.Mod(Some(18),3) /*18Z+3*/
-  val eightZzero= Congruence.Mod(Some(8),0) /*8Z+0*/
-  val eightZone= Congruence.Mod(Some(8),1) /*8Z+1*/
-  val eightZtwo= Congruence.Mod(Some(8),2) /*8Z+2*/
   val threeZnone= Congruence.Mod(Some(3),-1) /*3Z-1*/
-  val threeZone= Congruence.Mod(Some(3),1) /*3Z+1*/
-  val threeZtwo= Congruence.Mod(Some(3),2) /*3Z+2*/
-  val threeZthree= Congruence.Mod(Some(3),3) /*3Z+3*/
-  val threeZzero= Congruence.Mod(Some(3),0) /*3Z+0*/
+  /* STANDARD FORMS */
+  /* constants: first level of congruence (complete) lattice */
   val three= Congruence.Mod(None,3) /*0Z+3*/
   val nine= Congruence.Mod(None,9) /*0Z+9*/
   val zero= Congruence.Mod(None,0) /*0Z+0*/
-  val ttfZzero= Congruence.Mod(Some(240),0) /*240Z+0*/
-  val fsZzero= Congruence.Mod(Some(46),0) /*46Z+0*/
+  /* modK */
+  val twoZzero= Congruence.Mod(Some(2),0) /*2Z+0*/
+  val threeZzero= Congruence.Mod(Some(3),0) /*3Z+0*/
+  val fiveZzero= Congruence.Mod(Some(5),0) /*5Z+0*/
+  val sixZzero= Congruence.Mod(Some(6),0) /*6Z+0*/
+  val eightZzero= Congruence.Mod(Some(8),0) /*8Z+0*/
+  /* aZ + b with a!=0 and b!=0 */
+  val twoZone= Congruence.Mod(Some(2),1) /*2Z+1*/
+  val twoZtwo= Congruence.Mod(Some(2),2) /*2Z+2*/
+  val threeZone= Congruence.Mod(Some(3),1) /*3Z+1*/
+  val threeZtwo= Congruence.Mod(Some(3),2) /*3Z+2*/
+  val threeZthree= Congruence.Mod(Some(3),3) /*3Z+3*/
+  val sixZone= Congruence.Mod(Some(6),1) /*6Z+1*/
+  val sixZtwo= Congruence.Mod(Some(6),2) /*6Z+2*/
+  val sixZthree= Congruence.Mod(Some(6),3) /*6Z+3*/
+  val eightZone= Congruence.Mod(Some(8),1) /*8Z+1*/
+  val eightZtwo= Congruence.Mod(Some(8),2) /*8Z+2*/
+  val nineZone= Congruence.Mod(Some(9),1) /*9Z+1*/
+  val nineZthree= Congruence.Mod(Some(9),3) /*9Z+3*/
+  val tenZfive= Congruence.Mod(Some(10),5) /*10Z+5*/
+  val fifteenZten= Congruence.Mod(Some(15),10) /*15Z+10*/
+  val eighteenZthree= Congruence.Mod(Some(18),3) /*18Z+3*/
 
   "CongruenceDomainCore.alpha" should
     " - return the corresponding abstract value (check reduction aka standardForm)" in {
-    /* reduction (2Z+X*n) = 2Z+X with n in N */
+    /* i.e. (2Z+X*n) = 2Z+X with n in N */
     assert(dc.alpha(Some(2),3) === twoZone)
     assert(dc.alpha(Some(6),7) === sixZone)
     assert(dc.alpha(Some(9),19) === nineZone)
@@ -75,7 +82,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
 
   /*
     Note: we always consider the standardForm in the result.
-          So, each result is in the form aZ+b with a>0 and b >= 0
+          So, each result is in the form aZ+b with a > 0 and 0 <= b < a
   */
   "CongruenceDomainCore.mult" should
     " - return the mult of the two congruences given as input" in {
@@ -94,6 +101,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.mult(twoZone, twoZzero) === twoZzero)
     assert(dc.mult(zero, twoZone) === zero)
     assert(dc.mult(threeZone, zero) === zero)
+    assert(dc.mult(zero, zero) === zero)
   }
 
   /*
@@ -168,13 +176,14 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.glb(dc.top, dc.top) === dc.top)
     assert(dc.glb(dc.top, three) ===  three)
     assert(dc.glb(twoZone, dc.top) === twoZone)
-
     /* BOTTOM < X < TOP */
     assert(dc.glb(twoZone, threeZzero) === sixZthree)
-    assert(dc.glb(nineZthree, sixZthree) === etZthree)
-    assert(dc.glb(threeZone, Congruence.Mod(Some(5),0)) === Congruence.Mod(Some(15),10))
-    assert(dc.glb(twoZone, Congruence.Mod(Some(5),0)) === Congruence.Mod(Some(10),5))
-    assert(dc.glb(twoZzero, threeZzero) === Congruence.Mod(Some(6),0))
+    assert(dc.glb(nineZthree, sixZthree) === eighteenZthree)
+    assert(dc.glb(threeZone, fiveZzero) === fifteenZten)
+    assert(dc.glb(twoZone, fiveZzero) === tenZfive)
+    assert(dc.glb(twoZzero, threeZzero) === sixZzero)
+    assert(dc.glb(sixZtwo, nineZthree) === dc.bottom)
+    assert(dc.glb(zero, tenZfive) === dc.bottom)
   }
 
   "CongruenceDomainCore.compare" should
@@ -189,9 +198,9 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.compare(nineZone, dc.bottom) === Some(1))
     /* BOTTOM < X < TOP */
     assert(dc.compare(three, three) === Some(0))
+    assert(dc.compare(sixZone, sixZone) === Some(0))
     assert(dc.compare(sixZzero, threeZzero) === Some(-1))
     assert(dc.compare(threeZzero, sixZzero) === Some(1))
-
     /* NOT COMPARABLE TEST */
     assert(dc.compare(twoZone, twoZzero).isEmpty)
     assert(dc.compare(threeZone, twoZone).isEmpty)

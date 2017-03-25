@@ -194,12 +194,12 @@ object DomainTransformation {
     def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property = {
       p => dst.createProperty(
         (p.low, p.high).zipped.map({
-          case (Double.NegativeInfinity, Double.PositiveInfinity) => Mod(Some(1), 0)
           case (c,d) =>
             if (c == d)
               Mod(None, c.toInt)
             else
               Mod(Some(1), 0)
+
         })
       )
     }

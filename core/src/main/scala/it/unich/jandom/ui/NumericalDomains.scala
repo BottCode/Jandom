@@ -35,6 +35,20 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val description = "The numerical domain to use for the analysis."
 
   val values: Buffer[ParameterValue[NumericalDomain]] = Buffer(
+    ParameterValue(SignDomain(), "Sign Domain", "This is a native Scala implementation of the simple sign domain " +
+      "(<0, =0, >0)"),
+    ParameterValue(ParityDomain(), "Parity Domain", "This is a native Scala implementation of even/odd domain."),
+    ParameterValue(ConstantDomain(), "Constant domain", "This is a native Scala implementation of the constant " +
+      "propagation domain."),
+    ParameterValue(ModKDomain(3), "Module K domain", "This is a native Scala implementation of the module K domain."),
+    ParameterValue(ExtendedSigns01Domain(), "ES01 Domain", "This is a native Scala implementation of the sign domain " +
+      "extended with the constant 1."),
+    ParameterValue(ESeqDomain(), "Extended Sign domain", "This is a native Scala implementation of the sign domain " +
+      "extended with >=, <=, !=."),
+    ParameterValue(ProductESeqParityDomain(), "Product of extended sign and parity", "This is a native Scala " +
+      "implementation of the reduced product between parity and the extended sign domains."),
+    ParameterValue(CongruenceDomain(), "Congruence Domain", "This is a native Scala implementation of the domain " +
+      "of the congruences with arbitrary modulus."),
     ParameterValue(BoxDoubleDomain(), "BoxDouble", "This is a native Scala implementation of boxes. It is safe " +
       "w.r.t. double arithmetics."),
     ParameterValue(BoxDoubleDomain(overReals=true), "BoxDouble over Reals", "This is a native Scala implementation of boxes. It is safe " +
@@ -42,18 +56,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(ParallelotopeDomain(), "Parallelotope", "This is a native Scala implementation of parallelotopes. It is " +
       "not safe and should not be used."),
     ParameterValue(SumIntParallelotopeDomain(), "BoxDouble + Parallelotope", "Sum of boxes and parallelotopes."),
-    ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers."),
-    ParameterValue(SignDomain(), "Sign Domain", "UniPD"),
-    ParameterValue(ParityDomain(), "Parity Domain", "UniPD"),
-    ParameterValue(ConstantDomain(), "Constant domain", "UniPD: Constant propagation "),
-    ParameterValue(ModKDomain(3), "Module K domain", "UniPD: Module K propagation "),
-    ParameterValue(ExtendedSigns01Domain(), "ES01 Domain", "UniPD: extended sign domain with 0 and 1"),
-    ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements"),
-    ParameterValue(SumSignModKDomain(2), "Sum between sign and mod 2", ""),
-    ParameterValue(ProductSignModKDomain(2), "Product of sign and mod k with k = 2", "UniPD"),
-    ParameterValue(ProductESeqParityDomain(), "Product of extended sign and parity", "UniPD"),
-    ParameterValue(ESeqDomain(), "Extended Sign domain", "UniPD: the standard sign domain with 8 elements"),
-    ParameterValue(CongruenceDomain(), "Congruence Domain", "UniPD: the congruenceDomain")
+    ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers.")
   )
   val default = values.last
 

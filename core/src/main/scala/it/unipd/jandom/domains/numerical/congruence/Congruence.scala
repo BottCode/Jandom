@@ -30,13 +30,14 @@ object Congruence {
       * @inheritdoc
       */
     override def toString: String = {
+      var s : String = "\u2208 "
       (a, b) match {
-        case (None, 0) => "0"
-        case (None, _) => b + ""
-        case (Some(1), 0) => "Z"
-        case (Some(1), _) => "Z + " + b
-        case (Some(x), 0) => x + "Z"
-        case (Some(x), _) => x + "Z + " + b
+        case (None, 0) => s + "{0}"
+        case (None, _) => s + "{" + b + "}"
+        case (Some(1), 0) => s + "\u2124"
+        case (Some(1), _) => s + "\u2124 + " + b
+        case (Some(x), 0) => s + x + "\u2124"
+        case (Some(x), _) => s + x + "\u2124 + " + b
       }
     }
   }

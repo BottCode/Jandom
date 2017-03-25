@@ -13,7 +13,8 @@ object Congruence {
   trait Congruence
 
   /**
-    * Represent the elements of the domain of the form aZ + b
+    * Represents the elements of the domain of the form aZ + b.
+    * Invariant: a = None (infinite) or a = Some(x) with x > 0
     * @param a
     * @param b
     */
@@ -41,7 +42,7 @@ object Congruence {
   }
 
   /**
-    * Correspond to the bottom of the Congruence lattice
+    * Corresponds to the bottom of the Congruence lattice
     */
   case object CongruenceBottom extends Congruence {
     /**

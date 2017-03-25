@@ -1,7 +1,7 @@
 package it.unipd.jandom.domains.numerical.congruence
 
 import it.unich.jandom.domains.numerical.LinearForm
-import it.unipd.jandom.domains.numerical.{BaseNumericalDomain}
+import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 import it.unipd.jandom.domains.numerical.congruence.Congruence._
 /**
   * Congruence domain as described in Mine 2002 [[https://hal.archives-ouvertes.fr/hal-00136663/document]].
@@ -15,7 +15,9 @@ import it.unipd.jandom.domains.numerical.congruence.Congruence._
   */
 class CongruenceDomain extends BaseNumericalDomain[Congruence, CongruenceDomainCore](CongruenceDomainCore()) {
 
-
+  /**
+    * @inheritdoc
+    */
   override def createProperty(congruences: Array[Congruence], unreachable: Boolean): Property =
     new Property(congruences, unreachable)
 

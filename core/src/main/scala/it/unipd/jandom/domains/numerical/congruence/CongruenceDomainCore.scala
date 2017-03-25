@@ -6,7 +6,7 @@ import Congruence._
 
 /**
   * The Integer Congruence Domain.
-  * B# = { (aZ + b) | a ∈ N* ∪ {0}, b ∈ Z } ∪ {⊥#}}
+  * B# = { (aZ + b) | a ∈ N* ∪ {∞}, b ∈ Z } ∪ {⊥#}}
   * It forms a complete lattice with
   *   1Z+0 as Top element
   *   ⊥ as Bottom element

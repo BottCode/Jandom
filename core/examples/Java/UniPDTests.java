@@ -1,16 +1,17 @@
 public class UniPDTests {
-    static void mult() {
+
+    static void simple_multiplication_test() {
 		int a = 10;
 		int b = -2;
 		int c = 10 + a*b;
     }
-    static void foo() {
+    static void a_little_bit_of_algebra() {
     	int a = 10;
     	a = -a;
     	int c = -100 * + a;
     }
 
-    static void lbhg() {
+    static void simple_loop_with_exit() {
         int a = 0;
         while(a <= 0)
             a = 1;
@@ -47,7 +48,7 @@ public class UniPDTests {
                 sn = sn + (2);
             i = i + 1;
         }
-        // POST CONDITION: sn == 16 || sn == 0
+        // POST CONDITION: sn == 6
     }
 
     static void for_infinite_loop_2_true_unreach_call_false_termination() {

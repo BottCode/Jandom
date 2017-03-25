@@ -45,12 +45,14 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
       "extended with the constant 1."),
     ParameterValue(ESeqDomain(), "Extended Sign domain", "This is a native Scala implementation of the sign domain " +
       "extended with >=, <=, !=."),
-    ParameterValue(ProductESeqParityDomain(), "Product of extended sign and parity", "This is a native Scala " +
-      "implementation of the reduced product between parity and the extended sign domains."),
     ParameterValue(CongruenceDomain(), "Congruence Domain", "This is a native Scala implementation of the domain " +
       "of the congruences with arbitrary modulus."),
     ParameterValue(BoxDoubleDomain(), "BoxDouble", "This is a native Scala implementation of boxes. It is safe " +
       "w.r.t. double arithmetics."),
+    ParameterValue(ProductESeqParityDomain(), "ExtendedSign X Parity", "This is a native Scala " +
+      "implementation of the reduced product between parity and the extended sign domains."),
+    ParameterValue(ProductCongruenceBoxDoubleDomain(), "Congruence X BoxDouble", "This is a native Scala " +
+      "implementation of the reduced product between congruence and the interval domain (double)."),
     ParameterValue(BoxDoubleDomain(overReals=true), "BoxDouble over Reals", "This is a native Scala implementation of boxes. It is safe " +
       "w.r.t. reals."),
     ParameterValue(ParallelotopeDomain(), "Parallelotope", "This is a native Scala implementation of parallelotopes. It is " +

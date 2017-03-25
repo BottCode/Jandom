@@ -51,17 +51,7 @@ class ParityDomain extends BaseNumericalDomain[Parity, ParityDomainCore](ParityD
     /**
       * @inheritdoc
       */
-    override def linearDisequality(lf: LinearForm): Property = {
-      if (unreachable)
-        return this
-      val p: Parity = linearEvaluation(lf)
-      p match {
-        case Even => this
-        case Odd => this
-        case ParityTop => createProperty(Array.fill(dimension)(ParityDomainCore().top), unreachable = false)
-        case ParityBottom => createProperty(Array.fill(dimension)(ParityDomainCore().top), unreachable = true)
-      }
-    }
+    override def linearDisequality(lf: LinearForm): Property = this
 
     /**
       * @inheritdoc

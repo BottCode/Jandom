@@ -1,9 +1,12 @@
 package it.unipd.jandom.domains.numerical.utils
 
 /**
-  * Created by mirko on 3/18/17.
   * Implementation of the extended mathematical operations defined in Mine02 using the Option[Int]
   * to simulate the N* U infinite
+  *
+  * @author Mirko Bez <mirko.bez@studenti.unipd.it>
+  * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
+  * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 object MathLibrary {
 

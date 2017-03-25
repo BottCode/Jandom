@@ -22,21 +22,6 @@ class SignDomainCore extends CompleteLatticeOperator[Sign] with IntOperator[Sign
   }
 
   /**
-    * Factory method for signs.
-    *
-    * @param num number that has to be converted to sign
-    * @return sign of `num`
-    */
-  // TODO: Stale - keep or dispose?
-  def toSign(num : Double): Sign =
-    if(num > 0)
-      Plus
-    else if(num < 0)
-      Minus
-    else
-      Zero
-
-  /**
     * @inheritdoc
     */
   def sum(s: Sign, t: Sign) : Sign =

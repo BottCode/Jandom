@@ -12,6 +12,7 @@ object ModK {
 	private var k = 1
 
 	trait ModK
+	/** Represents the elements in the equivalence class num modulo k */
 	case class RestClass(num : Int) extends ModK
 	case object ModKBottom extends ModK
 	case object ModKTop extends ModK

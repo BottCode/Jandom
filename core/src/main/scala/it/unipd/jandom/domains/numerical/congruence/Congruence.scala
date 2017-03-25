@@ -19,7 +19,8 @@ object Congruence {
     * @param b
     */
   case class Mod(a : Option[Int], b : Int) extends Congruence {
-    /**Checks if `a` belongs to the set `N* U {inf}`      */
+    /**Checks if `a` belongs to the set `N* U {∞}` as described in
+      [[it.unipd.jandom.domains.numerical.congruence.CongruenceDomainCore]] */
     require(
       a match {
         case None => true

@@ -78,27 +78,6 @@ class SignDomain extends BaseNumericalDomain[Sign, SignDomainCore](sign.SignDoma
       }
     }
 
-     /**
-     * @inheritdoc
-     */
-    override def mkString(vars: Seq[String]): String = {
-      require(vars.length >= dimension)
-      if (unreachable)
-        "empty"
-      else {
-        val bounds = for (i <- 0 until dimension) yield {
-          val h = sign(i) match {
-            case SignTop => "\u22A4"
-            case SignBottom => "\u22A5"
-            case Plus => "PLUS"
-            case Minus => "MINUS"
-            case Zero => "ZERO"
-          }
-          s"${vars(i)} = $h"
-        }
-        bounds.mkString("[ ", " , ", " ]")
-      }
-    }
 
   } // end of SignDomain's Property
 } // end of SignDomain class

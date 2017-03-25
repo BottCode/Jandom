@@ -10,13 +10,23 @@ package it.unipd.jandom.domains.numerical.sign
 object Sign {
   trait Sign
   // positive numbers (> 0)
-  case object Plus extends Sign
+  case object Plus extends Sign {
+    override def toString: String = "Plus"
+  }
   // negative numbers (< 0)
-  case object Minus extends Sign
+  case object Minus extends Sign {
+    override def toString: String = "Minus"
+  }
   // null numbers (= 0)
-  case object Zero extends Sign
+  case object Zero extends Sign  {
+    override def toString: String = "Zero"
+  }
   // no accurate info available for variable
-  case object SignTop extends Sign
+  case object SignTop extends Sign  {
+    override def toString: String = "\u22A4"
+  }
   // no possible value
-  case object SignBottom extends Sign
+  case object SignBottom extends Sign  {
+    override def toString: String = "\u22A5"
+  }
 }

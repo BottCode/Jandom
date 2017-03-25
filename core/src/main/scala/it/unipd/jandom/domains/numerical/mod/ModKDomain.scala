@@ -23,9 +23,9 @@ import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 import ModK._
 
 /**
-  * Module K domain, i.e. the domain composed of the elements of 
+  * Module K domain, i.e. the domain composed of the elements of
   * the rest class of K {0,..,K-1}.
-  * It is a non-relational flat domain. ModKTop and ModKBottom complete 
+  * It is a non-relational flat domain. ModKTop and ModKBottom complete
   * the lattice, providing a greatest and a least element for this set.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
@@ -70,7 +70,7 @@ class ModKDomain extends BaseNumericalDomain[ModK, ModKDomainCore.type](ModKDoma
         bounds.mkString("[ ", " , ", " ]")
       }
     }
-    
+
   } // end of Property
 } // end of ModKDomain class
 

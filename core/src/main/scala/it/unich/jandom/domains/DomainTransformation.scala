@@ -27,6 +27,9 @@ import it.unipd.jandom.domains.numerical.sign.SignDomain
 import it.unipd.jandom.domains.numerical.sign.Sign._
 import it.unipd.jandom.domains.numerical.sign._
 import it.unipd.jandom.domains.numerical.parity._
+import it.unipd.jandom.domains.numerical.congruence._
+import it.unipd.jandom.domains.numerical.congruence.Congruence._
+import it.unipd.jandom.domains.numerical.congruence.CongruenceDomainCore._
 
 
 /**
@@ -155,6 +158,44 @@ object DomainTransformation {
           case Zero => Parity.Even
           case _ => Parity.ParityTop
         })
+    }
+  }
+
+  implicit object CongruenceToBoxDouble extends DomainTransformation[CongruenceDomain, BoxDoubleDomain] {
+    def apply(src: CongruenceDomain, dst: BoxDoubleDomain): src.Property => dst.Property = {
+      p => dst(p.elements.map {
+        case Mod(None, constant) => constant.toDouble
+        case Mod(a, b) => Double.NegativeInfinity
+      },
+      p.elements.map {
+        case Mod(None, constant) => constant.toDouble
+        case Mod(a, b) => Double.PositiveInfinity
+      })
+    }
+  }
+  /* reduce the interval using the congruence result
+  {
+    var (low, high) = (dst.low, dst.high)
+    if (!M.isCongruent(low, b, a) || !M.isCongruent(dst.high, b, a))
+    { /* restrict the interval until it matches with the congruence */
+      while (!M.isCongruent(low, b, a))
+        low = low + 1
+      while (!M.isCongruent(dst.high, b, a))
+        high = high - 1
+      dst(low,high)
+    }
+    else /* preserve the interval */
+      dst
+  }
+  */
+  implicit object BoxDoubleToCongruence extends DomainTransformation[BoxDoubleDomain, CongruenceDomain] {
+    def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property = {
+      p => dst.createProperty(
+        if(p.low.deep == p.high.deep)
+          Array.fill(p.high.length){CongruenceDomainCore().alpha(None,p.high(0).toInt)}
+        else
+          Array.fill(p.high.length){CongruenceDomainCore().top}
+        )
     }
   }
 

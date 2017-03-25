@@ -166,10 +166,12 @@ object DomainTransformation {
       p => dst(p.elements.map {
         case Mod(None, constant) => constant.toDouble
         case Mod(a, b) => Double.NegativeInfinity
+        case CongruenceBottom => Double.PositiveInfinity
       },
       p.elements.map {
         case Mod(None, constant) => constant.toDouble
         case Mod(a, b) => Double.PositiveInfinity
+        case CongruenceBottom => Double.NegativeInfinity
       })
     }
   }
@@ -191,11 +193,15 @@ object DomainTransformation {
   implicit object BoxDoubleToCongruence extends DomainTransformation[BoxDoubleDomain, CongruenceDomain] {
     def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property = {
       p => dst.createProperty(
-        if(p.low.deep == p.high.deep)
-          Array.fill(p.high.length){CongruenceDomainCore().alpha(None,p.high(0).toInt)}
-        else
-          Array.fill(p.high.length){CongruenceDomainCore().top}
-        )
+        (p.low, p.high).zipped.map({
+          case (Double.NegativeInfinity, Double.PositiveInfinity) => Mod(Some(1), 0)
+          case (c,d) =>
+            if (c == d)
+              Mod(None, c.toInt)
+            else
+              Mod(Some(1), 0)
+        })
+      )
     }
   }
 

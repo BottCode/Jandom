@@ -184,7 +184,6 @@ abstract class BaseNumericalDomain
       * @inheritdoc
       */
     override def variableRem(n: Int, m : Int): Property = {
-      println(s"REM")
       elements(n) = core.remainder(elements(n), elements(m))
       this
     }
@@ -225,7 +224,7 @@ abstract class BaseNumericalDomain
       else {
         val bounds = for (i <- 0 until dimension) yield {
           val h = elements(i).toString
-          s"${vars(i)} = $h"
+          s"${vars(i)} $h"
         }
         bounds.mkString("[ ", " , ", " ]")
       }

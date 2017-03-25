@@ -12,9 +12,15 @@ package it.unipd.jandom.domains.numerical.constant
 object Constant {
   trait Constant
   // constant value
-  case class Const (num : Int) extends Constant
+  case class Const (num : Int) extends Constant {
+    override def toString: String = "= " + num
+  }
   // no accurate info available for variable
-  case object ConstantTop extends Constant
+  case object ConstantTop extends Constant {
+    override def toString() : String = "\u22a4"
+  }
   // no possible value
-  case object ConstantBottom extends Constant
+  case object ConstantBottom extends Constant {
+    override def toString: String = "= \u22a5"
+  }
 }

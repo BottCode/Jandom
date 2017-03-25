@@ -11,22 +11,22 @@ object Sign {
   trait Sign
   // positive numbers (> 0)
   case object Plus extends Sign {
-    override def toString: String = "Plus"
+    override def toString: String = "> 0"
   }
   // negative numbers (< 0)
   case object Minus extends Sign {
-    override def toString: String = "Minus"
+    override def toString: String = "< 0"
   }
   // null numbers (= 0)
   case object Zero extends Sign  {
-    override def toString: String = "Zero"
+    override def toString: String = "= 0"
   }
   // no accurate info available for variable
   case object SignTop extends Sign  {
-    override def toString: String = "\u22A4"
+    override def toString: String = "= \u22A4"
   }
   // no possible value
   case object SignBottom extends Sign  {
-    override def toString: String = "\u22A5"
+    override def toString: String = "= \u22A5"
   }
 }

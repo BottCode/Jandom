@@ -10,9 +10,15 @@ import Sign._
   */
 object ESeq {
   // numbers greater or equal than 0 (>= 0)
-  case object Geq0 extends Sign
+  case object Geq0 extends Sign {
+    override def toString: String = "\u2265 0"
+  }
   // numbers less or equal than 0 (<= 0)
-  case object Leq0 extends Sign
+  case object Leq0 extends Sign {
+    override def toString: String = "\u2264 0"
+  }
   // numbers not equal to 0 (!= 0)
-  case object Neq0 extends Sign
+  case object Neq0 extends Sign {
+    override def toString: String = "\u2260 0"
+  }
 }

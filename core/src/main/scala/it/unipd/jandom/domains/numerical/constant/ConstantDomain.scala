@@ -56,26 +56,6 @@ class ConstantDomain extends BaseNumericalDomain[Constant, ConstantDomainCore](C
       }
     }
 
-    /**
-      * @inheritdoc
-      */
-    override def mkString(vars: Seq[String]): String = {
-      require(vars.length >= dimension)
-      if (unreachable)
-        "[ empty ]"
-      else {
-        val bounds = for (i <- 0 until dimension) yield {
-          val c = constants(i) match {
-            case ConstantTop => "\u22A4"
-            case ConstantBottom => "\u22A5"
-            case Const(num) => num
-          }
-          s"${vars(i)} = $c"
-        }
-        bounds.mkString("[ ", " , ", " ]")
-      }
-    }
-
   } // end of Property
 } // end of ConstantDomain (class)
 

@@ -61,28 +61,6 @@ class ExtendedSigns01Domain
       }
     }
 
-    /**
-      * @inheritdoc
-      */
-    override def mkString(vars: Seq[String]): String = {
-      require(vars.length >= dimension)
-      if (unreachable)
-        "empty"
-      else {
-        val bounds = for (i <- 0 until dimension) yield {
-          val h = sign(i) match {
-            case ES01Top => "\u22A4"
-            case ES01Bottom => "\u22A5"
-            case GTOne => "GT1"
-            case Negative => "NEG"
-            case Zero => "ZERO"
-            case One => "ONE"
-          }
-          s"${vars(i)} = $h"
-        }
-        bounds.mkString("[ ", " , ", " ]")
-      }
-    }
   } // end of ES01Domain's Property
 } // end of ES01Domain's class
 

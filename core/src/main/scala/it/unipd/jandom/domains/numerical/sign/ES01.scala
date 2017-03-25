@@ -12,15 +12,27 @@ package it.unipd.jandom.domains.numerical.sign
 object ES01 {
   trait ExtendedSign01
   // negative numbers (< 0)
-  case object Negative extends ExtendedSign01
+  case object Negative extends ExtendedSign01 {
+    override def toString = "< 0"
+  }
   // null numbers (= 0)
-  case object Zero extends ExtendedSign01
+  case object Zero extends ExtendedSign01 {
+    override def toString: String = "= 0"
+  }
   // numbers equal to 1 (= 1)
-  case object One extends ExtendedSign01
+  case object One extends ExtendedSign01 {
+    override def toString: String = "= 1"
+  }
   // numbers greater than 1 (> 1)
-  case object GTOne extends ExtendedSign01
+  case object GTOne extends ExtendedSign01 {
+    override def toString: String = "> 1"
+  }
   // no accurate info available for variable
-  case object ES01Top extends ExtendedSign01
+  case object ES01Top extends ExtendedSign01 {
+      override def toString: String = "= \u22A4"
+  }
   // no possible value
-  case object ES01Bottom extends ExtendedSign01
+  case object ES01Bottom extends ExtendedSign01 {
+    override def toString: String = "= \u22A5"
+  }
 }

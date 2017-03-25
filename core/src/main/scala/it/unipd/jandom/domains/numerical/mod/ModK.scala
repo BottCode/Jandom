@@ -16,17 +16,17 @@ object ModK {
 	case class RestClass(num : Int) extends ModK {
     override def toString: String = k match {
       case 2 => num match {
-        case 0 => "Even"
-        case 1 => "Odd"
+        case 0 => "= Even"
+        case 1 => "= Odd"
       }
-      case _ => num + " mod " + k
+      case _ => "\u2261 [" + num + "]%" + k
     }
 	}
 	case object ModKBottom extends ModK {
-    override def toString: String = "\u22A5"
+    override def toString: String = "= \u22A5"
   }
 	case object ModKTop extends ModK {
-    override def toString: String = "\u22A4"
+    override def toString: String = "= \u22A4"
   }
 
 	/**

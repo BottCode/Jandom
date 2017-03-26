@@ -6,7 +6,8 @@ import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.sign.SignDomain
 
 /**
-  * Instantiation of the sum domain using the Sign domain and the Parity domain.
+  * Instantiation of the sum domain using the Sign domain and the Parity domain
+  * (ModK with K=2).
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>
   * @author Stefano Munari <stefano.munari.1@studenti.unipd.it>
@@ -21,7 +22,7 @@ class SumSignModKDomain(val dom1: SignDomain, val dom2: ModKDomain) extends SumD
   /**
     * @inheritdoc
     */
-  class SumSignModK(val p1: dom1.Property, val p2: dom2.Property) extends Sum { }
+  class SumSignModK(val p1: dom1.Property, val p2: dom2.Property) extends Sum {}
 
   /**
     * Class constructor

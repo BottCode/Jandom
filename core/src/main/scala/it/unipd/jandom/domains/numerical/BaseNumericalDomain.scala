@@ -35,7 +35,7 @@ abstract class BaseNumericalDomain
     * @return a new property
     */
   def createProperty(elements: Array[T]) : Property =
-    createProperty(elements, elements.exists(x => x.equals(core.bottom)))
+    createProperty(elements, elements.contains(core.bottom))
   //It is enough that one of the variable is bottom that the whole property is bottom
 
   /**
@@ -207,8 +207,9 @@ abstract class BaseNumericalDomain
       that match {
         case that : BaseProperty =>
           val result = (elements, that.elements).zipped.map( core.glb )
-          createProperty(result, unreachable || that.unreachable)
-        case _ => top
+          createProperty(result, unreachable || that.unreachable || result.contains(core.bottom))
+        case _ =>
+          top
       }
     }
 

@@ -162,13 +162,11 @@ object DomainTransformation {
   }
 
   implicit object CongruenceToBoxDouble extends DomainTransformation[CongruenceDomain, BoxDoubleDomain] {
-    def apply(src: CongruenceDomain, dst: BoxDoubleDomain): src.Property => dst.Property = {
+    def apply(src: CongruenceDomain, dst: BoxDoubleDomain): src.Property => dst.Property =
       p =>
-        println(p.elements.deep.mkString("[", ",", "]") + " " + p.elements.contains(CongruenceBottom))
-        if (p.isEmpty || p.elements.contains(CongruenceBottom)) { //If the property is unreachable return bottom
+        if (p.isEmpty || p.elements.contains(CongruenceBottom)) //If the property is unreachable return bottom
           dst.bottom(p.dimension)
-        }
-        else {
+        else
           dst(
             p.elements.map {
               case Mod(None, constant) => constant.toDouble
@@ -178,12 +176,10 @@ object DomainTransformation {
               case Mod(None, constant) => constant.toDouble
               case Mod(a, b) => Double.PositiveInfinity
             })
-        }
-    }
   }
 
   implicit object BoxDoubleToCongruence extends DomainTransformation[BoxDoubleDomain, CongruenceDomain] {
-    def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property = {
+    def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property =
       p =>
         if(p.isEmpty || (p.low, p.high).zipped.exists(_ > _))
           dst.bottom(p.dimension)
@@ -199,7 +195,6 @@ object DomainTransformation {
                 Mod(Some(1), 0)
           })
         )
-    }
   }
 
   /**

@@ -53,6 +53,8 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
       "implementation of the reduced product between parity and the extended sign domains."),
     ParameterValue(ProductCongruenceBoxDoubleDomain(), "Congruence X BoxDouble", "This is a native Scala " +
       "implementation of the reduced product between congruence and the interval domain (double)."),
+    ParameterValue(FullyReducedProductCongruenceBoxDoubleDomain(), "Congruence X BoxDouble (Fully Reduced) ",
+      "This is a native Scala implentation of the fully reduced product between congruence and the interval domain"),
     ParameterValue(SumSignModKDomain(2), "Sign + Parity", "Sum of signs and parity domains."),
     ParameterValue(BoxDoubleDomain(overReals=true), "BoxDouble over Reals", "This is a native Scala implementation of boxes. It is safe " +
       "w.r.t. reals."),

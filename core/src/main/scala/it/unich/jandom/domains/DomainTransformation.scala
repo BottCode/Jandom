@@ -175,21 +175,7 @@ object DomainTransformation {
       })
     }
   }
-  /* reduce the interval using the congruence result
-  {
-    var (low, high) = (dst.low, dst.high)
-    if (!M.isCongruent(low, b, a) || !M.isCongruent(dst.high, b, a))
-    { /* restrict the interval until it matches with the congruence */
-      while (!M.isCongruent(low, b, a))
-        low = low + 1
-      while (!M.isCongruent(dst.high, b, a))
-        high = high - 1
-      dst(low,high)
-    }
-    else /* preserve the interval */
-      dst
-  }
-  */
+
   implicit object BoxDoubleToCongruence extends DomainTransformation[BoxDoubleDomain, CongruenceDomain] {
     def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property = {
       p => dst.createProperty(

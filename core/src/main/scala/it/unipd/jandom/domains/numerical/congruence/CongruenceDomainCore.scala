@@ -233,8 +233,8 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   override def bottom: Congruence = CongruenceBottom
 
   /**
-    * Reduce the congruence abstract domain, thus making (alpha, C, A, gamma)
-    * a Galois Insertion. So gamma becomes an injective function.
+    * Reduce the congruence abstract domain by removing redundant elements.
+    * All the congruences are converted in the form:
     * aZ+b with a > 0 and 0<= b < a
     */
   private def standardForm(c : Congruence) : Congruence = {

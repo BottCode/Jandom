@@ -163,33 +163,42 @@ object DomainTransformation {
 
   implicit object CongruenceToBoxDouble extends DomainTransformation[CongruenceDomain, BoxDoubleDomain] {
     def apply(src: CongruenceDomain, dst: BoxDoubleDomain): src.Property => dst.Property = {
-      p => dst(p.elements.map {
-        case Mod(None, constant) => constant.toDouble
-        case Mod(a, b) => Double.NegativeInfinity
-        case CongruenceBottom => Double.PositiveInfinity
-      },
-      p.elements.map {
-        case Mod(None, constant) => constant.toDouble
-        case Mod(a, b) => Double.PositiveInfinity
-        case CongruenceBottom => Double.NegativeInfinity
-      })
+      p =>
+        println(p.elements.deep.mkString("[", ",", "]") + " " + p.elements.contains(CongruenceBottom))
+        if (p.isEmpty || p.elements.contains(CongruenceBottom)) { //If the property is unreachable return bottom
+          dst.bottom(p.dimension)
+        }
+        else {
+          dst(
+            p.elements.map {
+              case Mod(None, constant) => constant.toDouble
+              case Mod(a, b) => Double.NegativeInfinity
+            },
+            p.elements.map {
+              case Mod(None, constant) => constant.toDouble
+              case Mod(a, b) => Double.PositiveInfinity
+            })
+        }
     }
   }
 
   implicit object BoxDoubleToCongruence extends DomainTransformation[BoxDoubleDomain, CongruenceDomain] {
     def apply(src: BoxDoubleDomain, dst: CongruenceDomain): src.Property => dst.Property = {
-      p => dst.createProperty(
-        (p.low, p.high).zipped.map({
-          case (Double.PositiveInfinity, Double.PositiveInfinity) => Mod(Some(1), 0)
-          case (Double.NegativeInfinity, Double.NegativeInfinity) => Mod(Some(1), 0)
-          case (c,d) =>
-            if (c == d)
-              Mod(None, c.toInt)
-            else
-              Mod(Some(1), 0)
-
-        })
-      )
+      p =>
+        if(p.isEmpty || (p.low, p.high).zipped.exists(_ > _))
+          dst.bottom(p.dimension)
+        else
+          dst.createProperty(
+          (p.low, p.high).zipped.map({
+            case (Double.PositiveInfinity, Double.PositiveInfinity) => Mod(Some(1), 0)
+            case (Double.NegativeInfinity, Double.NegativeInfinity) => Mod(Some(1), 0)
+            case (c,d) =>
+              if (c == d)
+                Mod(None, c.toInt)
+              else
+                Mod(Some(1), 0)
+          })
+        )
     }
   }
 

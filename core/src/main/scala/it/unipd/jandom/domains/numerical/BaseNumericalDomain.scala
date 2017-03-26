@@ -35,7 +35,8 @@ abstract class BaseNumericalDomain
     * @return a new property
     */
   def createProperty(elements: Array[T]) : Property =
-    createProperty(elements, elements.forall(x => x.equals(core.bottom)))
+    createProperty(elements, elements.exists(x => x.equals(core.bottom)))
+  //It is enough that one of the variable is bottom that the whole property is bottom
 
   /**
     * @inheritdoc
@@ -104,9 +105,10 @@ abstract class BaseNumericalDomain
       */
     // forget function
     override def nonDeterministicAssignment(n: Int): Property = {
-      if (unreachable)
-        return this
-      createProperty(elements.updated(n, core.top))
+      if (isBottom)
+        bottom
+      else
+        createProperty(elements.updated(n, core.top))
     }
 
     /**
@@ -159,40 +161,29 @@ abstract class BaseNumericalDomain
     /**
       * @inheritdoc
       */
-    override def variableMul(n: Int, m: Int): Property = {
-      elements(n) = core.mult(elements(n), elements(m))
-      this
-    }
+    override def variableMul(n: Int, m: Int): Property =
+      createProperty(elements.updated(n, core.mult(elements(n), elements(m))), unreachable)
+
 
     /**
       * @inheritdoc
       */
     override def variableDiv(n : Int, m : Int): Property = {
-      elements(n) = core.division(elements(n), elements(m))
-      if(elements(n) == core.bottom) //Run-Time Error occured while performing the division
-        bottom
-      else
-        this
+      createProperty(elements.updated(n, core.division(elements(n), elements(m))), unreachable)
     }
 
     /**
       * @inheritdoc
       */
-    override def variableNeg(n: Int = dimension - 1): Property = {
-      elements(n) = core.inverse(elements(n))
-      this
-    }
+    override def variableNeg(n: Int = dimension - 1): Property =
+      createProperty(elements.updated(n, core.inverse(elements(n))), unreachable)
+
 
     /**
       * @inheritdoc
       */
     override def variableRem(n: Int, m : Int): Property = {
-      elements(n) = core.remainder(elements(n), elements(m))
-      elements(n) = core.division(elements(n), elements(m))
-      if(elements(n) == core.bottom) //Run-Time Error occured while performing the remainder
-        bottom
-      else
-        this
+      createProperty(elements.updated(n, core.remainder(elements(n), elements(m))), unreachable)
     }
 
     /**

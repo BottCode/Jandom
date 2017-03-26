@@ -49,7 +49,7 @@ object Congruence {
     /**
       * @inheritdoc
       */
-    override def toString: String = "\u22A5"
+    override def toString: String = "= \u22A5"
   }
 
 } // end of Congruence object

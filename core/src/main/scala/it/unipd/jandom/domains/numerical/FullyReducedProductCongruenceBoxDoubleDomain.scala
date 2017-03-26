@@ -32,9 +32,6 @@ class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : Congruenc
     */
   class FullyReducedProductCongruenceBoxDouble(override val p1 : dom1.Property, override val p2 : dom2.Property) extends Product(p1, p2) {
 
-    override type Domain = FullyReducedProductCongruenceBoxDoubleDomain.this.type
-
-    override def domain : Domain = FullyReducedProductCongruenceBoxDoubleDomain.this
 
     override def reduce(x1: dom1.Property, x2: dom2.Property): FullyReducedProductCongruenceBoxDouble = {
       //Checking if the properties are empty, or contain a bottom element

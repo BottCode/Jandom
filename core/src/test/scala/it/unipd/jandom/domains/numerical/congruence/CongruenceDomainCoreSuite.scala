@@ -18,6 +18,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
   val threeZnone= Congruence.Mod(Some(3),-1) /*3Z-1*/
   /* STANDARD FORMS */
   /* constants: first level of congruence (complete) lattice */
+  val two= Congruence.Mod(None,2) /*0Z+2*/
   val three= Congruence.Mod(None,3) /*0Z+3*/
   val nine= Congruence.Mod(None,9) /*0Z+9*/
   val zero= Congruence.Mod(None,0) /*0Z+0*/
@@ -33,6 +34,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
   val threeZone= Congruence.Mod(Some(3),1) /*3Z+1*/
   val threeZtwo= Congruence.Mod(Some(3),2) /*3Z+2*/
   val threeZthree= Congruence.Mod(Some(3),3) /*3Z+3*/
+  val fourZone= Congruence.Mod(Some(4),1) /*4Z+1*/
   val sixZone= Congruence.Mod(Some(6),1) /*6Z+1*/
   val sixZtwo= Congruence.Mod(Some(6),2) /*6Z+2*/
   val sixZthree= Congruence.Mod(Some(6),3) /*6Z+3*/
@@ -126,6 +128,7 @@ class CongruenceDomainCoreSuite extends FlatSpec {
     assert(dc.division(twoZone, dc.top) === dc.top)
     /* BOTTOM < X < TOP */
     assert(dc.division(nine, three) === three)
+    assert(dc.division(eightZtwo, two) === fourZone)
     assert(dc.division(twoZone, twoZzero) === dc.top)
     assert(dc.division(twoZzero, twoZtwo) === dc.top)
   }

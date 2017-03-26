@@ -134,7 +134,7 @@ object DomainTransformation {
         dst.createProperty(p.elements.map {
           case Zero => ModK.RestClass(0)
           case _ => ModK.ModKTop
-        })
+        }, p.isEmpty)
       }
     }
   }
@@ -148,7 +148,7 @@ object DomainTransformation {
       p => dst.createProperty(p.elements.map {
           case Parity.Odd => ESeq.Neq0
           case _ => Sign.SignTop
-        })
+        }, p.isEmpty)
     }
   }
 
@@ -157,7 +157,7 @@ object DomainTransformation {
       p => dst.createProperty(p.elements.map {
           case Zero => Parity.Even
           case _ => Parity.ParityTop
-        })
+        }, p.isEmpty)
     }
   }
 
@@ -193,7 +193,7 @@ object DomainTransformation {
                 Mod(None, c.toInt)
               else
                 Mod(Some(1), 0)
-          })
+          }), p.isEmpty
         )
   }
 

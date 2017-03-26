@@ -31,4 +31,13 @@ class Congruence {
 				y=y-30;
 		}
 	}
+
+	static void mineProductIntervalCongruence() {
+		int x = 1;
+		while(x-10 <= 0) {
+			x = x + 2;
+		}
+		if(x-12 >= 0)
+			x=0;
+	}
 }

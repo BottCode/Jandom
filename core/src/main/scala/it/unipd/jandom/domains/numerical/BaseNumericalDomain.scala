@@ -29,11 +29,6 @@ abstract class BaseNumericalDomain
     */
   def createProperty(elements: Array[T], unreachable: Boolean) : Property
 
-
-  def createProperty(p : BaseProperty): Property =
-    createProperty(p.elements, p.isEmpty || p.elements.contains(core.bottom))
-
-
   /**
     * Factory method for creating a Property.
     * @param elements of the domain

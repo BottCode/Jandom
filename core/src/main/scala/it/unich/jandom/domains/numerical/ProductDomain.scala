@@ -176,9 +176,9 @@ class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, 
 
     def mkString(vars: Seq[String]): String = {
       if (isEmpty)
-        "empty"
+        "[ empty ]"
       else if (isTop)
-        "full"
+        "[ full ]"
       else
         p1.mkString(vars) + " / " + p2.mkString(vars)
     }

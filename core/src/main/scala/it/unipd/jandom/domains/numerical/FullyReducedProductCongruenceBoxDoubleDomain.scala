@@ -114,7 +114,7 @@ class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : Congruenc
   * @param b1 the constant part of the congruence a0Z+b1
   * @return the new (possibily restriced) upper bound of the interval
   */
-  private def compute_high (high : Int, a0 : Option[Int], b1 : Int) = {
+  private def compute_high (high : Int, a0 : Option[Int], b1 : Int) : Int = {
     a0 match {
       case None     => b1
       case Some(a1) => high - (a1 - (Math.abs((((high % a1)+ a1)% a1) - b1)% a1))
@@ -133,7 +133,7 @@ class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : Congruenc
   * @param b1 the constant part of the congruence a0Z+b1
   * @return the new (possibily restriced) lower bound of the interval
   */
-  private def compute_low (low : Int, a0 : Option[Int], b1 : Int) = {
+  private def compute_low (low : Int, a0 : Option[Int], b1 : Int) : Int = {
     a0 match {
       case None     => b1
       case Some(a1) => low + (Math.abs((((low % a1)+ a1)% a1) - b1)% a1)

@@ -73,13 +73,13 @@ class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : Congruenc
 
     /**
       * This function that takes as input an interval [_low, _high] and 
-      * an interval aZ + b. It returns the fully reduced product between 
+      * a congruence aZ + b. It returns the fully reduced product between
       * [low, high] and aZ + b. Thus, reducing [_low, _high] using aZ + b
       * @param _low the lower bound of the interval
       * @param _high the upper bound of the interval
       * @param a the module part of the congruence aZ+b
       * @param b the constant part of the congruence aZ+b
-      * @returns (low, high) the (potentially) restricted interval
+      * @return (low, high) the (potentially) restricted interval
       */
     private def transform(_low : Int, _high: Int, a : Option[Int], b : Int) : (Int, Int) = {
       var (low, high) = (_low, _high)

@@ -77,7 +77,6 @@ class BoxDoubleDomain(val overReals: Boolean) extends NumericalDomain {
           isEmpty)
 
     /**
-     * Next fix point
      * This computes the smallest y > x which is representable as a Double. Note that
      * x should not be -Infinity.
      */
@@ -96,7 +95,6 @@ class BoxDoubleDomain(val overReals: Boolean) extends NumericalDomain {
     }
 
     /**
-     * Previous fix point
      * This computes the largest  y < x which is representable as a Double.
      */
     private def prevfp(x: Double): Double = {

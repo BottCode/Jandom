@@ -18,6 +18,8 @@
 
 package it.unich.jandom.domains.numerical.ppl
 
+import scala.collection.JavaConverters._
+
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unich.jandom.domains.numerical.NumericalProperty
 import it.unich.jandom.utils.numberext.RationalExt
@@ -57,6 +59,7 @@ class PPLProperty[PPLNativeProperty <: AnyRef](val domain: PPLDomain[PPLNativePr
   def narrowing(that: PPLProperty[PPLNativeProperty]): PPLProperty[PPLNativeProperty] = {
     if (domain.supportsNarrowing) {
       val newpplobject = domain.copyConstructor(that.pplobject)
+      domain.intersection_assign(newpplobject, pplobject)
       domain.narrowing_assign(newpplobject, pplobject)
       new PPLProperty(domain, newpplobject)
     } else
@@ -112,7 +115,7 @@ class PPLProperty[PPLNativeProperty <: AnyRef](val domain: PPLDomain[PPLNativePr
 
   def minimize(lf: LinearForm) = {
     if (isEmpty) {
-      if (lf.homcoeffs.forall(_ == 0.0))
+      if (lf.homcoeffs.forall(_ == Rational.zero))
         lf.known
       else
         RationalExt.PositiveInfinity
@@ -131,7 +134,7 @@ class PPLProperty[PPLNativeProperty <: AnyRef](val domain: PPLDomain[PPLNativePr
 
   def maximize(lf: LinearForm) = {
     if (isEmpty) {
-      if (lf.homcoeffs.forall(_ == 0.0))
+      if (lf.homcoeffs.forall(_ ==  Rational.zero))
         lf.known
       else
         RationalExt.NegativeInfinity
@@ -150,7 +153,7 @@ class PPLProperty[PPLNativeProperty <: AnyRef](val domain: PPLDomain[PPLNativePr
 
   def frequency(lf: LinearForm) = {
     if (isEmpty) {
-      if (lf.homcoeffs.forall(_ == 0.0))
+      if (lf.homcoeffs.forall(_ == Rational.zero))
         Option(lf.known)
       else
         Option.empty
@@ -169,18 +172,15 @@ class PPLProperty[PPLNativeProperty <: AnyRef](val domain: PPLDomain[PPLNativePr
   }
 
   def constraints = {
-    import scala.collection.JavaConversions._
-
     val cs = domain.minimized_constraints(pplobject)
-    cs flatMap PPLUtils.fromPPLConstraint
+    cs.asScala flatMap PPLUtils.fromPPLConstraint
   }
 
   def isPolyhedral = {
-    import scala.collection.JavaConversions._
     val cs = domain.minimized_constraints(pplobject)
     // we explicitly check if the object is empty since, in this case, it has a unsatisfiable
     // congruence.
-    isEmpty || ((cs forall PPLUtils.isRepresentableAsLinearForms) && domain.minimized_congruences(pplobject).isEmpty())
+    isEmpty || ((cs.asScala forall PPLUtils.isRepresentableAsLinearForms) && domain.minimized_congruences(pplobject).isEmpty())
   }
 
   def addVariable = {

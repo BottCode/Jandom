@@ -79,7 +79,7 @@ class BoxRationalDomain private extends NumericalDomain {
      * If `remove` is a valid index in `x` and `y`, the factor `x(remove) * y(remove)` is
      * removed from the dot product.
      */
-    private def dotprod(x: Seq[Rational], y: Seq[RationalExt], remove: Int = -1): RationalExt = {
+    private def dotprod(x: Seq[Rational], y: Seq[RationalExt], remove: Int): RationalExt = {
       var sum = RationalExt.zero
       for (i <- x.indices; if i != remove && !x(i).isZero) sum += x(i) * y(i)
       sum
@@ -131,8 +131,8 @@ class BoxRationalDomain private extends NumericalDomain {
       if (that.isEmpty) {
         that
       } else {
-        val newlow = (low, that.low).zipped.map((l1, l2) => if (l1 == RationalExt.NegativeInfinity) l2 else l1 min l2)
-        val newhigh = (high, that.high).zipped.map((l1, l2) => if (l1 == RationalExt.PositiveInfinity) l2 else l1 max l2)
+        val newlow = (low, that.low).zipped.map((l1, l2) => if (l1 == RationalExt.NegativeInfinity) l2 else l1)
+        val newhigh = (high, that.high).zipped.map((l1, l2) => if (l1 == RationalExt.PositiveInfinity) l2 else l1)
         BoxRationalDomain.this(newlow, newhigh)
       }
     }
@@ -183,17 +183,6 @@ class BoxRationalDomain private extends NumericalDomain {
     private def linearArgmin(lf: LinearForm): Seq[RationalExt] = {
       require(lf.dimension <= dimension)
       (lf.homcoeffs,low,high).zipped.map{(c, l, h) => if (c > Rational.zero) l else h }
-    }
-
-    /**
-     * Compute the corner of the box which maximizes a linear form.
-     * @todo should be generalized to linear forms over arbitrary types.
-     * @param coeff the homogeneous coefficients
-     * @return the coordinates of the point which maximizes the linear form
-     */
-    private def linearArgmax(lf: LinearForm): Seq[RationalExt] = {
-      require(lf.dimension <= dimension)
-      (lf.homcoeffs,low,high).zipped.map{(c, l, h) => if (c < Rational.zero) l else h }
     }
 
     /**
@@ -375,7 +364,8 @@ class BoxRationalDomain private extends NumericalDomain {
     def top = BoxRationalDomain.this.top(low.length)
 
     def tryCompareTo[B >: Property](other: B)(implicit arg0: (B) => PartiallyOrdered[B]): Option[Int] = other match {
-      case other: Property =>
+      // we use BoxRationalDomain#Property instead of just Property to avoid a warning
+      case other: BoxRationalDomain#Property =>
         require(dimension == other.dimension)
         (isEmpty, other.isEmpty) match {
           case (true, true) => Option(0)
@@ -414,7 +404,7 @@ class BoxRationalDomain private extends NumericalDomain {
     else
       new Property(low, high, false)
   }
-  
+
   val widenings = Seq(WideningDescription.default[Property])
 
   /**

@@ -1,3 +1,5 @@
+import CustomKeys._
+
 //*** Additional source directories for PPL
 
 unmanagedSourceDirectories in Compile ++= (pplJar.value map { _ => (sourceDirectory in Compile).value / "ppl" }).toSeq
@@ -6,23 +8,26 @@ unmanagedSourceDirectories in Test ++= (pplJar.value map { _ => (sourceDirectory
 
 //*** Assembly plugin
 
-test in assembly := {}
+test in assembly := { }
 
-mergeStrategy in assembly <<= (mergeStrategy in assembly) { (old) => 
-  {
+assemblyMergeStrategy in assembly ~= { (oldStrategy) =>  {
     case PathList(ps @ _*) if ps.last.endsWith(".class")  => MergeStrategy.last
-    case x => old(x)
+    case x => oldStrategy(x)
   }
 }
 
-//*** Cappi plugin
-
-cappiSettings
-
 //*** Eclipse plugin
 
-EclipseKeys.executionEnvironment := Some(EclipseExecutionEnvironment.JavaSE17)
+EclipseKeys.configurations += Jmh
 
-EclipseKeys.eclipseOutput := Some("target.eclipse")
+//*** IDEA plugin
 
-incOptions := incOptions.value.withLogRecompileOnMacro(false)
+ideOutputDirectory in Compile := Some(file("extended/target/idea/classes"))
+
+ideOutputDirectory in Test := Some(file("extended/target/idea/test-classes"))
+
+//*** JMH Plugin
+
+enablePlugins(JmhPlugin)
+
+dependencyClasspath in Jmh ++= (exportedProducts in Test).value

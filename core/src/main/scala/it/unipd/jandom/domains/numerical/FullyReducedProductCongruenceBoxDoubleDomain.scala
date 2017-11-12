@@ -4,7 +4,7 @@ import it.unich.jandom.domains.DomainTransformation
 import it.unich.jandom.domains.numerical.ProductDomain
 import it.unich.jandom.domains.numerical.BoxDoubleDomain
 import it.unipd.jandom.domains.numerical.congruence.Congruence.{Congruence, CongruenceBottom}
-import it.unipd.jandom.domains.numerical.congruence.{Congruence, CongruenceDomain, CongruenceDomainCore}
+import it.unipd.jandom.domains.numerical.congruence.{Congruence, CongruenceDomain}
 import it.unipd.jandom.domains.numerical.utils.MathLibrary
 
 /**
@@ -43,9 +43,8 @@ class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : Congruenc
         /* Calculate the point-wise fully-reduct product of an array of cogruence and low- and upperbound of box double */
         val res : Array[(Congruence, Double, Double)] = (x1.elements, x2.low, x2.high).zipped.map(
           (congruence,_low, _high) => {
-            var low: Int = _low.toInt
-
-            var high: Int = _high.toInt
+            val low: Int = _low.toInt
+            val high: Int = _high.toInt
             congruence match {
               case Congruence.Mod(a, b) =>
                 val (a1, b1) = transform(low, high, a, b)

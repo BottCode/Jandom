@@ -19,6 +19,14 @@
 package it.unich.jandom.domains
 
 import it.unich.jandom.domains.numerical._
+import it.unipd.jandom.domains.numerical.congruence._
+import it.unipd.jandom.domains.numerical.congruence.Congruence._
+import it.unipd.jandom.domains.numerical.sign._
+import it.unipd.jandom.domains.numerical.sign.Sign.Zero
+import it.unipd.jandom.domains.numerical.mod._
+
+import it.unipd.jandom.domains.numerical.constant._
+import it.unipd.jandom.domains.numerical.parity._
 import it.unich.jandom.utils.numberext.{DenseMatrix, Bounds, RationalExt}
 
 

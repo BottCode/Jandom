@@ -25,7 +25,6 @@ import it.unipd.jandom.domains.numerical.sign._
 import it.unipd.jandom.domains.numerical.sign.Sign.Zero
 import it.unipd.jandom.domains.numerical.mod._
 
-import it.unipd.jandom.domains.numerical.constant._
 import it.unipd.jandom.domains.numerical.parity._
 import it.unich.jandom.utils.numberext.{DenseMatrix, Bounds, RationalExt}
 
@@ -138,16 +137,16 @@ object DomainTransformation {
       p =>
         if (p.isEmpty || p.elements.contains(CongruenceBottom)) //If the property is unreachable return bottom
           dst.bottom(p.dimension)
-        else
-          dst(
-            p.elements.map {
-              case Mod(None, constant) => constant.toDouble
-              case Mod(a, b) => Double.NegativeInfinity
-            },
-            p.elements.map {
-              case Mod(None, constant) => constant.toDouble
-              case Mod(a, b) => Double.PositiveInfinity
-            })
+        else {
+          val (low, high) = (p.elements.map {
+            case Mod(None, constant) => (constant.toDouble, constant.toDouble)
+            case Mod(a, b) => (Double.NegativeInfinity, Double.PositiveInfinity)
+            case CongruenceBottom => (Double.PositiveInfinity, Double.NegativeInfinity)
+            //This case is already covered in the previous if, but otherwise sbt gave a warning
+            //due to non exhaustive pattern matching
+          }).unzip
+          dst(low, high)
+        }
   }
 
   implicit object BoxDoubleToCongruence extends DomainTransformation[BoxDoubleDomain, CongruenceDomain] {

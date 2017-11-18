@@ -10,7 +10,7 @@ package it.unipd.jandom.domains.numerical.constant
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 object Constant {
-  trait Constant
+  sealed trait Constant
 
   // constant value
   case class Const (num : Int) extends Constant {

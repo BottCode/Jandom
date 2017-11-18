@@ -1,7 +1,7 @@
 package it.unipd.jandom.domains.numerical.parity
 
 object Parity {
-  trait Parity
+  sealed trait Parity
   // multiples of 2
   case object Even extends Parity
   // multiples of 2 plus 1

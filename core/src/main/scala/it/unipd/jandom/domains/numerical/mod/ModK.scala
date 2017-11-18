@@ -10,7 +10,7 @@ package it.unipd.jandom.domains.numerical.mod
 object ModK {
 	private var k = 1
 
-	trait ModK
+	sealed trait ModK
 	/** Represents the elements in the equivalence class num modulo k */
 	case class RestClass(num : Int) extends ModK {
     override def toString: String = k match {

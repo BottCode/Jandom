@@ -9,7 +9,7 @@ package it.unipd.jandom.domains.numerical.congruence
   * @author Sebastiano Valle <sebastiano.valle@studenti.unipd.it>
   */
 object Congruence {
-  trait Congruence
+  sealed trait Congruence
 
   /**
     * Represents the elements of the domain of the form aZ + b.
@@ -30,7 +30,7 @@ object Congruence {
       * @inheritdoc
       */
     override def toString: String = {
-      var s : String = "\u2208 "
+      val s : String = "\u2208 "
       (a, b) match {
         case (None, 0) => s + "{0}"
         case (None, _) => s + "{" + b + "}"

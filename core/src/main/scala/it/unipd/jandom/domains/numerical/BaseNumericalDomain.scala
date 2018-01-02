@@ -351,11 +351,12 @@ abstract class BaseNumericalDomain
       if (unreachable && homcoeffs.exists { _ != 0 })
         return core.top
       var acc: T = core.alpha(known)
-      for (i <- homcoeffs.indices)
-        if (homcoeffs(i) < 0)
-          acc = core.sum(acc, core.inverse(elements(i)))
-        else if(homcoeffs(i) > 0)
-          acc = core.sum(acc, elements(i))
+      for (i <- homcoeffs.indices) {
+        if (homcoeffs(i) != 0) {
+          val t = core.mult(core.alpha(homcoeffs(i)), elements(i))
+          acc = core.sum(acc, t)
+        }
+      }
       acc
     }
 

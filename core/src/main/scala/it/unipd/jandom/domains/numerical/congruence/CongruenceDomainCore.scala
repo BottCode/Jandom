@@ -63,7 +63,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(a1, b1)) =>
         val a = M.gcd(a0, a1)
         val b = b0 + b1
-        alpha(a,b)
+        alpha(a, b)
     }
   }
 
@@ -125,7 +125,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(a1, b1)) =>
         val a = M.gcd(a0,M.gcd(a1, Some(b1)))
         val b = b0
-        alpha(a,b)
+        alpha(a, b)
     }
   }
 
@@ -145,7 +145,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         }
         val a = M.gcd(a0, M.gcd(a1, btmp))
         val b = Math.min(b0,b1)
-        alpha(a,b)
+        alpha(a, b)
     }
   }
 
@@ -219,12 +219,9 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (_, CongruenceBottom) => Option(1)
 
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        var cleqd = false
-        var dleqc = false
-        if(M.isDivisor(a1, a0) && M.isCongruent(b0,b1,a1))
-          cleqd = true
-        if(M.isDivisor(a0,a1) && M.isCongruent(b1, b0, a0))
-          dleqc = true
+        val cleqd = M.isDivisor(a1, a0) && M.isCongruent(b0, b1, a1)
+        val dleqc = M.isDivisor(a0, a1) && M.isCongruent(b1, b0, a0)
+
 
         if(cleqd && dleqc)
           Option(0)
@@ -252,13 +249,15 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * Reduce the congruence abstract domain by removing redundant elements.
     * All the congruences are converted in the form:
-    * aZ+b with a > 0 and 0<= b < a
+    * aZ+b with a > 0 and 0 <= b < a
     */
   private def standardForm(c : Congruence) : Congruence = {
     c match {
       case CongruenceBottom => CongruenceBottom
       case Mod(None, _) => c
-      case Mod(Some(a), b) => Mod(Some(a), ((b % a) + a) % a)
+      case Mod(Some(a), b) =>
+        val a1 = Math.abs(a)
+        Mod(Some(a1), ((b % a1) + a1) % a1)
     }
   }
 

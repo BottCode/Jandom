@@ -1,4 +1,4 @@
-#Jandom
+# Jandom
 
 This is Jandom, an abstract interpretation based static analyzer written
 in Scala. To compile it, you need ''sbt'' (Scala Build Tools) 0.13.5 or 

@@ -43,7 +43,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
-      case (IntervalTop, _) => IntervalTop 
+      case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
       case (Interval(low1, high1), Interval(low2,high2)) => Interval((low1 + low2), (high1 + high2))
     }
@@ -53,9 +53,9 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def inverse(x : Box) : Box = {
-    (x,y) match {
+    x match {
       case (IntervalBottom) => IntervalBottom
-      case (IntervalTop) => IntervalTop 
+      case (IntervalTop) => IntervalTop
       case (Interval (low, high)) => Interval (-high, -low)
     }
   }
@@ -67,51 +67,57 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
-      case (IntervalTop, _) => IntervalTop 
+      case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (Interval (low1, high1), Interval (low2,high2)) => 
+      case (Interval (low1, high1), Interval (low2,high2)) =>
         val comb = Array(low1 * low2, high1 * high2, low1 * high2, high1 * low2)
         val new_low = comb.reduceLeft(_ min _)
         val new_high = comb.reduceLeft(_ max _)
-        Interval (min, max)
+        Interval (new_low, new_high)
     }
   }
 
   /**
     * @inheritdoc
-    */  
+    */
   def division(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
-      case (IntervalTop, _) => IntervalTop 
+      case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (Interval (low1, high1), Interval (low2,high2)) => 
+      case (Interval (low1, high1), Interval (low2,high2)) =>
         if (low2 >=1){
           val new_low = (low1 / low2) min (low1 / high2)
           val new_high = (high1 / low2) max (high1 / high2)
-          Interval (new_low, new_high) 
-        } else if (high2 <= -1){
+          Interval (new_low, new_high)
+        } else if (high2 <= -1) {
           val new_low = (high1 / low2) min (high1 / high2)
           val new_high = (low1 / low2) max (low1 / high2)
           Interval (new_low, new_high)
         } else {
         // TODO: MODELLARE L'INFINITO "INTERO"
-          lub(division(x, glb(y, Interval(1,Double.PositiveInfinity)), division(x, glb(y, Interval(Double.NegativeInfinity, -1)))) 
-        }        
+          Interval(1,1)
+          //lub(division(Interval (low1, high1), glb(Interval (low2,high2), Interval(1,Double.PositiveInfinity)), division(Interval (low1, high1), glb(Interval (low2,high2), Interval(Double.NegativeInfinity, -1)))))
+        }
     }
+  }
+
+  //TODO
+  def remainder(x : Box, y : Box) : Box = {
+    x
   }
 
   /**
     * @inheritdoc
-    */ 
+    */
   def lub(x : Box, y : Box) : Box = {
     (x, y) match {
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
       case (IntervalBottom, _) => y
       case (_, IntervalBottom) => x
-      case (Interval (low1, high1), Interval (low2, high2)) => 
+      case (Interval (low1, high1), Interval (low2, high2)) =>
         val new_low = low1 min low2
         val new_high = high1 max high2
         Interval (new_low, new_high)
@@ -127,7 +133,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (_, IntervalTop) => x
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
-      case (Interval (low1, high1), Interval (low2, high2)) => 
+      case (Interval (low1, high1), Interval (low2, high2)) =>
         val new_low = low1 max low2
         val new_high = high1 min high2
         if (new_low > new_high) IntervalBottom else Interval (new_low, new_high)
@@ -145,14 +151,14 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (IntervalTop, IntervalTop) => Option(0)
       case (IntervalTop, _) => Option(1)
       case (_, IntervalTop) => Option(-1)
-      case (Interval(low1, high1), Interval(low2, high2))) => 
-        if (low1 == low2 && high1 == high2) 
+      case (Interval(low1, high1), Interval(low2, high2)) =>
+        if (low1 == low2 && high1 == high2)
           Option(0)
         else if (low1 >= low2 && high1 <= high2)
           Option(-1)
         else if (low2 >= low1 && high2 >= high1)
           Option(1)
-        else 
+        else
           Option.empty
     }
   }
@@ -161,7 +167,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   override def top: Box = IntervalTop
- 
+
   /**
     * @inheritdoc
     */

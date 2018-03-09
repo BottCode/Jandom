@@ -26,6 +26,7 @@ import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.constant.ConstantDomain
 import it.unipd.jandom.domains.numerical.mod.ModKDomain
 import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, ExtendedSigns01Domain, SignDomain}
+import it.unipd.jandom.domains.numerical.box.BoxDomain
 
 /**
  * The ParameterEnumeration for numerical domains.
@@ -35,6 +36,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val description = "The numerical domain to use for the analysis."
 
   val values: Buffer[ParameterValue[NumericalDomain]] = Buffer(
+    ParameterValue(BoxDomain(), "Box (Interval) Domain", "This is a native Scala implementation of the Box (that is Interval) integer domain"),
     ParameterValue(SignDomain(), "Sign Domain", "This is a native Scala implementation of the simple sign domain " +
       "(<0, =0, >0)"),
     ParameterValue(ParityDomain(), "Parity Domain", "This is a native Scala implementation of even/odd domain."),

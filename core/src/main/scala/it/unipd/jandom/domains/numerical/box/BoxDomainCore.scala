@@ -1,5 +1,5 @@
 /**
- * Copyright 2017 Mattia Bottaro, Mauro Carlin
+ * Copyright 2018 Mattia Bottaro, Mauro Carlin
  *
  * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
  * JANDOM is free software: you can redistribute it and/or modify

@@ -34,16 +34,17 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
   /**
     * @inheritdoc
     */
-  override def createProperty(constants: Array[Box], unreachable: Boolean): Property =
-    new Property(Box, unreachable)
+  override def createProperty(boxes: Array[Box], unreachable: Boolean): Property =
+    new Property(boxes, unreachable)
 
   /**
     * Numerical property that tells whether the variables in a certain point of the CFG are constant or not.
-    * @param boxes array of the variables' constant status
+    * @param boxes array of the variables' boxes status
     * @param unreachable tells if a given program point is unreachable
     */
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
+	def apply(boxes: Array[Box], unreachable: Boolean) : Property = new Property(boxes, unreachable)
     /**
       * @inheritdoc
       */
@@ -57,6 +58,14 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     override def linearInequality(lf: LinearForm): Property = {
       
     }
+    
+    override def widening(that : Property) : Property = {
+	
+	}
+	
+	override def narrowing(that : Property) : Property = {
+		
+	}
 
   } // end of Property
 } // end of BoxDomain (class)

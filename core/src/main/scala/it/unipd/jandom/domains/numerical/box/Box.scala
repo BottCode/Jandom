@@ -30,7 +30,7 @@ object Box {
 
   // interval
   case class Interval (low : Int, high : Int) extends Box {
-    override def toString : String = "= [" + low + "," + high + "]" 
+    override def toString : String = "= [" + low + "," + high + "]"
   }
   // no accurate info available for variable
   case object IntervalTop extends Box {
@@ -40,4 +40,4 @@ object Box {
   case object IntervalBottom extends Box {
     override def toString: String = "= \u22a5"
   }
-} 
+}

@@ -45,26 +45,36 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
 	def apply(boxes: Array[Box], unreachable: Boolean) : Property = new Property(boxes, unreachable)
+    // x != 0
     /**
       * @inheritdoc
       */
     override def linearDisequality(lf: LinearForm): Property = {
-      
+      if (isEmpty)
+        return this
+      val result : Box = linearEvaluation(lf);
+      result match {
+        case IntervalBottom => bottom
+        case Interval(low,high) => if (low == high && low == 0) bottom else this
+        case _ => this
+      }
     }
 
     /**
       * @inheritdoc
       */
     override def linearInequality(lf: LinearForm): Property = {
-      
+      if (isEmpty)
+        return this
+      val result : Box = linearEvaluation(lf);
     }
-    
+
     override def widening(that : Property) : Property = {
-	
+
 	}
-	
+
 	override def narrowing(that : Property) : Property = {
-		
+
 	}
 
   } // end of Property
@@ -75,4 +85,4 @@ object BoxDomain {
     * Factory method of BoxDomain
     */
   def apply() = new BoxDomain()
-} 
+}

@@ -64,18 +64,47 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       * @inheritdoc
       */
     override def linearInequality(lf: LinearForm): Property = {
-      if (isEmpty)
+      /*if (isEmpty)
         return this
-      val result : Box = linearEvaluation(lf);
+      val result : Box = linearEvaluation(lf);*/
+      return this
     }
 
     override def widening(that : Property) : Property = {
+      createProperty((this.elements, that.elements).zipped.map((x, y) => {
+        (x,y) match {
+          case (IntervalBottom, _) => y
+          case (_ , IntervalBottom) => x
+          case (IntervalTop, _) => IntervalTop
+          case (_ , IntervalTop) => IntervalTop
+          case (Interval(low1, high1), Interval(low2,high2)) =>
+            // TODO
+            var newlow = Double.NegativeInfinity.toInt
+            var newhigh = Double.PositiveInfinity.toInt
+            if (low1 <= low2) newlow = low1
+            if (high1 >= high2) newhigh = high1
+            Interval(newlow,newhigh)
+        }
+      }), this.isEmpty && that.isEmpty)
+	  }
 
-	}
-
-	override def narrowing(that : Property) : Property = {
-
-	}
+	  override def narrowing(that : Property) : Property = {
+      createProperty((this.elements, that.elements).zipped.map((x, y) => {
+        (x,y) match {
+          case (IntervalBottom, _) => IntervalBottom
+          case (_ , IntervalBottom) => x
+          case (IntervalTop, _) => y
+          case (_ , IntervalTop) => x
+          case (Interval(low1, high1), Interval(low2,high2)) =>
+            // TODO
+            var newlow = low1
+            var newhigh = high1
+            if (low1 == Double.NegativeInfinity.toInt) newlow = low2
+            if (high1 == Double.PositiveInfinity.toInt) newhigh = high2 
+            Interval(newlow,newhigh)
+        }
+      }), this.isEmpty && that.isEmpty)
+	  }
 
   } // end of Property
 } // end of BoxDomain (class)

@@ -21,7 +21,7 @@ import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperato
 import Constant._
 
 /**
-  * Constant domain, checks if a given variable is constant 
+  * Constant domain, checks if a given variable is constant
   * (and equal to a value `num`) in a program point.
   *
   * @author Mirko Bez <mirko.bez@studenti.unipd.it>

@@ -149,14 +149,14 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (IntervalBottom, _) => Option(-1)
       case (_, IntervalBottom) => Option(1)
       case (IntervalTop, IntervalTop) => Option(0)
-      case (IntervalTop, _) => Option(1)
-      case (_, IntervalTop) => Option(-1)
+      case (IntervalTop, _) => Option(1);
+      case (_, IntervalTop) => Option(-1);
       case (Interval(low1, high1), Interval(low2, high2)) =>
         if (low1 == low2 && high1 == high2)
           Option(0)
         else if (low1 >= low2 && high1 <= high2)
           Option(-1)
-        else if (low2 >= low1 && high2 >= high1)
+        else if (low2 >= low1 && high2 <= high1)
           Option(1)
         else
           Option.empty

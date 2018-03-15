@@ -44,7 +44,23 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     */
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
-	def apply(boxes: Array[Box], unreachable: Boolean) : Property = new Property(boxes, unreachable)
+    def projectLow (box : Box) : Int = {
+      box match {
+        case IntervalBottom => Double.PositiveInfinity.toInt
+        case IntervalTop => Double.NegativeInfinity.toInt
+        case Interval(low,high) => low
+      }
+    }
+
+    def projectHigh (box : Box) : Int = {
+      box match {
+        case IntervalBottom => Double.NegativeInfinity.toInt
+        case IntervalTop => Double.PositiveInfinity.toInt
+        case Interval(low,high) => high
+      }
+    }
+
+	  def apply(boxes: Array[Box], unreachable: Boolean) : Property = new Property(boxes, unreachable)
     // x != 0
     /**
       * @inheritdoc
@@ -64,10 +80,30 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       * @inheritdoc
       */
     override def linearInequality(lf: LinearForm): Property = {
-      /*if (isEmpty)
+      if (isEmpty)
         return this
-      val result : Box = linearEvaluation(lf);*/
-      return this
+      val homcoeffs = lf.homcoeffs.toArray
+      val known = lf.known
+      val lowresult = projectLow(linearEvaluation(lf))
+      val lfArgmin = linearArgmin(lf);
+      print(lowresult)
+      if (lowresult > 0)
+        bottom
+      else {
+        var newboxes : Array[Box] = boxes
+        for (i <- homcoeffs.indices) {
+          if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lowresult / homcoeffs(i)).toInt), projectHigh(newboxes(i)))
+          if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lowresult / homcoeffs(i)).toInt))
+        }
+        print(newboxes)
+        new Property(newboxes,false)
+      }
+    }
+
+    private def linearArgmin(lf: LinearForm): Seq[Int] = {
+      (lf.homcoeffs.zipWithIndex) map {
+        case (c, i) => if (c > 0) projectLow(boxes(i)) else projectHigh(boxes(i))
+      }
     }
 
     override def widening(that : Property) : Property = {
@@ -100,7 +136,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
             var newlow = low1
             var newhigh = high1
             if (low1 == Double.NegativeInfinity.toInt) newlow = low2
-            if (high1 == Double.PositiveInfinity.toInt) newhigh = high2 
+            if (high1 == Double.PositiveInfinity.toInt) newhigh = high2
             Interval(newlow,newhigh)
         }
       }), this.isEmpty && that.isEmpty)

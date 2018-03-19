@@ -46,16 +46,16 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
 
     def projectLow (box : Box) : Int = {
       box match {
-        case IntervalBottom => Double.PositiveInfinity.toInt
-        case IntervalTop => Double.NegativeInfinity.toInt
+        case IntervalBottom => Int.MaxValue
+        case IntervalTop => Int.MinValue
         case Interval(low,high) => low
       }
     }
 
     def projectHigh (box : Box) : Int = {
       box match {
-        case IntervalBottom => Double.NegativeInfinity.toInt
-        case IntervalTop => Double.PositiveInfinity.toInt
+        case IntervalBottom => Int.MinValue
+        case IntervalTop => Int.MaxValue
         case Interval(low,high) => high
       }
     }
@@ -90,12 +90,13 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       if (lowresult > 0)
         bottom
       else {
-        var newboxes : Array[Box] = boxes
+        var newboxes = boxes.clone
         for (i <- homcoeffs.indices) {
           if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lowresult / homcoeffs(i)).toInt), projectHigh(newboxes(i)))
           if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lowresult / homcoeffs(i)).toInt))
         }
-        print(newboxes)
+        for (i <- newboxes.indices)
+          print("boxes:",newboxes(i))
         new Property(newboxes,false)
       }
     }
@@ -115,8 +116,8 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
           case (_ , IntervalTop) => IntervalTop
           case (Interval(low1, high1), Interval(low2,high2)) =>
             // TODO
-            var newlow = Double.NegativeInfinity.toInt
-            var newhigh = Double.PositiveInfinity.toInt
+            var newlow = Int.MinValue
+            var newhigh = Int.MaxValue
             if (low1 <= low2) newlow = low1
             if (high1 >= high2) newhigh = high1
             Interval(newlow,newhigh)
@@ -135,8 +136,8 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
             // TODO
             var newlow = low1
             var newhigh = high1
-            if (low1 == Double.NegativeInfinity.toInt) newlow = low2
-            if (high1 == Double.PositiveInfinity.toInt) newhigh = high2
+            if (low1 == Int.MinValue) newlow = low2
+            if (high1 == Int.MaxValue) newhigh = high2
             Interval(newlow,newhigh)
         }
       }), this.isEmpty && that.isEmpty)

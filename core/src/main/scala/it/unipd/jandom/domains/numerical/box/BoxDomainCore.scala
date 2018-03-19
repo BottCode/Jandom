@@ -45,8 +45,28 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (_, IntervalBottom) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (Interval(low1, high1), Interval(low2,high2)) => Interval((low1 + low2), (high1 + high2))
+      case (Interval(low1, high1), Interval(low2,high2)) =>
+
+        /*if (low1 == Int.MinValue || low2 == Int.MinValue)
+          Interval(Int.MinValue, high1 + high2)
+
+        else if (high1 == Int.MaxValue || high2 == Int.MaxValue) {
+          print("DFASDFAFKJAHSDHKFJ")
+          Interval(low1 + low2, Int.MaxValue)
+        }*/
+
+        Interval(safeSum(low1,low2), safeSum(high1,high2))
     }
+  }
+
+  private def safeSum(left : Int, right : Int) : Int = {
+    if (right > 0 && left > Int.MaxValue - right)
+      return Int.MaxValue
+
+    if (right < 0 && left < Int.MinValue - right)
+      return Int.MinValue
+
+    return left + right
   }
 
    /**
@@ -87,18 +107,20 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
       case (Interval (low1, high1), Interval (low2,high2)) =>
-        if (low2 >=1){
+        if (low2 >= 1) {
           val new_low = (low1 / low2) min (low1 / high2)
           val new_high = (high1 / low2) max (high1 / high2)
           Interval (new_low, new_high)
+
         } else if (high2 <= -1) {
           val new_low = (high1 / low2) min (high1 / high2)
           val new_high = (low1 / low2) max (low1 / high2)
           Interval (new_low, new_high)
+
         } else {
         // TODO: MODELLARE L'INFINITO "INTERO"
           Interval(1,1)
-          //lub(division(Interval (low1, high1), glb(Interval (low2,high2), Interval(1,Double.PositiveInfinity)), division(Interval (low1, high1), glb(Interval (low2,high2), Interval(Double.NegativeInfinity, -1)))))
+          //lub(division(Interval (low1, high1), glb(Interval (low2,high2), Interval(1,Int.MaxValue)), division(Interval (low1, high1), glb(Interval (low2,high2), Interval(Int.MinValue, -1)))))
         }
     }
   }

@@ -30,16 +30,23 @@ object Box {
 
   // interval
   case class Interval (low : Int, high : Int) extends Box {
-    override def toString : String = {
-      if (low == Int.MinValue) return "= [" + "-\u221E" + "," + high + "]"
-      else if (high == Int.MaxValue) return "= [" + low + "," + "+\u221E" + "]"
-      return "= [" + low + "," + high + "]"
-    }
+    override def toString : String =  "= [" + low + "," + high + "]"
+  }
+
+  // represent an interval with the lower bound = -infinity
+  case class IntervalNegative (high : Int) extends Box {
+    override def toString : String = "= [" + "-\u221E" + "," + high + "]"
+  }
+
+  // represent an interval with the upper bound = +infinity
+  case class IntervalPositive (low : Int) extends Box {
+    override def toString : String = "= [" + low + "," + "+\u221E" + "]"
   }
   // no accurate info available for variable
   case object IntervalTop extends Box {
     override def toString : String = "= \u22a4"
   }
+
   // no possible value
   case object IntervalBottom extends Box {
     override def toString: String = "= \u22a5"

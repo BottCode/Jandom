@@ -45,17 +45,38 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (_, IntervalBottom) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (Interval(low1, high1), Interval(low2,high2)) =>
+      case (IntervalNegative(_), IntervalPositive(_)) => IntervalTop
+      case (IntervalNegative(high1), IntervalNegative(high2)) =>
+        val res = safeSum(high1, high2)
+        //[-inifinity,-infinity] = T
+        if (res < Int.MaxValue && res > Int.MinValue )
+          return IntervalNegative(res)
+        return IntervalTop
 
-        /*if (low1 == Int.MinValue || low2 == Int.MinValue)
-          Interval(Int.MinValue, high1 + high2)
+      case(IntervalNegative(high1), Interval(low2,high2)) =>
+        val res = safeSum(high1, high2)
+        //[-inifinity,-infinity] = T
+        if (res < Int.MaxValue && res > Int.MinValue )
+          return IntervalNegative(res)
+        return IntervalTop
 
-        else if (high1 == Int.MaxValue || high2 == Int.MaxValue) {
-          print("DFASDFAFKJAHSDHKFJ")
-          Interval(low1 + low2, Int.MaxValue)
-        }*/
+      case(IntervalPositive(_), IntervalNegative(_)) => IntervalTop
 
-        Interval(safeSum(low1,low2), safeSum(high1,high2))
+      case(IntervalPositive(low1), IntervalPositive(low2)) =>
+        val res = safeSum(low1, low2)
+        if (res < Int.MaxValue && res > Int.MinValue)
+          return IntervalPositive(res)
+        return IntervalTop
+
+      case(IntervalPositive(low1), Interval(low2,high2)) =>
+        val res = safeSum(low1, low2)
+        if (res < Int.MaxValue && res > Int.MinValue)
+          return IntervalPositive(res)
+        return IntervalTop
+
+      case (Interval(low1, high1), Interval(low2,high2)) => Interval(safeSum(low1,low2), safeSum(high1,high2))
+
+      case(_,_) => sum(y,x) //due casi mancanti
     }
   }
 
@@ -73,28 +94,105 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def inverse(x : Box) : Box = {
+    print("INVERSE")
     x match {
       case (IntervalBottom) => IntervalBottom
       case (IntervalTop) => IntervalTop
-      case (Interval (low, high)) => Interval (-high, -low)
+      case (IntervalNegative(high)) => IntervalPositive(-high)
+      case (IntervalPositive(low)) =>
+        if (low == Int.MinValue)
+          return IntervalTop
+        return IntervalNegative(-low)
+      case (Interval(low,high)) =>
+        if (low == Int.MinValue)
+          IntervalPositive(-high)
+        Interval(-high,-low)
     }
   }
 
    /**
     * @inheritdoc
-    */
+
   def mult(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
+      case (IntervalNegative(_), IntervalPositive(_)) => IntervalTop
+      case (IntervalPositive(_), IntervalNegative(_)) => IntervalTop
+      case (IntervalNegative(high1), IntervalNegative(high2)) =>
+        val res = safeMult(high1,high2)
+        if (res < Int.MaxValue && res > Int.MinValue)
+          return IntervalPositive(res)
+        return IntervalTop
+
+      case(IntervalNegative(high1), Interval(low2,high2)) =>
+        val res = Array(safeMult(high1,low2), safeMult(high1,high2))
+        val min_res = res.reduceLeft(_ min _)
+        val max_res = res.reduceLeft(_ max _)
+
+        if (low2 < 0) {
+          if (min_res < Int.MaxValue && min_res > Int.MinValue)
+            return IntervalPositive(min_res)
+          return IntervalTop
+        }
+        if (low2 > 0) {
+          if (high1 > 0)
+        }
+        if (res < Int.MaxValue && res > Int.MinValue)
+          return IntervalTop
+        return IntervalPositive(res)
+
+      case(IntervalPositive(low1), IntervalPositive(low2)) =>
+
+
+      case(IntervalPositive(low1), Interval(low2,high2)) =>
+
       case (Interval (low1, high1), Interval (low2,high2)) =>
-        val comb = Array(low1 * low2, high1 * high2, low1 * high2, high1 * low2)
+        val comb = Array(safeMult(low1, low2), safeMult(high1, high2), safeMult(low1, high2), safeMult(high1, low2))
         val new_low = comb.reduceLeft(_ min _)
         val new_high = comb.reduceLeft(_ max _)
         Interval (new_low, new_high)
     }
+  }
+*/
+
+def mult(x : Box, y : Box) : Box = {
+  var bounds = Array(projectLow(x),projectHigh(x),projectLow(y),projectHigh(y))
+  for(i <- bounds.indices){
+    if(bounds(i).toInt == Int.MinValue) bounds(i) = Double.NegativeInfinity
+    else if(bounds(i).toInt == Int.MaxValue) bounds(i) = Double.PositiveInfinity
+  }
+  var comb = Array(bounds(0)*bounds(2),bounds(0)*bounds(3),bounds(1)*bounds(2),bounds(1)*bounds(3))
+  var left = comb.reduceLeft(_ min _)
+  var right = comb.reduceLeft(_ max _)
+  if(left == Double.NegativeInfinity && (right == Double.PositiveInfinity || right == Double.NegativeInfinity)) return IntervalTop
+  if(left == Double.NegativeInfinity) return IntervalNegative(right.toInt)
+  
+
+}
+  private def safeMult(left : Int, right : Int) : Int = {
+    print(" LEFT "+left+" RIGHt "+right)
+    if (right > 0) {
+      if (left > Int.MaxValue / right)
+        return Int.MaxValue
+      if (left < Int.MinValue / right)
+        return Int.MinValue
+    }
+    else if (right < -1) {
+      if (left > Int.MinValue / right)
+        return Int.MinValue
+      if (left < Int.MaxValue / right)
+        return Int.MaxValue
+    }
+    else if (right == -1) {
+      if (left == Int.MinValue)
+        return Int.MaxValue
+      if (left == Int.MaxValue)
+        return Int.MinValue
+    }
+    return left * right
   }
 
   /**

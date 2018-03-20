@@ -34,10 +34,10 @@ trait InfInt{
     def +(x: InfInt): InfInt
     def >(x: InfInt): Boolean
     def /(x: InfInt): InfInt
-    def >=(x: InfInt): Boolean
-    def <=(x: InfInt): InfInt
+    // def <=(x: InfInt): InfInt
     def max(x: InfInt): InfInt
     def min(x: InfInt): InfInt
+    // def ==(x: InfInt): InfInt // TODO
 
     def inverse(x: InfInt): InfInt = {
         x match {
@@ -51,6 +51,10 @@ trait InfInt{
     def -(x: InfInt): InfInt = {
         return this.+(inverse(x))
     }
+
+    def >=(x: InfInt): Boolean = {
+        return this.>(x.+(IntNumber(1)))
+    }    
 
 }
 
@@ -70,6 +74,39 @@ case class IntNumber(n: Int) extends InfInt {
             case PositiveInfinity() => return false
             case IntNumber(x) => return n > x
             case _ => return true 
+        }
+    }
+
+    def /(x: InfInt): InfInt = {
+        x match {
+            case IntNumber(x) => 
+                if (x != 0)
+                    return IntNumber(n / x)
+                if (n > 0) // && x == 0 
+                    return PositiveInfinity()
+                else if (n < 0) 
+                    return NegativeInfinity()
+                return IntNumber(0)
+            case Undetermined() => return Undetermined()
+            case _ => IntNumber(0)
+        }
+    }
+
+    def max(x: InfInt): InfInt = {
+        x match {
+            case IntNumber(x) => return IntNumber(n max x)
+            case PositiveInfinity() => return PositiveInfinity()
+            case NegativeInfinity() => return IntNumber(n)
+            case _ => return Undetermined()
+        }
+    }
+
+    def min(x: InfInt): InfInt = {
+        x match {
+            case IntNumber(x) => return IntNumber(n min x)
+            case PositiveInfinity() => return IntNumber(n)
+            case NegativeInfinity() => return NegativeInfinity()
+            case _ => return Undetermined()
         }
     }
 
@@ -99,7 +136,33 @@ case class NegativeInfinity() extends InfInt {
             case Undetermined() => return false
             case _ => true 
         }
+    }
+
+    def /(x: InfInt): InfInt = {
+        x match {
+            case IntNumber(x) => 
+                if(x < 0) 
+                    return PositiveInfinity()
+                return NegativeInfinity()
+            case _ => return Undetermined()
+        }
     }    
+
+    def max(x: InfInt): InfInt = {
+        x match {
+            case IntNumber(x) => return IntNumber(x)
+            case PositiveInfinity() => return PositiveInfinity()
+            case NegativeInfinity() => return NegativeInfinity()
+            case _ => Undetermined()
+        }
+    }
+
+    def min(x: InfInt): InfInt = {
+        x match {
+            case Undetermined() => return Undetermined()
+            case _ => return NegativeInfinity()
+        }
+    }
 
 }
   
@@ -118,20 +181,56 @@ case class PositiveInfinity() extends InfInt {
             case Undetermined() => return true
             case _ => false 
         }
-    }    
+    }
+
+    def /(x: InfInt): InfInt = {
+        x match {
+            case IntNumber(x) => 
+                if(x < 0)
+                    return NegativeInfinity()
+                return PositiveInfinity()
+            case _ => return Undetermined()
+        }
+    }
+
+    def max(x: InfInt): InfInt = {
+        x match {
+            case Undetermined() => Undetermined()
+            case _ => PositiveInfinity()
+        }
+    }
+
+    def min(x: InfInt): InfInt = {
+        x match {
+            case Undetermined() => return Undetermined()
+            case NegativeInfinity() => return NegativeInfinity()
+            case PositiveInfinity() => return PositiveInfinity()
+            case IntNumber(x) => return IntNumber(x)
+        }
+    }
 
 }
 
 // case infinity - infinity
 case class Undetermined() extends InfInt {
     def +(x: InfInt): InfInt = {
-        Undetermined()
+        return Undetermined()
     }
 
     def >(x:InfInt): Boolean = {
-        x match {
-           case _ => false
-        }
+        return false
+    }
+
+    def /(x: InfInt): InfInt = {
+        return Undetermined()
+    }
+
+    def max(x: InfInt): InfInt = {
+        Undetermined();
+    }
+
+    def min(x: InfInt): InfInt = {
+        return Undetermined()
     }
 
 }

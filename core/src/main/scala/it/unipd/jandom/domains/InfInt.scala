@@ -33,12 +33,25 @@ final abstract class InfInt(val self: Any) private extends AnyVal {
 trait InfInt{
     def +(x: InfInt): InfInt
     def >(x: InfInt): Boolean
-    def -(x: InfInt): InfInt
     def /(x: InfInt): InfInt
     def >=(x: InfInt): Boolean
     def <=(x: InfInt): InfInt
     def max(x: InfInt): InfInt
     def min(x: InfInt): InfInt
+
+    def inverse(x: InfInt): InfInt = {
+        x match {
+            case PositiveInfinity() => return NegativeInfinity()
+            case NegativeInfinity() => return PositiveInfinity()
+            case IntNumber(x) => return IntNumber(-x)
+            case _ => return Undetermined()
+        }
+    }
+
+    def -(x: InfInt): InfInt = {
+        return this.+(inverse(x))
+    }
+
 }
 
 case class IntNumber(n: Int) extends InfInt {
@@ -56,7 +69,7 @@ case class IntNumber(n: Int) extends InfInt {
         x match {
             case PositiveInfinity() => return false
             case IntNumber(x) => return n > x
-            case _ => true 
+            case _ => return true 
         }
     }
 

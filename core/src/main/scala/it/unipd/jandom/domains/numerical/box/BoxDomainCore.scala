@@ -210,8 +210,8 @@ def mult(x : Box, y : Box) : Box = {
   /**
     * @inheritdoc
     */
-  def compare(x : Box, y : Box) : Option[InfInt] = {
-    x
+  def compare(x : Box, y : Box) : Option[Int] = {
+    Option(0)
     // (x, y) match {
     //   case (IntervalBottom, IntervalBottom) => Option(0)
     //   case (IntervalBottom, _) => Option(-1)

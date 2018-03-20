@@ -19,7 +19,7 @@
 package it.unipd.jandom.domains.numerical.box
 
 import it.unipd.jandom.domains.numerical.utils.{MathLibrary => M}
-import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator}
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator, InfInt, IntNumber}
 import Box._
 
 /**
@@ -29,12 +29,12 @@ import Box._
   // TODO: define reminder function
 
 class BoxDomainCore extends CompleteLatticeOperator[Box]
-  with IntOperator[Box] with Abstraction[Int,Box]{
+  with IntOperator[Box] with Abstraction[InfInt,Box]{
 
   /**
     * @inheritdoc
     */
-  def alpha(num : Int) : Box = Interval(num,num)
+  def alpha(num : Int) : Box = Interval(IntNumber(num),IntNumber(num))
 
   /**
     * @inheritdoc
@@ -45,74 +45,35 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (_, IntervalBottom) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (IntervalNegative(_), IntervalPositive(_)) => IntervalTop
-      case (IntervalNegative(high1), IntervalNegative(high2)) =>
-        val res = safeSum(high1, high2)
-        //[-inifinity,-infinity] = T
-        if (res < Int.MaxValue && res > Int.MinValue )
-          return IntervalNegative(res)
-        return IntervalTop
-
-      case(IntervalNegative(high1), Interval(low2,high2)) =>
-        val res = safeSum(high1, high2)
-        //[-inifinity,-infinity] = T
-        if (res < Int.MaxValue && res > Int.MinValue )
-          return IntervalNegative(res)
-        return IntervalTop
-
-      case(IntervalPositive(_), IntervalNegative(_)) => IntervalTop
-
-      case(IntervalPositive(low1), IntervalPositive(low2)) =>
-        val res = safeSum(low1, low2)
-        if (res < Int.MaxValue && res > Int.MinValue)
-          return IntervalPositive(res)
-        return IntervalTop
-
-      case(IntervalPositive(low1), Interval(low2,high2)) =>
-        val res = safeSum(low1, low2)
-        if (res < Int.MaxValue && res > Int.MinValue)
-          return IntervalPositive(res)
-        return IntervalTop
-
-      case (Interval(low1, high1), Interval(low2,high2)) => Interval(safeSum(low1,low2), safeSum(high1,high2))
-
-      case(_,_) => sum(y,x) //due casi mancanti
+      case (Interval(low1,high1),Interval(low2,high2)) => Interval(low1.+(low2), high1.+(high2))
     }
-  }
-
-  private def safeSum(left : Int, right : Int) : Int = {
-    if (right > 0 && left > Int.MaxValue - right)
-      return Int.MaxValue
-
-    if (right < 0 && left < Int.MinValue - right)
-      return Int.MinValue
-
-    return left + right
   }
 
    /**
     * @inheritdoc
     */
   def inverse(x : Box) : Box = {
-    print("INVERSE")
-    x match {
-      case (IntervalBottom) => IntervalBottom
-      case (IntervalTop) => IntervalTop
-      case (IntervalNegative(high)) => IntervalPositive(-high)
-      case (IntervalPositive(low)) =>
-        if (low == Int.MinValue)
-          return IntervalTop
-        return IntervalNegative(-low)
-      case (Interval(low,high)) =>
-        if (low == Int.MinValue)
-          IntervalPositive(-high)
-        Interval(-high,-low)
-    }
+    x
+    // print("INVERSE")
+    // x match {
+    //   case (IntervalBottom) => IntervalBottom
+    //   case (IntervalTop) => IntervalTop
+    //   case (IntervalNegative(high)) => IntervalPositive(-high)
+    //   case (IntervalPositive(low)) =>
+    //     if (low == InfInt.MinValue)
+    //       return IntervalTop
+    //     return IntervalNegative(-low)
+    //   case (Interval(low,high)) =>
+    //     if (low == InfInt.MinValue)
+    //       IntervalPositive(-high)
+    //     Interval(-high,-low)
+    // }
   }
 
    /**
     * @inheritdoc
-
+    */
+  /*
   def mult(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
@@ -123,7 +84,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (IntervalPositive(_), IntervalNegative(_)) => IntervalTop
       case (IntervalNegative(high1), IntervalNegative(high2)) =>
         val res = safeMult(high1,high2)
-        if (res < Int.MaxValue && res > Int.MinValue)
+        if (res < InfInt.MaxValue && res > InfInt.MinValue)
           return IntervalPositive(res)
         return IntervalTop
 
@@ -133,14 +94,14 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
         val max_res = res.reduceLeft(_ max _)
 
         if (low2 < 0) {
-          if (min_res < Int.MaxValue && min_res > Int.MinValue)
+          if (min_res < InfInt.MaxValue && min_res > InfInt.MinValue)
             return IntervalPositive(min_res)
           return IntervalTop
         }
         if (low2 > 0) {
           if (high1 > 0)
         }
-        if (res < Int.MaxValue && res > Int.MinValue)
+        if (res < InfInt.MaxValue && res > InfInt.MinValue)
           return IntervalTop
         return IntervalPositive(res)
 
@@ -157,12 +118,12 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     }
   }
 */
-
+/*
 def mult(x : Box, y : Box) : Box = {
   var bounds = Array(projectLow(x),projectHigh(x),projectLow(y),projectHigh(y))
   for(i <- bounds.indices){
-    if(bounds(i).toInt == Int.MinValue) bounds(i) = Double.NegativeInfinity
-    else if(bounds(i).toInt == Int.MaxValue) bounds(i) = Double.PositiveInfinity
+    if(bounds(i).toInt == InfInt.MinValue) bounds(i) = Double.NegativeInfinity
+    else if(bounds(i).toInt == InfInt.MaxValue) bounds(i) = Double.PositiveInfinity
   }
   var comb = Array(bounds(0)*bounds(2),bounds(0)*bounds(3),bounds(1)*bounds(2),bounds(1)*bounds(3))
   var left = comb.reduceLeft(_ min _)
@@ -172,55 +133,39 @@ def mult(x : Box, y : Box) : Box = {
   
 
 }
-  private def safeMult(left : Int, right : Int) : Int = {
-    print(" LEFT "+left+" RIGHt "+right)
-    if (right > 0) {
-      if (left > Int.MaxValue / right)
-        return Int.MaxValue
-      if (left < Int.MinValue / right)
-        return Int.MinValue
-    }
-    else if (right < -1) {
-      if (left > Int.MinValue / right)
-        return Int.MinValue
-      if (left < Int.MaxValue / right)
-        return Int.MaxValue
-    }
-    else if (right == -1) {
-      if (left == Int.MinValue)
-        return Int.MaxValue
-      if (left == Int.MaxValue)
-        return Int.MinValue
-    }
-    return left * right
+*/
+  
+  def mult(x : Box, y : Box) : Box = {
+    x
   }
 
   /**
     * @inheritdoc
     */
   def division(x : Box, y : Box) : Box = {
-    (x,y) match {
-      case (IntervalBottom, _) => IntervalBottom
-      case (_, IntervalBottom) => IntervalBottom
-      case (IntervalTop, _) => IntervalTop
-      case (_, IntervalTop) => IntervalTop
-      case (Interval (low1, high1), Interval (low2,high2)) =>
-        if (low2 >= 1) {
-          val new_low = (low1 / low2) min (low1 / high2)
-          val new_high = (high1 / low2) max (high1 / high2)
-          Interval (new_low, new_high)
+    x
+    // (x,y) match {
+    //   case (IntervalBottom, _) => IntervalBottom
+    //   case (_, IntervalBottom) => IntervalBottom
+    //   case (IntervalTop, _) => IntervalTop
+    //   case (_, IntervalTop) => IntervalTop
+    //   case (Interval (low1, high1), Interval (low2,high2)) =>
+    //     if (low2 >= 1) {
+    //       val new_low = (low1 / low2) min (low1 / high2)
+    //       val new_high = (high1 / low2) max (high1 / high2)
+    //       Interval (new_low, new_high)
 
-        } else if (high2 <= -1) {
-          val new_low = (high1 / low2) min (high1 / high2)
-          val new_high = (low1 / low2) max (low1 / high2)
-          Interval (new_low, new_high)
+    //     } else if (high2 <= -1) {
+    //       val new_low = (high1 / low2) min (high1 / high2)
+    //       val new_high = (low1 / low2) max (low1 / high2)
+    //       Interval (new_low, new_high)
 
-        } else {
-        // TODO: MODELLARE L'INFINITO "INTERO"
-          Interval(1,1)
-          //lub(division(Interval (low1, high1), glb(Interval (low2,high2), Interval(1,Int.MaxValue)), division(Interval (low1, high1), glb(Interval (low2,high2), Interval(Int.MinValue, -1)))))
-        }
-    }
+    //     } else {
+    //     // TODO: MODELLARE L'INFINITO "INTERO"
+    //       Interval(1,1)
+    //       //lub(division(Interval (low1, high1), glb(Interval (low2,high2), Interval(1,InfInt.MaxValue)), division(Interval (low1, high1), glb(Interval (low2,high2), Interval(InfInt.MinValue, -1)))))
+    //     }
+    // }
   }
 
   //TODO
@@ -232,55 +177,58 @@ def mult(x : Box, y : Box) : Box = {
     * @inheritdoc
     */
   def lub(x : Box, y : Box) : Box = {
-    (x, y) match {
-      case (IntervalTop, _) => IntervalTop
-      case (_, IntervalTop) => IntervalTop
-      case (IntervalBottom, _) => y
-      case (_, IntervalBottom) => x
-      case (Interval (low1, high1), Interval (low2, high2)) =>
-        val new_low = low1 min low2
-        val new_high = high1 max high2
-        Interval (new_low, new_high)
-    }
+    x
+    // (x, y) match {
+    //   case (IntervalTop, _) => IntervalTop
+    //   case (_, IntervalTop) => IntervalTop
+    //   case (IntervalBottom, _) => y
+    //   case (_, IntervalBottom) => x
+    //   case (Interval (low1, high1), Interval (low2, high2)) =>
+    //     val new_low = low1 min low2
+    //     val new_high = high1 max high2
+    //     Interval (new_low, new_high)
+    // }
   }
 
   /**
     * @inheritdoc
     */
   def glb(x : Box, y : Box) : Box = {
-    (x, y) match {
-      case (IntervalTop, _) => y
-      case (_, IntervalTop) => x
-      case (IntervalBottom, _) => IntervalBottom
-      case (_, IntervalBottom) => IntervalBottom
-      case (Interval (low1, high1), Interval (low2, high2)) =>
-        val new_low = low1 max low2
-        val new_high = high1 min high2
-        if (new_low > new_high) IntervalBottom else Interval (new_low, new_high)
-    }
+    x
+    // (x, y) match {
+    //   case (IntervalTop, _) => y
+    //   case (_, IntervalTop) => x
+    //   case (IntervalBottom, _) => IntervalBottom
+    //   case (_, IntervalBottom) => IntervalBottom
+    //   case (Interval (low1, high1), Interval (low2, high2)) =>
+    //     val new_low = low1 max low2
+    //     val new_high = high1 min high2
+    //     if (new_low > new_high) IntervalBottom else Interval (new_low, new_high)
+    // }
   }
 
   /**
     * @inheritdoc
     */
-  def compare(x : Box, y : Box) : Option[Int] = {
-    (x, y) match {
-      case (IntervalBottom, IntervalBottom) => Option(0)
-      case (IntervalBottom, _) => Option(-1)
-      case (_, IntervalBottom) => Option(1)
-      case (IntervalTop, IntervalTop) => Option(0)
-      case (IntervalTop, _) => Option(1);
-      case (_, IntervalTop) => Option(-1);
-      case (Interval(low1, high1), Interval(low2, high2)) =>
-        if (low1 == low2 && high1 == high2)
-          Option(0)
-        else if (low1 >= low2 && high1 <= high2)
-          Option(-1)
-        else if (low2 >= low1 && high2 <= high1)
-          Option(1)
-        else
-          Option.empty
-    }
+  def compare(x : Box, y : Box) : Option[InfInt] = {
+    x
+    // (x, y) match {
+    //   case (IntervalBottom, IntervalBottom) => Option(0)
+    //   case (IntervalBottom, _) => Option(-1)
+    //   case (_, IntervalBottom) => Option(1)
+    //   case (IntervalTop, IntervalTop) => Option(0)
+    //   case (IntervalTop, _) => Option(1);
+    //   case (_, IntervalTop) => Option(-1);
+    //   case (Interval(low1, high1), Interval(low2, high2)) =>
+    //     if (low1 == low2 && high1 == high2)
+    //       Option(0)
+    //     else if (low1 >= low2 && high1 <= high2)
+    //       Option(-1)
+    //     else if (low2 >= low1 && high2 <= high1)
+    //       Option(1)
+    //     else
+    //       Option.empty
+    // }
   }
 
   /**

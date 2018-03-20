@@ -16,6 +16,7 @@
  * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
  */
 package it.unipd.jandom.domains.numerical.box
+import it.unipd.jandom.domains.InfInt
 
 /**
   * The elements of the constant domain.
@@ -29,17 +30,17 @@ object Box {
   sealed trait Box
 
   // interval
-  case class Interval (low : Int, high : Int) extends Box {
+  case class Interval (low : InfInt, high : InfInt) extends Box {
     override def toString : String =  "= [" + low + "," + high + "]"
   }
 
   // represent an interval with the lower bound = -infinity
-  case class IntervalNegative (high : Int) extends Box {
+  case class IntervalNegative (high : InfInt) extends Box {
     override def toString : String = "= [" + "-\u221E" + "," + high + "]"
   }
 
   // represent an interval with the upper bound = +infinity
-  case class IntervalPositive (low : Int) extends Box {
+  case class IntervalPositive (low : InfInt) extends Box {
     override def toString : String = "= [" + low + "," + "+\u221E" + "]"
   }
   // no accurate info available for variable

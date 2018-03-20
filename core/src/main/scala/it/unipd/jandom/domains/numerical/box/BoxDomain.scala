@@ -21,7 +21,7 @@ import it.unich.jandom.domains.numerical.LinearForm
 import it.unipd.jandom.domains.numerical.BaseNumericalDomain
 import it.unipd.jandom.domains.numerical.box.Box._
 import it.unipd.jandom.domains.numerical.box.BoxDomainCore._
-
+import it.unipd.jandom.domains.{InfInt, PositiveInfinity, NegativeInfinity, IntNumber}
 
 /**
   * Box Domain ... @TODO a better explanation is required
@@ -44,18 +44,18 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     */
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
-    def projectLow (box : Box) : Int = {
+    def projectLow (box : Box) : InfInt = {
       box match {
-        case IntervalBottom => Int.MaxValue
-        case IntervalTop => Int.MinValue
+        case IntervalBottom => PositiveInfinity()
+        case IntervalTop => NegativeInfinity()
         case Interval(low,high) => low
       }
     }
 
-    def projectHigh (box : Box) : Int = {
+    def projectHigh (box : Box) : InfInt = {
       box match {
-        case IntervalBottom => Int.MinValue
-        case IntervalTop => Int.MaxValue
+        case IntervalBottom => NegativeInfinity()
+        case IntervalTop => PositiveInfinity()
         case Interval(low,high) => high
       }
     }
@@ -87,13 +87,13 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       val lowresult = projectLow(linearEvaluation(lf))
       val lfArgmin = linearArgmin(lf);
       print(lowresult)
-      if (lowresult > 0)
-        bottom
+      if (lowresult > IntNumber(0))
+        return bottom
       else {
         var newboxes = boxes.clone
         for (i <- homcoeffs.indices) {
-          if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lowresult / homcoeffs(i)).toInt), projectHigh(newboxes(i)))
-          if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lowresult / homcoeffs(i)).toInt))
+          if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lowresult / IntNumber(homcoeffs(i).toInt))), projectHigh(newboxes(i)))
+          if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lowresult / IntNumber(homcoeffs(i).toInt))))
         }
         for (i <- newboxes.indices)
           print("boxes:",newboxes(i))
@@ -101,7 +101,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       }
     }
 
-    private def linearArgmin(lf: LinearForm): Seq[Int] = {
+    private def linearArgmin(lf: LinearForm): Seq[InfInt] = {
       (lf.homcoeffs.zipWithIndex) map {
         case (c, i) => if (c > 0) projectLow(boxes(i)) else projectHigh(boxes(i))
       }
@@ -116,10 +116,19 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
           case (_ , IntervalTop) => IntervalTop
           case (Interval(low1, high1), Interval(low2,high2)) =>
             // TODO
-            var newlow = Int.MinValue
-            var newhigh = Int.MaxValue
-            if (low1 <= low2) newlow = low1
-            if (high1 >= high2) newhigh = high1
+            var newhigh = high1
+            var newlow = low1
+
+            if (low2 >= low1) 
+              newlow = low1
+            else 
+              newlow = NegativeInfinity()
+              
+            if (high1 >= high2) 
+              newhigh = high1
+            else 
+              newhigh = PositiveInfinity()
+
             Interval(newlow,newhigh)
         }
       }), this.isEmpty && that.isEmpty)
@@ -136,8 +145,8 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
             // TODO
             var newlow = low1
             var newhigh = high1
-            if (low1 == Int.MinValue) newlow = low2
-            if (high1 == Int.MaxValue) newhigh = high2
+            if (low1 == NegativeInfinity()) newlow = low2
+            if (high1 == PositiveInfinity()) newhigh = high2
             Interval(newlow,newhigh)
         }
       }), this.isEmpty && that.isEmpty)

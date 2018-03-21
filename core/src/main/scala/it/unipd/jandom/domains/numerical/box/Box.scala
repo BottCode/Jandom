@@ -31,7 +31,7 @@ object Box {
 
   // interval
   case class Interval (low : InfInt, high : InfInt) extends Box {
-    override def toString : String =  "= [" + low + "," + high + "]"
+    override def toString : String =  "= [" + low.toString + "," + high.toString + "]"
   }
 
   // no accurate info available for variable

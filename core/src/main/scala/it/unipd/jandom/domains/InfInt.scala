@@ -61,6 +61,7 @@ trait InfInt{
 case class IntNumber(n: Int) extends InfInt {
     
     def +(x: InfInt): InfInt = {
+        print("IntNumber+",n," + ",x)
         x match { 
             case NegativeInfinity() => return NegativeInfinity()
             case PositiveInfinity() => return PositiveInfinity()
@@ -112,10 +113,16 @@ case class IntNumber(n: Int) extends InfInt {
 
     def safeAdd(left: Int, right: Int): InfInt = {
         // require(left should be anIstanceOf[Int])
-        if (right > 0 && left > Int.MaxValue - right)
+        print("safeadd",left,right)
+        if (right > 0 && left > Int.MaxValue - right){
+            print("Ritorno il positiveInf")
             return PositiveInfinity()
-        if (right < 0 && left < Int.MinValue - right)
+        }
+        if (right < 0 && left < Int.MinValue - right){
+            print("ritnorno il neginf")
             return NegativeInfinity()
+        }
+        print("ritorno: ",left+right)
         return IntNumber(left + right)
     }
 
@@ -123,6 +130,7 @@ case class IntNumber(n: Int) extends InfInt {
 
 case class NegativeInfinity() extends InfInt {
     def +(x: InfInt): InfInt = {
+        print("NegativeInf+",x)
         x match {
             case PositiveInfinity() => return Undetermined()
             case Undetermined() => return Undetermined()
@@ -168,6 +176,7 @@ case class NegativeInfinity() extends InfInt {
   
 case class PositiveInfinity() extends InfInt {
     def +(x: InfInt): InfInt = {
+        print("NegativeInf+",x)
         x match {
             case NegativeInfinity()=> return Undetermined()
             case Undetermined() => return Undetermined()

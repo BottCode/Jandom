@@ -29,23 +29,27 @@ import Box._
   // TODO: define reminder function
 
 class BoxDomainCore extends CompleteLatticeOperator[Box]
-  with IntOperator[Box] with Abstraction[InfInt,Box]{
+  with IntOperator[Box] with Abstraction[Int,Box]{
 
   /**
     * @inheritdoc
     */
-  def alpha(num : Int) : Box = Interval(IntNumber(num),IntNumber(num))
+  def alpha(num : Int) : Box = {
+    print("Astraggo ",num)
+    return Interval(IntNumber(num),IntNumber(num))
+  }
 
   /**
     * @inheritdoc
     */
   def sum(x : Box, y : Box) : Box = {
+    print("sum",x,y)
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (Interval(low1,high1),Interval(low2,high2)) => Interval(low1.+(low2), high1.+(high2))
+      case (Interval(low1,high1),Interval(low2,high2)) => Interval(low1 + low2, high1 + high2)
     }
   }
 

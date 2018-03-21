@@ -25,7 +25,7 @@ trait InfInt {
     // def <=(x: InfInt): InfInt TODO ??
     def max(x: InfInt): InfInt
     def min(x: InfInt): InfInt
-    def ==(x: InfInt): Boolean 
+    def ==(x: InfInt): Boolean
 
     def inverse(): InfInt = {
         this match {
@@ -42,12 +42,12 @@ trait InfInt {
 
     def >=(x: InfInt): Boolean = {
         return this.>(x.+(IntNumber(1)))
-    }    
+    }
 
 }
 
 case class IntNumber(n: Int) extends InfInt {
-    
+
     def +(x: InfInt): InfInt = {
         print("IntNumber+",n," + ",x)
         x match { 
@@ -68,12 +68,13 @@ case class IntNumber(n: Int) extends InfInt {
                 return x.inverse()
         }        
     }
-    
+
     def >(x: InfInt): Boolean = {
         x match {
             case PositiveInfinity() => false
             case IntNumber(m) => n > m
             case _ => true // TODO
+
         }
     }
 
@@ -140,9 +141,10 @@ case class IntNumber(n: Int) extends InfInt {
                 return NegativeInfinity()
         }
 
-        return IntNumber(left * right)    
+        return IntNumber(left * right)
     }
 
+    override def toString : String = n.toString
 }
 
 case class NegativeInfinity() extends InfInt {
@@ -167,6 +169,7 @@ case class NegativeInfinity() extends InfInt {
             case PositiveInfinity() => NegativeInfinity()
             case NegativeInfinity() => PositiveInfinity()
         }        
+
     }
 
     def >(x: InfInt): Boolean = {
@@ -181,12 +184,13 @@ case class NegativeInfinity() extends InfInt {
         x match {
             case IntNumber(x) => 
                 if(x < 0) // TODO THORW /0
+
                     return PositiveInfinity()
                 return NegativeInfinity()
             case Undetermined() => Undetermined()
             case _ => IntNumber(0) // Inf / Inf = Inf * (1 / Inf) = Inf * 0
         }
-    }    
+    }
 
     def ==(x: InfInt): Boolean = {
         x match {
@@ -209,8 +213,10 @@ case class NegativeInfinity() extends InfInt {
         }
     }
 
+    override def toString : String = "-\u221E"
+
 }
-  
+
 case class PositiveInfinity() extends InfInt {
 
     def +(x: InfInt): InfInt = {
@@ -224,8 +230,8 @@ case class PositiveInfinity() extends InfInt {
 
     def *(x: InfInt): InfInt = {
         x match {
-            case IntNumber(x) => 
-                if (x > 0) 
+            case IntNumber(x) =>
+                if (x > 0)
                     return PositiveInfinity()
                 if (x < 0)
                     return NegativeInfinity()
@@ -274,6 +280,8 @@ case class PositiveInfinity() extends InfInt {
         }
     }
 
+    override def toString : String = "+\u221E"
+
 }
 
 // case infinity - infinity
@@ -283,7 +291,7 @@ case class Undetermined() extends InfInt {
     }
 
     def *(x: InfInt): InfInt = {
-        return Undetermined()      
+        return Undetermined()
     }
 
     def >(x:InfInt): Boolean = {

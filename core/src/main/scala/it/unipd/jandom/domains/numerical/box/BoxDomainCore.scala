@@ -61,7 +61,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     x match {
       case IntervalBottom => IntervalBottom
       case IntervalTop => IntervalTop
-      case Interval(low,high) => Interval(high.inverse(high),low.inverse(low)) // TODO, bruttino
+      case Interval(low,high) => Interval(high.inverse(),low.inverse()) // TODO, bruttino
     }
   }
 

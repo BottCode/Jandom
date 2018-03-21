@@ -68,7 +68,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
    /**
     * @inheritdoc
     */
-  
+
   def mult(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
@@ -102,20 +102,20 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
           val new_low = (high1 / low2) min (high1 / high2)
           val new_high = (low1 / low2) max (low1 / high2)
           return Interval (new_low, new_high)
-        } 
-        
+        }
+
         val one_to_infinite = Interval(IntNumber(1),PositiveInfinity())
         val minus_infinite_to_minus_one = Interval(NegativeInfinity(),IntNumber(-1))
-        return lub ( 
+        return lub (
                   division(Interval (low1, high1), glb(Interval (low2,high2), one_to_infinite)),              // first argument
                   division(Interval (low1, high1), glb(Interval (low2,high2), minus_infinite_to_minus_one)) // second argument
-                ) 
+                )
     }
   }
 
   //TODO
   def remainder(x : Box, y : Box) : Box = {
-    x
+    sum(x,inverse(mult(division(x,y),y))) // (10%4) = 10 - (10/4)*4 
   }
 
   /**
@@ -146,8 +146,8 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (Interval (low1, high1), Interval (low2, high2)) =>
         val new_low = low1 max low2
         val new_high = high1 min high2
-        if (new_low > new_high) 
-          return IntervalBottom 
+        if (new_low > new_high)
+          return IntervalBottom
 
         return Interval (new_low, new_high)
     }
@@ -171,7 +171,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
           return Option(-1)
         if (low2 >= low1 && high1 >= high2)
           return Option(1)
-        
+
         return Option.empty
     }
   }

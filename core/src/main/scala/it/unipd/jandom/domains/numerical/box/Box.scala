@@ -34,15 +34,6 @@ object Box {
     override def toString : String =  "= [" + low + "," + high + "]"
   }
 
-  // represent an interval with the lower bound = -infinity
-  case class IntervalNegative (high : InfInt) extends Box {
-    override def toString : String = "= [" + "-\u221E" + "," + high + "]"
-  }
-
-  // represent an interval with the upper bound = +infinity
-  case class IntervalPositive (low : InfInt) extends Box {
-    override def toString : String = "= [" + low + "," + "+\u221E" + "]"
-  }
   // no accurate info available for variable
   case object IntervalTop extends Box {
     override def toString : String = "= \u22a4"

@@ -71,7 +71,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       val result : Box = linearEvaluation(lf);
       result match {
         case IntervalBottom => bottom
-        case Interval(low,high) => if (low == high && low == 0) bottom else this
+        case Interval(low,high) => if (low == high && low == IntNumber(0)) bottom else this
         case _ => this
       }
     }

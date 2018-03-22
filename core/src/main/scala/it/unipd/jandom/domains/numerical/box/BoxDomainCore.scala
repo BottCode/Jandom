@@ -35,7 +35,6 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def alpha(num : Int) : Box = {
-    print("Astraggo ",num)
     return Interval(IntNumber(num),IntNumber(num))
   }
 
@@ -43,7 +42,6 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def sum(x : Box, y : Box) : Box = {
-    print("sum",x,y)
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
@@ -57,7 +55,6 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def inverse(x : Box) : Box = {
-    print("INVERSE")
     x match {
       case IntervalBottom => IntervalBottom
       case IntervalTop => IntervalTop
@@ -115,7 +112,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
 
   //TODO
   def remainder(x : Box, y : Box) : Box = {
-    sum(x,inverse(mult(division(x,y),y))) // (10%4) = 10 - (10/4)*4 
+    sum(x,inverse(mult(division(x,y),y))) // (10%4) = 10 - (10/4)*4
   }
 
   /**
@@ -138,6 +135,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def glb(x : Box, y : Box) : Box = {
+    print("GLB",x,y)
     (x, y) match {
       case (IntervalTop, _) => return y
       case (_, IntervalTop) => return x

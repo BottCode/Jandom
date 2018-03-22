@@ -4,11 +4,12 @@ public class TestBox {
         int y = 5;
         while (x > 0) {
             y++;
+            x--;
         }
     }
 
     public static void BoxUnion() {
-        
+
     }
 
 }

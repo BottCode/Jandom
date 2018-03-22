@@ -18,6 +18,9 @@
 package it.unipd.jandom.domains
 
 trait InfInt {
+
+    def isInfinity : Boolean
+
     def +(x: InfInt): InfInt
     def /(x: InfInt): InfInt
     def *(x: InfInt): InfInt
@@ -56,8 +59,9 @@ trait InfInt {
 
 case class IntNumber(n: Int) extends InfInt {
 
+    def isInfinity = false
+
     def +(x: InfInt): InfInt = {
-        print("IntNumber+",n," + ",x)
         x match {
             case NegativeInfinity() => NegativeInfinity()
             case PositiveInfinity() => PositiveInfinity()
@@ -164,8 +168,10 @@ case class IntNumber(n: Int) extends InfInt {
 }
 
 case class NegativeInfinity() extends InfInt {
+
+    def isInfinity = true
+
     def +(x: InfInt): InfInt = {
-        print("NegativeInf+",x)
         x match {
             case PositiveInfinity() => Undetermined()
             case Undetermined() => Undetermined()
@@ -242,8 +248,9 @@ case class NegativeInfinity() extends InfInt {
 
 case class PositiveInfinity() extends InfInt {
 
+    def isInfinity = true
+
     def +(x: InfInt): InfInt = {
-        print("NegativeInf+",x)
         x match {
             case NegativeInfinity() => Undetermined()
             case Undetermined() => Undetermined()
@@ -315,6 +322,9 @@ case class PositiveInfinity() extends InfInt {
 
 // case infinity - infinity
 case class Undetermined() extends InfInt {
+
+    def isInfinity = false
+
     def +(x: InfInt): InfInt = {
         return Undetermined()
     }

@@ -82,21 +82,32 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     override def linearInequality(lf: LinearForm): Property = {
       if (isEmpty)
         return this
-      val homcoeffs = lf.homcoeffs.toArray
-      val known = lf.known
-      val lowresult = projectLow(linearEvaluation(lf))
+      val homcoeffs = lf.homcoeffs.map(_.toInt).toArray
+      val known = IntNumber(lf.known.toInt)
+      val lfMin = projectLow(linearEvaluation(lf))
       val lfArgmin = linearArgmin(lf);
-      print(lowresult)
-      if (lowresult > IntNumber(0))
+      //print(lowresult)
+      if (lfMin > IntNumber(0))
         return bottom
       else {
         var newboxes = boxes.clone
-        for (i <- homcoeffs.indices) {
-          if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lowresult / IntNumber(homcoeffs(i).toInt))), projectHigh(newboxes(i)))
-          if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lowresult / IntNumber(homcoeffs(i).toInt))))
+        val infinities = (homcoeffs.indices) filter { i => lfArgmin(i).isInfinity && homcoeffs(i) != 0 }
+
+        infinities.size match {
+          case 0 =>
+            for (i <- homcoeffs.indices) {
+              if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))), projectHigh(newboxes(i)))
+              if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))))
+            }
+          case 1 => {
+            val posinf = infinities.head
+            if (homcoeffs(posinf) < 0)
+                newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf) - known).inverse() / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
+              else
+                newboxes(posinf) = Interval(projectLow(boxes(posinf)), projectHigh(boxes(posinf)) min ((dotprod(homcoeffs, lfArgmin, posinf) - known).inverse() / IntNumber(homcoeffs(posinf))))
+          }
+          case _ =>
         }
-        for (i <- newboxes.indices)
-          print("boxes:",newboxes(i))
         new Property(newboxes,false)
       }
     }
@@ -105,6 +116,13 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       (lf.homcoeffs.zipWithIndex) map {
         case (c, i) => if (c > 0) projectLow(boxes(i)) else projectHigh(boxes(i))
       }
+    }
+
+    private def dotprod(x: Seq[Int], y: Seq[InfInt], remove: Int): InfInt = {
+      var sum: InfInt = IntNumber(0)
+      for (i <- x.indices; if i != remove && x(i) != 0)
+        sum = sum + (IntNumber(x(i)) * y(i))
+      sum
     }
 
     override def widening(that : Property) : Property = {
@@ -119,14 +137,14 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
             var newhigh = high1
             var newlow = low1
 
-            if (low2 >= low1) 
+            if (low2 >= low1)
               newlow = low1
-            else 
+            else
               newlow = NegativeInfinity()
-              
-            if (high1 >= high2) 
+
+            if (high1 >= high2)
               newhigh = high1
-            else 
+            else
               newhigh = PositiveInfinity()
 
             Interval(newlow,newhigh)

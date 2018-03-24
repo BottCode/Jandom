@@ -17,19 +17,53 @@
  */
 package it.unipd.jandom.domains
 
+/**
+  * This class manage integer operation avoid overflow. 
+  * It defines also a way to manage the "infinite" similar to Double.PositiveInfinity and Double.NegativeInfinity
+  *
+  * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>
+  * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>
+  */
+
 trait InfInt {
 
     def isInfinity : Boolean
 
+    /**
+      * The following method are abstract. 
+      * The real implementation can be found in each sub-case class extending this trait
+      */
+
+    /** 
+      * Perform the mathematical sum between the object that invoke this method and the param
+      * @param x is the adding
+      * @return the mathematical sum between the object that invoke this method and x.
+      */
     def +(x: InfInt): InfInt
+
+    /** 
+      * Perform the mathematical division between the object that invoke this method and the param
+      * @param x is the divider
+      * @return the mathematical division between the object that invoke this method and x.
+      */
     def /(x: InfInt): InfInt
+
     def *(x: InfInt): InfInt
     def >(x: InfInt): Boolean
-    def >=(x: InfInt): Boolean
+    def >=(x: InfInt): 
+    
+    /** 
+      * @param x is the second argument of max operator
+      * @return the max element between the object that invoke this method and x.
+      */
     def max(x: InfInt): InfInt
+
     def min(x: InfInt): InfInt
     def ==(x: InfInt): Boolean
 
+    /**
+      * @return the inverse of the object that invoke this method.
+      */
     def inverse(): InfInt = {
         this match {
             case PositiveInfinity() => NegativeInfinity()
@@ -39,18 +73,35 @@ trait InfInt {
         }
     }
 
+    
+    /** 
+      * Perform the mathematical difference between the object that invoke this method and the param
+      * @param x is the substracting
+      * @return the mathematical difference between the object that invoke this method and x.
+      */
     def -(x: InfInt): InfInt = {
         this + x.inverse()
     }
 
+    /** 
+      * Checks if two InfInt are not equal
+      * @param x is the second argument of != operator
+      * @return true if and only if the object that invoke this method is not equal to x.
+      */
     def !=(x: InfInt): Boolean = {
         !(this == x)
     }
 
+    /** 
+      * Checks if the object that invoke this method is less than the argument
+      * @param x is the second argument of < operator
+      * @return true if and only if the object that invoke this method is less than x.
+      */
     def <(x: InfInt): Boolean = {
         !(this >= x)
     }
 
+    // similar to <
     def <=(x: InfInt): Boolean = {
         !(this > x)
     }
@@ -131,7 +182,13 @@ case class IntNumber(n: Int) extends InfInt {
         }
     }
 
+    /** 
+      * Perform a "safe add", that is a sum that will never do an overflow. 
+      * @param x is the adding
+      * @return the safe add between the object that invoke this method and x. If an overflow is detected, an Infinity is returned.
+      */
     def safeAdd(left: Int, right: Int): InfInt = {
+        // if right + left > Int.MaxValue => Overflow
         if (right > 0 && left > Int.MaxValue - right)
             return PositiveInfinity()
 
@@ -141,6 +198,11 @@ case class IntNumber(n: Int) extends InfInt {
         return IntNumber(left + right)
     }
 
+    /** 
+      * Perform a "safe multiplication", that is a product that will never do an overflow. 
+      * @param x is the adding
+      * @return the safe prduct between the object that invoke this method and x. If an overflow is detected, an Infinity is returned.
+      */
     def safeMul(left: Int, right: Int): InfInt = { // TODO
         if (right > 0) {
             if (left > Int.MaxValue / right)

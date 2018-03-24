@@ -20,8 +20,8 @@ import it.unipd.jandom.domains.InfInt
 
 /**
   * The elements of the constant domain.
-  * It is a flat domain composed of constant elements, top and bottom.
-  * This domain is useful for the constant propagation analysis.
+  * It is a flat domain composed of Interval, top and bottom.
+  * This domain is useful for the Interval propagation analysis.
   *
   * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>
   * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>

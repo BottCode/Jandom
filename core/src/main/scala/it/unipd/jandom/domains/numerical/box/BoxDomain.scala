@@ -44,7 +44,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     */
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
-    def projectLow (box : Box) : InfInt = {
+    private def projectLow (box : Box) : InfInt = {
       box match {
         case IntervalBottom => PositiveInfinity()
         case IntervalTop => NegativeInfinity()
@@ -52,7 +52,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       }
     }
 
-    def projectHigh (box : Box) : InfInt = {
+    private def projectHigh (box : Box) : InfInt = {
       box match {
         case IntervalBottom => NegativeInfinity()
         case IntervalTop => PositiveInfinity()
@@ -85,21 +85,27 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       val homcoeffs = lf.homcoeffs.map(_.toInt).toArray
       val known = IntNumber(lf.known.toInt)
       val lfMin = projectLow(linearEvaluation(lf))
+      print("LfMin", lfMin)
       val lfArgmin = linearArgmin(lf);
+      print("ArgMin", lfArgmin)
       //print(lowresult)
       if (lfMin > IntNumber(0))
         return bottom
       else {
         var newboxes = boxes.clone
         val infinities = (homcoeffs.indices) filter { i => lfArgmin(i).isInfinity && homcoeffs(i) != 0 }
+        print("Infiniti", infinities)
 
         infinities.size match {
-          case 0 =>
+          case 0 => {
+            print("Case Zero")
             for (i <- homcoeffs.indices) {
               if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))), projectHigh(newboxes(i)))
               if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))))
             }
+          }
           case 1 => {
+              print("Case Uno")
             val posinf = infinities.head
             if (homcoeffs(posinf) < 0)
                 newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf) - known).inverse() / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
@@ -108,6 +114,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
           }
           case _ =>
         }
+        print("Return ")
         new Property(newboxes,false)
       }
     }

@@ -147,8 +147,10 @@ object NumericExpression {
     def assignTo[Property <: NumericalProperty[Property]](v: Int)(input: Property): Property =
       input.linearAssignment(v, lf)
 
-    override def lteZero[Property <: NumericalProperty[Property]](input: Property): Property =
+    override def lteZero[Property <: NumericalProperty[Property]](input: Property): Property = {
+      print("LinearIneq ",input.linearInequality(lf))
       input.linearInequality(lf)
+    }
 
     override def ltZero[Property <: NumericalProperty[Property]](input: Property): Property =
       input.linearInequality(lf)

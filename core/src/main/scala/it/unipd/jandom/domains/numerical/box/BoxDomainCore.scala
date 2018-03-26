@@ -19,7 +19,7 @@
 package it.unipd.jandom.domains.numerical.box
 
 import it.unipd.jandom.domains.numerical.utils.{MathLibrary => M}
-import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator, InfInt, IntNumber, PositiveInfinity, NegativeInfinity}
+import it.unipd.jandom.domains.{Abstraction, CompleteLatticeOperator, IntOperator, InfInt, IntNumber, PositiveInfinity, NegativeInfinity, Undetermined}
 import Box._
 
 /**
@@ -47,7 +47,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (_, IntervalBottom) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
-      case (Interval(low1,high1),Interval(low2,high2)) => Interval(low1 + low2, high1 + high2)
+      case (Interval(low1,high1),Interval(low2,high2)) => check(Interval(low1 + low2, high1 + high2))
     }
   }
 
@@ -76,7 +76,15 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
         val comb = Array(low1 * low2, high1 * high2, low1 * high2, high1 * low2)
         val new_low = comb.reduceLeft(_ min _)
         val new_high = comb.reduceLeft(_ max _)
-        return Interval(new_low,new_high)
+        return check(Interval(new_low,new_high))
+    }
+  }
+
+  def check(x : Interval) : Box = {
+    x match {
+      case Interval(Undetermined(), _) => IntervalTop
+      case Interval(_, Undetermined()) => IntervalTop
+      case _ => x
     }
   }
 

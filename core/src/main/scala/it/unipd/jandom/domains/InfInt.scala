@@ -198,7 +198,7 @@ case class NegativeInfinity() extends InfInt {
         x match {
             case NegativeInfinity() => false
             case Undetermined() => false
-            case _ => true
+            case _ => false
         }
     }
 

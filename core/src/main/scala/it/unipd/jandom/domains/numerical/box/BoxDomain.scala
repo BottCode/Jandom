@@ -44,7 +44,12 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     */
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
+    /**
+      * @param x is an Interval
+      * @return the lower bound.
+      */
     private def projectLow (box : Box) : InfInt = {
+
       box match {
         case IntervalBottom => PositiveInfinity()
         case IntervalTop => NegativeInfinity()
@@ -52,7 +57,13 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       }
     }
 
+
+    /**
+      * @param x is an Interval
+      * @return the upper bound.
+      */
     private def projectHigh (box : Box) : InfInt = {
+
       box match {
         case IntervalBottom => NegativeInfinity()
         case IntervalTop => PositiveInfinity()
@@ -132,6 +143,13 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       sum
     }
 
+    /**
+      * Implementing the widening strategy described in
+      * https://hal.archives-ouvertes.fr/hal-01657536 (Tutorial on Static Inference of Numeric Invariants by Abstract Interpretation), page 221
+      *
+      * @param that the abstract object to be widened with `this`. `that` IS assumed to be smaller than `this`.
+      * @return the widening of the two abstract properties.
+      */
     override def widening(that : Property) : Property = {
       createProperty((this.elements, that.elements).zipped.map((x, y) => {
         (x,y) match {
@@ -159,6 +177,12 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       }), this.isEmpty && that.isEmpty)
 	  }
 
+    /**
+      * Implementing the narrowing strategy
+      *
+      * @param that the abstract object to be narrowed with `this`. `that` IS assumed to be smaller than `this`.
+      * @return the narrowing of the two abstract properties.
+      */
 	  override def narrowing(that : Property) : Property = {
       createProperty((this.elements, that.elements).zipped.map((x, y) => {
         (x,y) match {

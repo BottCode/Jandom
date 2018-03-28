@@ -16,7 +16,7 @@
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-package it.unich.jandom
+/*package it.unich.jandom
 
 import it.unich.jandom.benchmark.FASTLoader
 import it.unich.jandom.domains.DimensionFiberedProperty
@@ -25,7 +25,7 @@ import it.unich.jandom.domains.numerical.ppl.PPLDomain
 import it.unich.jandom.targets.lts.LTS
 import it.unich.jandom.targets.parameters.NarrowingSpecs._
 import it.unich.jandom.targets.parameters.WideningSpecs._
-import parma_polyhedra_library.C_Polyhedron
+import parma_polyhedra_library.C_Polyhedron*/
 
 /**
   * Example program using ''Jandom'' to analyze the Alice benchmarks and
@@ -33,7 +33,7 @@ import parma_polyhedra_library.C_Polyhedron
   * the result of separately computing using box and parallelotope with respect
   * to using their product.
   */
-object JandomParallelotopeBench extends App with FASTLoader {
+/*object JandomParallelotopeBench extends App with FASTLoader {
 
   var totalEquals = 0
   var totalBestReduced = 0
@@ -149,4 +149,4 @@ object JandomParallelotopeBench extends App with FASTLoader {
   println(s"Total best reduced product: $totalBestReduced")
   println(s"Total best separate analysis: $totalBestSeparate")
   println(s"Total uncomparables: $totalUncomparable")
-}
+}*/

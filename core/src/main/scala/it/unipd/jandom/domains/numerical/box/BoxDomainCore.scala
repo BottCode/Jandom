@@ -65,11 +65,12 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
    /**
     * @inheritdoc
     */
-
   def mult(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
+      case (_, Interval(IntNumber(0),IntNumber(0))) => Interval(IntNumber(0),IntNumber(0))
+      case (Interval(IntNumber(0),IntNumber(0)), _) => Interval(IntNumber(0),IntNumber(0))
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
       case (Interval(low1,high1),Interval(low2,high2)) =>

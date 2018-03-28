@@ -85,6 +85,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     x match {
       case Interval(Undetermined(), _) => IntervalTop
       case Interval(_, Undetermined()) => IntervalTop
+      case Interval(NegativeInfinity(), PositiveInfinity()) => IntervalTop
       case _ => x
     }
   }
@@ -96,6 +97,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
+      case (_, Interval(IntNumber(0),IntNumber(0))) => IntervalBottom
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
       case (Interval (low1, high1), Interval (low2,high2)) =>

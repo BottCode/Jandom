@@ -16,7 +16,7 @@
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-/*package it.unich.jandom
+package it.unich.jandom
 
 import it.unich.jandom.benchmark.FASTLoader
 import it.unich.jandom.domains.DimensionFiberedProperty
@@ -24,7 +24,7 @@ import it.unich.jandom.domains.numerical._
 import it.unich.jandom.domains.numerical.ppl.PPLDomain
 import it.unich.jandom.targets.lts.LTS
 import it.unich.jandom.targets.parameters.WideningSpecs._
-import parma_polyhedra_library.C_Polyhedron*/
+import parma_polyhedra_library.C_Polyhedron
 
 /**
   * Example program using ''Jandom'' to analyze the Alice benchmarks and
@@ -32,7 +32,7 @@ import parma_polyhedra_library.C_Polyhedron*/
   * the result of the analyisis with standard Kleene iteration and worklist
   * based ones.
   */
-/*object JandomSumBench extends App with FASTLoader {
+object JandomSumBench extends App with FASTLoader {
 
   var totalEquals = 0
   var totalBestSum = 0
@@ -155,4 +155,3 @@ import parma_polyhedra_library.C_Polyhedron*/
   println(s"Total best other: $totalBestOther")
   println(s"Total uncomparables: $totalUncomparable")
 }
-*/

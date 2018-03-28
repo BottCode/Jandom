@@ -100,7 +100,7 @@ class BoxDomainCoreSuite extends FlatSpec {
     assert(bc.mult(MinfMone, One) === MinfMone)
     assert(bc.mult(One, MinfMone) === MinfMone)
     assert(bc.mult(MtenTen, MtenTen) === MhudredHundred)
-    assert(bc.mult(oneInf, MinfMone) === MinfZero)
+    assert(bc.mult(oneInf, MinfMone) === MinfMone)
     assert(bc.mult(MinfMone, oneInf) === MinfZero)
     assert(bc.mult(oneInf, Mone) === MinfMone)
     assert(bc.mult(Mone, oneInf) === MinfMone)

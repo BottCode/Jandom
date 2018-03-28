@@ -98,6 +98,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (IntervalBottom, _) => IntervalBottom
       case (_, IntervalBottom) => IntervalBottom
       case (_, Interval(IntNumber(0),IntNumber(0))) => IntervalBottom
+      case (Interval(IntNumber(0),IntNumber(0)), _) => Interval(IntNumber(0),IntNumber(0))
       case (IntervalTop, _) => IntervalTop
       case (_, IntervalTop) => IntervalTop
       case (Interval (low1, high1), Interval (low2,high2)) =>
@@ -138,7 +139,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (Interval (low1, high1), Interval (low2, high2)) =>
         val new_low = low1 min low2
         val new_high = high1 max high2
-        return Interval (new_low, new_high)
+        return check(Interval (new_low, new_high))
     }
   }
 

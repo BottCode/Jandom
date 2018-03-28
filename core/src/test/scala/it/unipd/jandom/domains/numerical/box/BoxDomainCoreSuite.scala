@@ -101,7 +101,7 @@ class BoxDomainCoreSuite extends FlatSpec {
     assert(bc.mult(One, MinfMone) === MinfMone)
     assert(bc.mult(MtenTen, MtenTen) === MhudredHundred)
     assert(bc.mult(oneInf, MinfMone) === MinfMone)
-    assert(bc.mult(MinfMone, oneInf) === MinfZero)
+    assert(bc.mult(MinfMone, oneInf) === MinfMone)
     assert(bc.mult(oneInf, Mone) === MinfMone)
     assert(bc.mult(Mone, oneInf) === MinfMone)
   }
@@ -110,7 +110,7 @@ class BoxDomainCoreSuite extends FlatSpec {
     " - return the division of the two Boxs given as input" in {
     val twoThree = Box.Interval(IntNumber(2), IntNumber(3))
     val twoThirteen = Box.Interval(IntNumber(2), IntNumber(13))
-    val zeroFour = Box.Interval(IntNumber(0), IntNumber(4))
+    val zeroSix = Box.Interval(IntNumber(0), IntNumber(6))
     // IntervalBottom
     assert(bc.division(IntervalBottom, MtenTen) === IntervalBottom)
     assert(bc.division(IntervalBottom, IntervalTop) === IntervalBottom)
@@ -129,7 +129,7 @@ class BoxDomainCoreSuite extends FlatSpec {
 
     // Interval
     assert(bc.division(MtenTen, MtenTen) === MtenTen)
-    assert(bc.division(twoThirteen, twoThree) === zeroFour)
+    assert(bc.division(twoThirteen, twoThree) === zeroSix)
   }
 
   "BoxDomainCore.remainder" should

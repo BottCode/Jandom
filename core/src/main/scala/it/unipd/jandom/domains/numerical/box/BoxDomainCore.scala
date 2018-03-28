@@ -147,7 +147,6 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     * @inheritdoc
     */
   def glb(x : Box, y : Box) : Box = {
-    print("GLB",x,y)
     (x, y) match {
       case (IntervalTop, _) => return y
       case (_, IntervalTop) => return x

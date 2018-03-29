@@ -14,7 +14,7 @@
   *
   * You should have received a copy of the GNU General Public License
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
-  */
+  
 
 package it.unich.jandom
 
@@ -27,12 +27,12 @@ import it.unich.jandom.targets.parameters.NarrowingSpecs._
 import it.unich.jandom.targets.parameters.WideningSpecs._
 import parma_polyhedra_library.C_Polyhedron
 
-/**
+
   * Example program using ''Jandom'' to analyze the Alice benchmarks and
   * compare the results with different parameters. At the moment, it compares
   * the result of separately computing using box and parallelotope with respect
   * to using their product.
-  */
+  
 object JandomParallelotopeBench extends App with FASTLoader {
 
   var totalEquals = 0
@@ -150,3 +150,4 @@ object JandomParallelotopeBench extends App with FASTLoader {
   println(s"Total best separate analysis: $totalBestSeparate")
   println(s"Total uncomparables: $totalUncomparable")
 }
+*/

@@ -69,7 +69,7 @@ trait InfInt {
             case PositiveInfinity() => NegativeInfinity()
             case NegativeInfinity() => PositiveInfinity()
             case IntNumber(x) => IntNumber(-x)
-            case _ => Undetermined()
+            //case _ => Undetermined()
         }
     }
 
@@ -116,7 +116,7 @@ case class IntNumber(n: Int) extends InfInt {
         x match {
             case NegativeInfinity() => NegativeInfinity()
             case PositiveInfinity() => PositiveInfinity()
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case IntNumber(m) => safeAdd(n,m)
         }
     }
@@ -125,7 +125,7 @@ case class IntNumber(n: Int) extends InfInt {
         if(n == 0) return IntNumber(0)
         x match {
             case IntNumber(m) => safeMul(n,m)
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ =>
                 if(n > 0) return x
                 return x.inverse()
@@ -152,7 +152,7 @@ case class IntNumber(n: Int) extends InfInt {
     def /(x: InfInt): InfInt = {
         x match {
             case IntNumber(m) => IntNumber(n / m)
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ => IntNumber(0)
         }
     }
@@ -169,7 +169,7 @@ case class IntNumber(n: Int) extends InfInt {
             case IntNumber(m) => IntNumber(n max m)
             case PositiveInfinity() => PositiveInfinity()
             case NegativeInfinity() => IntNumber(n)
-            case _ => Undetermined()
+            //case _ => Undetermined()
         }
     }
 
@@ -178,7 +178,7 @@ case class IntNumber(n: Int) extends InfInt {
             case IntNumber(m) => IntNumber(n min m)
             case PositiveInfinity() => IntNumber(n)
             case NegativeInfinity() => NegativeInfinity()
-            case _ => Undetermined()
+            //case _ => Undetermined()
         }
     }
 
@@ -235,9 +235,10 @@ case class NegativeInfinity() extends InfInt {
 
     def +(x: InfInt): InfInt = {
         x match {
-            case PositiveInfinity() => Undetermined()
-            case Undetermined() => Undetermined()
             case _ => NegativeInfinity()
+            /*case PositiveInfinity() => Undetermined()
+            // // case Undetermined() => Undetermined()
+            case _ => NegativeInfinity()*/
         }
     }
 
@@ -249,7 +250,7 @@ case class NegativeInfinity() extends InfInt {
                 if (m < 0)
                     return PositiveInfinity()
                 return IntNumber(0)
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case PositiveInfinity() => NegativeInfinity()
             case NegativeInfinity() => PositiveInfinity()
         }
@@ -259,7 +260,7 @@ case class NegativeInfinity() extends InfInt {
     def >(x: InfInt): Boolean = {
         x match {
             case NegativeInfinity() => false
-            case Undetermined() => false
+            // // case Undetermined() => false
             case _ => false
         }
     }
@@ -278,7 +279,7 @@ case class NegativeInfinity() extends InfInt {
 
                     return PositiveInfinity()
                 return NegativeInfinity()
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ => IntNumber(0) // Inf / Inf = Inf * (1 / Inf) = Inf * 0
         }
     }
@@ -299,7 +300,7 @@ case class NegativeInfinity() extends InfInt {
 
     def min(x: InfInt): InfInt = {
         x match {
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ => NegativeInfinity()
         }
     }
@@ -314,8 +315,8 @@ case class PositiveInfinity() extends InfInt {
 
     def +(x: InfInt): InfInt = {
         x match {
-            case NegativeInfinity() => Undetermined()
-            case Undetermined() => Undetermined()
+            /*case NegativeInfinity() => Undetermined()
+            // // case Undetermined() => Undetermined()*/
             case _ => PositiveInfinity()
         }
     }
@@ -335,7 +336,7 @@ case class PositiveInfinity() extends InfInt {
     def >(x: InfInt): Boolean = {
         x match {
             case NegativeInfinity() => true
-            case Undetermined() => true // todo think
+            // // case Undetermined() => true // todo think
             case _ => false
         }
     }
@@ -359,21 +360,21 @@ case class PositiveInfinity() extends InfInt {
                 if(m < 0)
                     return NegativeInfinity()
                 return PositiveInfinity() // TODO EXCEPTION /0
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ => IntNumber(0) // Inf / Inf = Inf * (1 / Inf) = Inf * 0
         }
     }
 
     def max(x: InfInt): InfInt = {
         x match {
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ => PositiveInfinity()
         }
     }
 
     def min(x: InfInt): InfInt = {
         x match {
-            case Undetermined() => Undetermined()
+            // // case Undetermined() => Undetermined()
             case _ => x
         }
     }
@@ -383,6 +384,7 @@ case class PositiveInfinity() extends InfInt {
 }
 
 // case infinity - infinity
+/*
 case class Undetermined() extends InfInt {
 
     def isInfinity = false
@@ -420,3 +422,4 @@ case class Undetermined() extends InfInt {
     }
 
 }
+*/

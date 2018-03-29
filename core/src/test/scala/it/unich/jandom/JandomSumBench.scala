@@ -14,7 +14,7 @@
   *
   * You should have received a copy of the GNU General Public License
   * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
-  */
+  
 
 package it.unich.jandom
 
@@ -26,12 +26,12 @@ import it.unich.jandom.targets.lts.LTS
 import it.unich.jandom.targets.parameters.WideningSpecs._
 import parma_polyhedra_library.C_Polyhedron
 
-/**
+
   * Example program using ''Jandom'' to analyze the Alice benchmarks and
   * compare the results with different parameters. In this moment, it compares
   * the result of the analyisis with standard Kleene iteration and worklist
   * based ones.
-  */
+  
 object JandomSumBench extends App with FASTLoader {
 
   var totalEquals = 0
@@ -155,3 +155,4 @@ object JandomSumBench extends App with FASTLoader {
   println(s"Total best other: $totalBestOther")
   println(s"Total uncomparables: $totalUncomparable")
 }
+*/

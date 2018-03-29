@@ -1,6 +1,6 @@
 package it.unipd.jandom.domains.numerical.box
 
-import it.unipd.jandom.domains.{InfInt, IntNumber, PositiveInfinity, NegativeInfinity, Undetermined}
+import it.unipd.jandom.domains.{InfInt, IntNumber, PositiveInfinity, NegativeInfinity}
 import it.unipd.jandom.domains.numerical.box.Box._
 import it.unipd.jandom.domains.numerical.box.BoxDomainCore._
 import org.scalatest.FlatSpec

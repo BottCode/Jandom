@@ -24,14 +24,14 @@ import it.unipd.jandom.domains.numerical.box.BoundedBoxDomainCore._
 import it.unipd.jandom.domains.{InfInt, PositiveInfinity, NegativeInfinity, IntNumber}
 
 /**
-  * 
+  *
   *
   * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>
   * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>
   */
 class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, BoundedBoxDomainCore](BoundedBoxDomainCore(m,n)){
 
-  
+
   /**
     * @inheritdoc
     */
@@ -139,8 +139,8 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
         sum = sum + (IntNumber(x(i)) * y(i))
       sum
     }
-  
-  } // End of property  
+
+  } // End of property
 
 } // End of BoundedBoxDomain
 

@@ -30,11 +30,6 @@ import Box._
 
 class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
 
-  override def alpha(num : Int) : Box = {
-    val result = super.alpha(num)
-    BoundedBoxDomainCore.normalizeBound(result)
-  }
-
   override def sum(x : Box, y : Box) : Box = {
     val result = super.sum(x,y)
     BoundedBoxDomainCore.normalizeBound(result)
@@ -92,17 +87,19 @@ object BoundedBoxDomainCore {
 
   def normalizeBound(x : Box) : Box = {
     val m = IntNumber(-10)
-    val n = IntNumber(10) 
+    val n = IntNumber(10)
     x match {
-      case Interval(low,high) => 
-        if (high < m) 
+      case Interval(low,high) =>
+        if (low == high)
+          return Interval(low,high)
+        if (high < m)
           return Interval(NegativeInfinity(),m)
         if (low > n)
           return Interval(n,PositiveInfinity())
-          
+
         var new_low = low
         var new_high = high
-        if (high > n) 
+        if (high > n)
           new_high = PositiveInfinity()
         if (low < m)
           new_low = NegativeInfinity()

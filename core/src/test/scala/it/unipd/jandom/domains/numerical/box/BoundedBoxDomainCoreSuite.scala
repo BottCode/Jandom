@@ -55,7 +55,7 @@ class BoundedBoxDomainCoreSuite extends FlatSpec {
     assert(bc.sum(zeroTen, Seven) === sevenInf)
     assert(bc.sum(Seven, zeroTen) === sevenInf)
     assert(bc.sum(Seven, Seven) === fourTeen)
-    assert(bc.sum(fourTeen, fourTeen) === nInf)
+    assert(bc.sum(fourTeen, zeroTen) === nInf)
     assert(bc.sum(MinfMone, One) === MinfZero)
     assert(bc.sum(Zero, oneInf) === oneInf)
     assert(bc.sum(oneInf, Zero) === oneInf)
@@ -66,6 +66,7 @@ class BoundedBoxDomainCoreSuite extends FlatSpec {
 
   "BoundedBoxDomainCore.inverse" should
     " - return the inverse of the Box given as input" in {
+    val elevenTwelve = Box.Interval(IntNumber(11), IntNumber(12))
     // IntervalBottom
     assert(bc.inverse(IntervalBottom) === IntervalBottom)
     // IntervalTop
@@ -78,7 +79,7 @@ class BoundedBoxDomainCoreSuite extends FlatSpec {
     assert(bc.inverse(MtenTen) === MtenTen)
     assert(bc.inverse(MinfMone) === oneInf)
     assert(bc.inverse(oneInf) === MinfMone)
-    assert(bc.inverse(fourTeen) === MinfM)
+    assert(bc.inverse(elevenTwelve) === MinfM)
   }
 
 

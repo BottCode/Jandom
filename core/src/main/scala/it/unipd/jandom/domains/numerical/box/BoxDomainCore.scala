@@ -26,8 +26,6 @@ import Box._
   * The Box domain
   */
 
-  // TODO: define reminder function
-
 class BoxDomainCore extends CompleteLatticeOperator[Box]
   with IntOperator[Box] with Abstraction[Int,Box]{
 

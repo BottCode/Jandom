@@ -27,6 +27,8 @@ import it.unipd.jandom.domains.numerical.constant.ConstantDomain
 import it.unipd.jandom.domains.numerical.mod.ModKDomain
 import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, ExtendedSigns01Domain, SignDomain}
 import it.unipd.jandom.domains.numerical.box.BoxDomain
+import it.unipd.jandom.domains.numerical.box.BoundedBoxDomain
+import it.unipd.jandom.domains.IntNumber
 
 /**
  * The ParameterEnumeration for numerical domains.
@@ -36,6 +38,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val description = "The numerical domain to use for the analysis."
 
   val values: Buffer[ParameterValue[NumericalDomain]] = Buffer(
+    ParameterValue(BoundedBoxDomain(IntNumber(-10),IntNumber(10)), "Bounded Box", "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."),
     ParameterValue(BoxDomain(), "Box (Interval) Domain", "This is a native Scala implementation of the Box (that is Interval) integer domain"),
     ParameterValue(SignDomain(), "Sign Domain", "This is a native Scala implementation of the simple sign domain " +
       "(<0, =0, >0)"),

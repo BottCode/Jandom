@@ -36,7 +36,7 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
     * @inheritdoc
     */
   override def createProperty(boxes: Array[Box], unreachable: Boolean): Property = {
-    boxes.map(BoundedBoxDomainCore.normalizeBound)
+    //boxes.map(normalizeBound)
     new Property(boxes, unreachable)
   }
 

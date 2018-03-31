@@ -32,7 +32,7 @@ class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
 
   override def sum(x : Box, y : Box) : Box = {
     val result = super.sum(x,y)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
   /**
@@ -40,12 +40,12 @@ class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
     */
   override def inverse(x : Box) : Box = {
     val result = super.inverse(x)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
   override def mult(x : Box, y : Box) : Box = {
     val result = super.mult(x,y)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
   /**
@@ -53,12 +53,12 @@ class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
     */
   override def division(x : Box, y : Box) : Box = {
     val result = super.division(x,y)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
   override def remainder(x : Box, y : Box) : Box = {
     val result = super.remainder(x,y)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
   /**
@@ -66,7 +66,7 @@ class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
     */
   override def lub(x : Box, y : Box) : Box = {
     val result = super.lub(x,y)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
   /**
@@ -74,16 +74,17 @@ class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
     */
   override def glb(x : Box, y : Box) : Box = {
     val result = super.glb(x,y)
-    BoundedBoxDomainCore.normalizeBound(result)
+    normalizeBound(result)
   }
 
-} // end of BoundedBoxDomainCore class
-
-object BoundedBoxDomainCore {
-  /**
-    * Factory method of BoundedBoxDomainCore
-    */
-  def apply(m : InfInt, n : InfInt) = new BoundedBoxDomainCore(m,n)
+  /*def check(x : Interval) : Box = {
+    x match {
+      case Interval(NegativeInfinity(), NegativeInfinity()) => Interval(NegativeInfinity(),m)
+      case Interval(PositiveInfinity(), PositiveInfinity()) => Interval(n, PositiveInfinity())
+      case Interval(NegativeInfinity(), PositiveInfinity()) => IntervalTop
+      case _ => x
+    }
+  }*/
 
   def normalizeBound(x : Box) : Box = {
     val m = IntNumber(-10)
@@ -104,11 +105,19 @@ object BoundedBoxDomainCore {
         if (low < m)
           new_low = NegativeInfinity()
 
-        return Interval(new_low,new_high)
+        return check(Interval(new_low,new_high))
 
         case _ => x
 
     }
   }
+
+} // end of BoundedBoxDomainCore class
+
+object BoundedBoxDomainCore {
+  /**
+    * Factory method of BoundedBoxDomainCore
+    */
+  def apply(m : InfInt, n : InfInt) = new BoundedBoxDomainCore(m,n)
 
 } // end of BoundedBoxDomainCore companion object

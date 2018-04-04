@@ -32,7 +32,17 @@ public class TestBox {
 
     public static void BoxNull() {
         int x = 0;
-        
+
+    }
+
+    public static void remainder() {
+	       int x = 10;
+	       int y = 0;
+	       while (x + y < 15) {
+           x++;
+           y++;
+         }
+         int w = x % y;
     }
 
 }

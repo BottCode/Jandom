@@ -40,7 +40,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val description = "The numerical domain to use for the analysis."
 
   val values: Buffer[ParameterValue[NumericalDomain]] = Buffer(
-    ParameterValue(BoundedBoxDomain(IntNumber(Double.NegativeInfinity.toInt),IntNumber(Double.PositiveInfinity.toInt)), "Bounded Box", "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."),
+    ParameterValue(BoundedBoxDomain(IntNumber(0),IntNumber(0)), "Bounded Box", "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."),
     ParameterValue(BoxDomain(), "Box (Interval) Domain", "This is a native Scala implementation of the Box (that is Interval) integer domain"),
     ParameterValue(SignDomain(), "Sign Domain", "This is a native Scala implementation of the simple sign domain " +
       "(<0, =0, >0)"),
@@ -71,7 +71,16 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val default = values.last
 
   def setBound(m: Int,n: Int) = {
-    values.update(0,ParameterValue(BoundedBoxDomain(IntNumber(m),IntNumber(n)), "BOUNDED CON "+ m + " e " + n, "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."))
+    var i = 0
+    for (d <- values) {
+      if (d.value.isInstanceOf[BoundedBoxDomain]) {
+        print("dkfbskjfbksdfkasdfbaksefbaskdfbaskdfbasdk")
+        values.update(i,
+                (new ParameterValue(BoundedBoxDomain(IntNumber(m),IntNumber(n)),
+                "Bounded Box "+ m + " " + n, "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis.")))
+      }
+      i = i + 1
+    }
   }
 
   // Load objects PPLUIInitializer and PPLMacroUIInitializer if available

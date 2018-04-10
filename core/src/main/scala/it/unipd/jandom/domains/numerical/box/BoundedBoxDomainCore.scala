@@ -31,6 +31,7 @@ import Box._
 class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
 
   override def sum(x : Box, y : Box) : Box = {
+    print("method sum. Bounds are: " + m + " and " + n)
     val result = super.sum(x,y)
     normalizeBound(result)
   }

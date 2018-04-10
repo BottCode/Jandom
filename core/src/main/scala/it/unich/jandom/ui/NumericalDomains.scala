@@ -71,7 +71,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val default = values.last
 
   def setBound(m: Int,n: Int) = {
-    values.update(0,ParameterValue(BoundedBoxDomain(IntNumber(m),IntNumber(n)), "Bounded Box", "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."))
+    values.update(0,ParameterValue(BoundedBoxDomain(IntNumber(m),IntNumber(n)), "BOUNDED CON "+ m + " e " + n, "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."))
   }
 
   // Load objects PPLUIInitializer and PPLMacroUIInitializer if available

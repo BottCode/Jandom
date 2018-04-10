@@ -12,6 +12,6 @@ target.eclipse/
 .cache-main
 .cache-tests
 *.sc
-
+*.log
 # intellij idea
 .idea/

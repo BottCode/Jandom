@@ -38,6 +38,10 @@ class ParametersPane extends GridBagPanel {
   val wideningComboBox = addParameterEnumeration(2, WideningScopes)
   val narrowingComboBox = addParameterEnumeration(3, NarrowingStrategies)
   val delayModel = new SpinnerNumberModel(0, 0, Double.PositiveInfinity, 1)
+  val parameter_m_model = new SpinnerNumberModel(0, Double.NegativeInfinity, Double.PositiveInfinity, 1)
+  val parameter_n_model = new SpinnerNumberModel(0, Double.NegativeInfinity, Double.PositiveInfinity, 1)
+  val parameter_m = Component.wrap(new JSpinner(parameter_m_model))
+  val parameter_n = Component.wrap(new JSpinner(parameter_n_model))
   val delay = Component.wrap(new JSpinner(delayModel))
   val debug = new CheckBox("Debug")
 
@@ -45,9 +49,20 @@ class ParametersPane extends GridBagPanel {
     GridBagConstraints.NONE, new Insets(0, 0, 5, 5), 0, 0)
   layout(delay) = new Constraints(1, 4, 1, 1, 0.0, 0.0, GridBagConstraints.WEST,
     GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0), 0, 0)
-  layout(debug) = new Constraints(0, 5, 2, 1, 0.0, 0.0, GridBagConstraints.BASELINE,
+  
+  layout(new Label("Lower bound M:")) = new Constraints(0, 5, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+    GridBagConstraints.NONE, new Insets(0, 0, 5, 5), 0, 0)
+  layout(parameter_m) = new Constraints(1, 5, 2, 1, 0.0, 0.0, GridBagConstraints.WEST,
+    GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0), 0, 0)
+  
+  layout(new Label("Upper bound N:")) = new Constraints(0, 6, 1, 1, 0.0, 0.0, GridBagConstraints.EAST,
+    GridBagConstraints.NONE, new Insets(0, 0, 5, 5), 0, 0)
+  layout(parameter_n) = new Constraints(1, 6, 3, 1, 0.0, 0.0, GridBagConstraints.WEST,
+    GridBagConstraints.HORIZONTAL, new Insets(0, 0, 5, 0), 0, 0)
+
+  layout(debug) = new Constraints(0, 7, 2, 1, 0.0, 0.0, GridBagConstraints.BASELINE,
     GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0)
-  layout(Swing.VGlue) = new Constraints(0, 6, 2, 1, 0.0, 1.0, GridBagConstraints.BASELINE,
+  layout(Swing.VGlue) = new Constraints(0, 7, 4, 1, 0.0, 1.0, GridBagConstraints.BASELINE,
     GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0)
 
   object ParameterRenderer extends Renderer[ParameterValue[_]] {
@@ -77,17 +92,23 @@ class ParametersPane extends GridBagPanel {
     comboBox
   }
 
-  def selectedNumericalDomain = NumericalDomains.values(numericalDomainComboBox.selection.index).value
-
-  def selectedObjectDomain = ObjectDomains.values(objectDomainComboBox.selection.index).value
-
   def setParameters[T <: Target[T]](params: Parameters[T]) {
     params.wideningScope = WideningScopes.values(wideningComboBox.selection.index).value
     params.narrowingStrategy = NarrowingStrategies.values(narrowingComboBox.selection.index).value
     val delay = delayModel.getValue().asInstanceOf[Double].toInt
+    val bound_m = parameter_m_model.getValue().asInstanceOf[Double].toInt
+    val bound_n = parameter_n_model.getValue.asInstanceOf[Double].toInt
+    print("Bound",bound_m,bound_n)
+    NumericalDomains.setBound(bound_m, bound_n)
     params.widening = DelayedWidening(DefaultWidening, delay)
     params.narrowing = DelayedNarrowing(TrivialNarrowing, 2)
     if (debug.selected) params.debugWriter = new java.io.StringWriter
   }
+
+  def selectedNumericalDomain = NumericalDomains.values(numericalDomainComboBox.selection.index).value
+
+  def selectedObjectDomain = ObjectDomains.values(objectDomainComboBox.selection.index).value
+
+ 
 
 }

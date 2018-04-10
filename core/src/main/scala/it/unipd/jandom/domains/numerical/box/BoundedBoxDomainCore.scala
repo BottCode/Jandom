@@ -28,11 +28,14 @@ import Box._
   * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>
 */
 
-class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
+class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomainCore{
+
+  var m: InfInt = bound_m
+  var n: InfInt = bound_n
 
   override def sum(x : Box, y : Box) : Box = {
-    print("method sum. Bounds are: " + m + " and " + n)
     val result = super.sum(x,y)
+    println("sum i bound sono"+ m + " " +n)
     normalizeBound(result)
   }
 
@@ -88,8 +91,6 @@ class BoundedBoxDomainCore(m : InfInt, n : InfInt) extends BoxDomainCore{
   }*/
 
   def normalizeBound(x : Box) : Box = {
-    val m = IntNumber(-10)
-    val n = IntNumber(10)
     x match {
       case Interval(low,high) =>
         if (low == high)
@@ -119,6 +120,16 @@ object BoundedBoxDomainCore {
   /**
     * Factory method of BoundedBoxDomainCore
     */
-  def apply(m : InfInt, n : InfInt) = new BoundedBoxDomainCore(m,n)
+  var D: BoundedBoxDomainCore = apply(IntNumber(0),IntNumber(0))
+  def apply(m : InfInt, n : InfInt): BoundedBoxDomainCore = {
+    D = new BoundedBoxDomainCore(m,n)
+    return D
+  }
+
+  def updateData(x: InfInt, y: InfInt) = {
+    D.m = x
+    D.n = y
+    println("DATA ARE UPDATED " + D.m + " and " + D.n)
+  }
 
 } // end of BoundedBoxDomainCore companion object

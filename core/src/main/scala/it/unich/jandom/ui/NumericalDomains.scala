@@ -71,15 +71,11 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val default = values.last
 
   def setBound(m: Int,n: Int) = {
-    var i = 0
     for (d <- values) {
       if (d.value.isInstanceOf[BoundedBoxDomain]) {
-        print("dkfbskjfbksdfkasdfbaksefbaskdfbaskdfbasdk")
-        values.update(i,
-                (new ParameterValue(BoundedBoxDomain(IntNumber(m),IntNumber(n)),
-                "Bounded Box "+ m + " " + n, "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis.")))
+        println("te chiamo qui" + m + " - " + n)
+        d.value.updateData(m,n)
       }
-      i = i + 1
     }
   }
 

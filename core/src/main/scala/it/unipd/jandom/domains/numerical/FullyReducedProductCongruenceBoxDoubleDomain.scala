@@ -36,7 +36,7 @@ import it.unipd.jandom.domains.numerical.utils.MathLibrary
 class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : CongruenceDomain, override val dom2 : BoxDoubleDomain) extends ProductDomain[CongruenceDomain, BoxDoubleDomain](dom1, dom2) {
   override val dom1Todom2 = DomainTransformation.CongruenceToBoxDouble
   override val dom2Todom1 = DomainTransformation.BoxDoubleToCongruence
-
+ 
   override def top(n: Int) =
     new FullyReducedProductCongruenceBoxDouble(dom1.top(n), dom2.top(n))
 

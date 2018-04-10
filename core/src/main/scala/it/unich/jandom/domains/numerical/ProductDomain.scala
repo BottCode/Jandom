@@ -37,7 +37,6 @@ import it.unich.scalafix.Box
  */
 class ProductDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, val dom2: D2)(
     implicit val dom1Todom2: DomainTransformation[D1, D2], val dom2Todom1: DomainTransformation[D2, D1]) extends NumericalDomain {
-
   val widenings = {
     for (w1 <- dom1.widenings; w2 <- dom2.widenings)
       yield WideningDescription(s"${w1.name} X ${w2.name}", s"Component-wise combination of the two widenings.",

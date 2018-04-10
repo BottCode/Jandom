@@ -44,12 +44,14 @@ abstract class BaseNumericalDomain
     * @param unreachable tells whether the program point is reachable or not
     * @return a new property for the given array
     */
+    
   def createProperty(elements: Array[T], unreachable: Boolean) : Property
 
 
   def createProperty(p : BaseProperty): Property =
     createProperty(p.elements, p.isEmpty || p.elements.contains(core.bottom))
 
+  //def updateData(x: Double, y: Double) = core.updateData(x,y)
 
   /**
     * Factory method for creating a Property.

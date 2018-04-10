@@ -39,7 +39,6 @@ import scala.util.Try
 class ParallelotopeRationalDomain private(favorAxis: Int) extends NumericalDomain {
 
   val widenings = Seq(WideningDescription.default[Property])
-
   /**
     * Build a non-empty parallelotope. If the parallelotope is not empty, the result is undetermined.
     *

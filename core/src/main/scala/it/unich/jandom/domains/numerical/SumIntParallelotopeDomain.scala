@@ -27,7 +27,6 @@ package it.unich.jandom.domains.numerical
 
 class SumBoxDoubleParallelotopeRationDomain(val dom1: BoxDoubleDomain, val dom2: ParallelotopeRationalDomain) extends SumDomain[BoxDoubleDomain, ParallelotopeRationalDomain] {
   type Property = SumBoxDoubleParallelotopeRational
-
   class SumBoxDoubleParallelotopeRational(val p1: dom1.Property, val p2: dom2.Property) extends Sum {
     override def linearAssignment(n: Int, lf: LinearForm): Property = {
       if ((n >= lf.homcoeffs.size) || (lf.homcoeffs(n) == 0)) {

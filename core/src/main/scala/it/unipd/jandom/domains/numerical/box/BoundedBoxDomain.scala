@@ -31,6 +31,11 @@ import it.unipd.jandom.domains.{InfInt, PositiveInfinity, NegativeInfinity, IntN
   */
 class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, BoundedBoxDomainCore](BoundedBoxDomainCore(m,n)){
 
+  override def updateData(x: Double, y: Double): Unit = {
+    val new_m = IntNumber(x.toInt)
+    val new_n = IntNumber(y.toInt)
+    BoundedBoxDomainCore.updateData(new_m,new_n)
+  }
 
   /**
     * @inheritdoc

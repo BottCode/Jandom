@@ -52,6 +52,7 @@ class BoxDoubleDomain(val overReals: Boolean) extends NumericalDomain {
   final class Property(val low: Array[Double], val high: Array[Double], val isEmpty: Boolean) extends NumericalProperty[Property] {
     require(normalized, s"The parameters low: ${low.mkString(",")}, high: ${high.mkString(",")} and isEmpty: ${isEmpty} are not normalized")
 
+
     type Domain = BoxDoubleDomain
 
     def domain = BoxDoubleDomain.this

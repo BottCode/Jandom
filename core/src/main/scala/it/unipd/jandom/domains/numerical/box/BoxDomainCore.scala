@@ -122,9 +122,24 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     }
   }
 
-  //TODO
+  /**
+    * @inheritdoc
+    */
   def remainder(x : Box, y : Box) : Box = {
-    sum(x,inverse(mult(division(x,y),y))) // (10%4) = 10 - (10/4)*4
+    (x,y) match {
+      case (IntervalBottom, _) => IntervalBottom
+      case (_, IntervalBottom) => IntervalBottom
+      case (_, Interval(IntNumber(0),IntNumber(0))) => IntervalBottom
+      case (Interval(IntNumber(0),IntNumber(0)), _) => Interval(IntNumber(0),IntNumber(0))
+      case (IntervalTop, _) => IntervalTop
+      case (_, IntervalTop) => IntervalTop
+      case (Interval (low1, high1), Interval (low2,high2)) =>
+        if (low2 >= IntNumber(0))
+          return Interval(IntNumber(0),high2 - IntNumber(1))
+        if (high2 <= IntNumber(0))
+          return Interval(low2 + IntNumber(1), IntNumber(0))
+        return Interval(low2 + IntNumber(1), high2 - IntNumber(1))
+    }
   }
 
   /**

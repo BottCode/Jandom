@@ -134,23 +134,32 @@ class BoxDomainCoreSuite extends FlatSpec {
 
   "BoxDomainCore.remainder" should
     " - return the remainder of the two Boxs given as input" in {
-    // IntervalBottom
-    /*assert(bc.remainder(IntervalBottom, One) === IntervalBottom)
-    assert(bc.remainder(IntervalBottom, IntervalTop) === IntervalBottom)
-    assert(bc.remainder(One, IntervalBottom) === IntervalBottom)
-    assert(bc.remainder(IntervalTop, IntervalBottom) === IntervalBottom)
-    // IntervalTop
-    assert(bc.remainder(IntervalTop, MtenTen) === IntervalTop)
-    assert(bc.remainder(MtenTen, IntervalTop) === IntervalTop)
-    assert(bc.remainder(IntervalTop, IntervalTop) === IntervalTop)
-    // Interval(0)
-    assert(bc.remainder(IntervalTop, Zero) === IntervalBottom)
-    assert(bc.remainder(Zero, IntervalTop) === Zero)
-    assert(bc.remainder(Zero, MtenTen) === Zero)
-    assert(bc.remainder(MtenTen, Zero) === IntervalBottom)
-    assert(bc.remainder(Zero, Zero) === IntervalBottom)
-    // Interval
-    assert(bc.remainder(MtenTen, MtenTen) === zero)*/
+      val twoThree = Box.Interval(IntNumber(2), IntNumber(3))
+      val MnineNine = Box.Interval(IntNumber(-9), IntNumber(9))
+      val zeroTwo = Box.Interval(IntNumber(0), IntNumber(2))
+      val MnineMseven = Box.Interval(IntNumber(-9), IntNumber(-7))
+      val MeightZero = Box.Interval(IntNumber(-8), IntNumber(0))
+      val zeroInf = Box.Interval(IntNumber(0), PositiveInfinity())
+      //IntervalBottom
+      assert(bc.remainder(IntervalBottom, One) === IntervalBottom)
+      assert(bc.remainder(IntervalBottom, IntervalTop) === IntervalBottom)
+      assert(bc.remainder(One, IntervalBottom) === IntervalBottom)
+      assert(bc.remainder(IntervalTop, IntervalBottom) === IntervalBottom)
+      // IntervalTop
+      assert(bc.remainder(IntervalTop, MtenTen) === IntervalTop)
+      assert(bc.remainder(MtenTen, IntervalTop) === IntervalTop)
+      assert(bc.remainder(IntervalTop, IntervalTop) === IntervalTop)
+      // Interval(0)
+      assert(bc.remainder(IntervalTop, Zero) === IntervalBottom)
+      assert(bc.remainder(Zero, IntervalTop) === Zero)
+      assert(bc.remainder(Zero, MtenTen) === Zero)
+      assert(bc.remainder(MtenTen, Zero) === IntervalBottom)
+      assert(bc.remainder(Zero, Zero) === IntervalBottom)
+      // Interval
+      assert(bc.remainder(MtenTen, MtenTen) === MnineNine)
+      assert(bc.remainder(MtenTen, twoThree) === zeroTwo)
+      assert(bc.remainder(MtenTen, MnineMseven) === MeightZero)
+      assert(bc.remainder(MtenTen, oneInf) === zeroInf)
   }
 
   "BoxDomainCore.lub" should

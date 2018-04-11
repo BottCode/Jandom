@@ -38,7 +38,7 @@ public class TestBox {
     public static void remainder() {
 	       int x = 10;
 	       int y = 0;
-	       while (x + y < 15) {
+	       while (x < 15) {
            x++;
            y++;
          }

@@ -135,7 +135,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
       case (_, IntervalTop) => IntervalTop
       case (Interval (low1, high1), Interval (low2,high2)) =>
         if (low2 >= IntNumber(0))
-          return Interval(IntNumber(0),high2 - IntNumber(1))
+          return Interval(IntNumber(0), high2 - IntNumber(1))
         if (high2 <= IntNumber(0))
           return Interval(low2 + IntNumber(1), IntNumber(0))
         return Interval(low2 + IntNumber(1), high2 - IntNumber(1))

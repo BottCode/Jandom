@@ -43,7 +43,6 @@ case class WhileStmt(condition: NumericCondition, body: SLILStmt) extends SLILSt
   var lastBodyResult: NumericalProperty[_] = null
 
   override def analyzeStmt(params: Parameters)(input: params.Property, phase: AnalysisPhase, ann: Annotation[ProgramPoint, params.Property]): params.Property = {
-
     import WideningScope._
     import NarrowingStrategy._
 
@@ -116,6 +115,7 @@ case class WhileStmt(condition: NumericCondition, body: SLILStmt) extends SLILSt
         currentPhase = Descending
     }
 
+
     if (currentPhase == Descending) {
       // Debug
       params.log("Beginning Descending Chain\n")
@@ -144,7 +144,6 @@ case class WhileStmt(condition: NumericCondition, body: SLILStmt) extends SLILSt
 
       params.log(s"Final descending invariant: $newinvariant\n")
     }
-
     // Save current values for later iterations of the loop
     lastInvariant = invariant
     lastBodyResult = bodyResult

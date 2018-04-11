@@ -323,9 +323,13 @@ class BoxDoubleDomain(val overReals: Boolean) extends NumericalDomain {
               }
             case 1 => {
               val posinf = infinities.head
-              if (homcoeffs(posinf) < 0)
+              if (homcoeffs(posinf) < 0) {
+                print("MINORE")
+                print("LOW = " + low(posinf))
+                print("ALTRO = " + ((-dotprod_lo(homcoeffs, lfArgmin, posinf) - known) / homcoeffs(posinf)))
+                print("LFARGMIN = "+lfArgmin)
                 newlow(posinf) = low(posinf) max ((-dotprod_lo(homcoeffs, lfArgmin, posinf) - known) / homcoeffs(posinf))
-              else
+              } else
                 newhigh(posinf) = high(posinf) min ((-dotprod_hi(homcoeffs, lfArgmin, posinf) - known) / homcoeffs(posinf))
             }
             case _ =>

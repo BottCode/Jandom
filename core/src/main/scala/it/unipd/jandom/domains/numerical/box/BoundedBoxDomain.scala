@@ -122,13 +122,13 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
           case 1 => {
             val posinf = infinities.head
             if (homcoeffs(posinf) < 0)
-                newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf) - known).inverse() / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
+                newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
               else
-                newboxes(posinf) = Interval(projectLow(boxes(posinf)), projectHigh(boxes(posinf)) min ((dotprod(homcoeffs, lfArgmin, posinf) - known).inverse() / IntNumber(homcoeffs(posinf))))
+                newboxes(posinf) = Interval(projectLow(boxes(posinf)), projectHigh(boxes(posinf)) min ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))))
           }
           case _ =>
         }
-        new Property(newboxes,false)
+        new Property(newboxes.map(BoundedBoxDomainCore.norm),false)
       }
     }
 

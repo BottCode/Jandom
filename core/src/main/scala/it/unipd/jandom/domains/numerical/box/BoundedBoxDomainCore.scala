@@ -86,12 +86,13 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
       case Interval(low,high) => {
         if (low == high)
           return Interval(low,high)
-        if(n > m){
-        if (high < m)
-          return Interval(NegativeInfinity(),m)
-        if (low > n)
-          return Interval(n,PositiveInfinity())
 
+        if (n > m) {
+          if (high < m)
+            return Interval(NegativeInfinity(),m)
+          if (low > n)
+            return Interval(n,PositiveInfinity())
+            
           var new_low = low
           var new_high = high
           if (high > n)

@@ -24,11 +24,14 @@ import it.unipd.jandom.domains.numerical.box.BoxDomainCore._
 import it.unipd.jandom.domains.{InfInt, PositiveInfinity, NegativeInfinity, IntNumber}
 
 /**
-  * Box Domain ... @TODO a better explanation is required
+  * This is the domain of Integer boxes, also known as the interval domain. Bounds are represented by two numbers which type is :InfInt.
+  * InfInt is a particular ad-hoc type that manages normal Int operation better than :Int type. For Example there's no overflow error, but it's
+  * replaced by an "infinity" entity just like happens in :Double type.
   *
   * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>
   * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>
   */
+
 class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore()) {
 
   /**
@@ -38,7 +41,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
     new Property(boxes, unreachable)
 
   /**
-    * Numerical property that tells whether the variables in a certain point of the CFG are constant or not.
+    * Numerical property that tells whether the variables in a certain point of the CFG are an integer interval or not.
     * @param boxes array of the variables' boxes status
     * @param unreachable tells if a given program point is unreachable
     */

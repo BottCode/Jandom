@@ -1,7 +1,7 @@
 /**
  * Copyright 2018 Mattia Bottaro, Mauro Carlin
  *
- * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
+ * This file is part of JANDOM: JVM-based Analyzer for Numerical Domains
  * JANDOM is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -23,8 +23,7 @@ import it.unipd.jandom.domains.numerical.box.Box._
 import it.unipd.jandom.domains.numerical.box.BoundedBoxDomainCore._
 import it.unipd.jandom.domains.{InfInt, PositiveInfinity, NegativeInfinity, IntNumber}
 
-/**
-  *
+/** TODO
   *
   * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>
   * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>

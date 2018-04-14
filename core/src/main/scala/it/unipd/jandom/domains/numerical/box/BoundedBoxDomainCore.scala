@@ -35,7 +35,7 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
 
   override def sum(x : Box, y : Box) : Box = {
     val result = super.sum(x,y)
-    //println("sum i bound sono"+ m + " " +n)
+    //// println("sum i bound sono"+ m + " " +n)
     normalizeBound(result)
   }
 
@@ -92,7 +92,7 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
             return Interval(NegativeInfinity(),m)
           if (low > n)
             return Interval(n,PositiveInfinity())
-            
+
           var new_low = low
           var new_high = high
           if (high > n)
@@ -124,7 +124,7 @@ object BoundedBoxDomainCore {
   def updateData(x: InfInt, y: InfInt) = {
     D.m = x
     D.n = y
-    println("DATA ARE UPDATED " + D.m + " and " + D.n)
+    // println("DATA ARE UPDATED " + D.m + " and " + D.n)
   }
 
   def norm(x : Box) : Box = {

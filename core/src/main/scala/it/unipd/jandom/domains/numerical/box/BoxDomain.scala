@@ -97,7 +97,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       val known = IntNumber(lf.known.toInt)
       val lfMin = projectLow(linearEvaluation(lf))
       val lfArgmin = linearArgmin(lf);
-      //print(lowresult)
+      //// print(lowresult)
       if (lfMin > IntNumber(0))
         return bottom
       else {
@@ -106,23 +106,23 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
 
         infinities.size match {
           case 0 => {
-            print("CASE 0")
+            // print("CASE 0")
             for (i <- homcoeffs.indices) {
               if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))), projectHigh(newboxes(i)))
               if (homcoeffs(i) > 0) newboxes(i) = Interval(projectLow(newboxes(i)), projectHigh(boxes(i)) min (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))))
             }
           }
           case 1 => {
-            print("CASE 1")
+            // print("CASE 1")
             val posinf = infinities.head
             if (homcoeffs(posinf) < 0) {
-              print("MINORE")
-              print("LOW = " + projectLow(boxes(posinf)))
-              print("ALTRO = " + ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))))
-              print("LFARGMIN = "+lfArgmin)
+              // print("MINORE")
+              // print("LOW = " + projectLow(boxes(posinf)))
+              // print("ALTRO = " + ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))))
+              // print("LFARGMIN = "+lfArgmin)
               newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
             } else {
-              print("MAGGIORE")
+              // print("MAGGIORE")
               newboxes(posinf) = Interval(projectLow(boxes(posinf)), projectHigh(boxes(posinf)) min ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))))
             }
           }

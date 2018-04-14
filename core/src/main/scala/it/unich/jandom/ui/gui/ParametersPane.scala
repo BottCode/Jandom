@@ -98,7 +98,7 @@ class ParametersPane extends GridBagPanel {
     val delay = delayModel.getValue().asInstanceOf[Double].toInt
     val bound_m = parameter_m_model.getValue().asInstanceOf[Double].toInt
     val bound_n = parameter_n_model.getValue.asInstanceOf[Double].toInt
-    print("Bound from graphics ",bound_m,bound_n)
+    // print("Bound from graphics ",bound_m,bound_n)
     NumericalDomains.setBound(bound_m, bound_n)
     params.widening = DelayedWidening(DefaultWidening, delay)
     params.narrowing = DelayedNarrowing(TrivialNarrowing, 2)

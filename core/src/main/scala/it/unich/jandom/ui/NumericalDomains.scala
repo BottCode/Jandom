@@ -73,7 +73,7 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   def setBound(m: Int,n: Int) = {
     for (d <- values) {
       if (d.value.isInstanceOf[BoundedBoxDomain]) {
-        println("te chiamo qui" + m + " - " + n)
+        // println("te chiamo qui" + m + " - " + n)
         d.value.updateData(m,n)
       }
     }

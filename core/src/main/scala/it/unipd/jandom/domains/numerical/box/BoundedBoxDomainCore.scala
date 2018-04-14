@@ -81,33 +81,27 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
     normalizeBound(result)
   }
 
-  /*def check(x : Interval) : Box = {
-    x match {
-      case Interval(NegativeInfinity(), NegativeInfinity()) => Interval(NegativeInfinity(),m)
-      case Interval(PositiveInfinity(), PositiveInfinity()) => Interval(n, PositiveInfinity())
-      case Interval(NegativeInfinity(), PositiveInfinity()) => IntervalTop
-      case _ => x
-    }
-  }*/
-
   def normalizeBound(x : Box) : Box = {
     x match {
       case Interval(low,high) => {
         if (low == high)
           return Interval(low,high)
+        if(n > m){
         if (high < m)
           return Interval(NegativeInfinity(),m)
         if (low > n)
           return Interval(n,PositiveInfinity())
 
-        var new_low = low
-        var new_high = high
-        if (high > n)
-          new_high = PositiveInfinity()
-        if (low < m)
-          new_low = NegativeInfinity()
+          var new_low = low
+          var new_high = high
+          if (high > n)
+            new_high = PositiveInfinity()
+          if (low < m)
+            new_low = NegativeInfinity()
 
-        return check(Interval(new_low,new_high))
+          return check(Interval(new_low,new_high))
+        }
+        return IntervalTop
       }
       case _ => x
 

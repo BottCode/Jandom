@@ -32,7 +32,6 @@ public class TestBox {
 
     public static void BoxNull() {
         int x = 0;
-
     }
 
     public static void remainder() {
@@ -44,5 +43,50 @@ public class TestBox {
          }
          int w = x % y;
     }
+
+    public static void Test1(){
+        int i = 0;
+        while(i < 10) {
+            i++;
+        }
+    }
+
+    public static void Test3(){
+        int i = 1;
+        while(i < 10) {
+            i = i * 11;
+        }
+    }
+
+    public static void Test33(){
+        int i = 1;
+        while(i < 10) {
+            i = i * 11;
+        }
+    }
+
+    public static void Test7(){
+        int k = Integer.MAX_VALUE;
+        int i = 0;
+        while(i < k){
+            i++;
+        }
+    }
+
+    public static void Test8(){
+        int i = 0;
+        int x = 2;
+        int z = 0;
+        while(i < 10){
+            i++;
+            if(i % 2 == 0){
+                x = x * 2;
+            }else{
+                x = x* (-2);
+            }
+        }
+
+    }
+    
 
 }

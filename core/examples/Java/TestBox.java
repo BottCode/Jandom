@@ -36,13 +36,63 @@ public class TestBox {
     }
 
     public static void remainder() {
-	       int x = 10;
-	       int y = 0;
-	       while (x < 15) {
-           x++;
-           y++;
-         }
-         int w = x % y;
+	      int x = 10;
+	      int y = 0;
+	      while (x < 15) {
+            x++;
+            y++;
+        }
+        int w = x % y;
+    }
+
+    public static void test2() {
+        int x = 7;
+        while (x >= -10) {
+            x = x - 2;
+        }
+    }
+
+    public static void test4() {
+        int x = 0;
+        int y = -20;
+        int w = x + y;
+        if (w - x != -5) {
+            y = y * w;
+        } else {
+            w = x % y;
+        }
+    }
+
+    public static void test6() {
+        int x = 0;
+        int y = 15;
+        while (x != 5) {
+            x = x * y;
+        }
+    }
+
+    public static void test8() {
+        int x = -5;
+        int y = 15;
+        while (x <= 5) {
+            y = x * y;
+            x++;
+        }
+        if (x >= 6) {
+            x = x - 10;
+        } else {
+            x = x + 10;
+        }
+    }
+
+    public static void test10() {
+        int x = 0;
+        int y = 7;
+        while (x <= 5) {
+            x++;
+        }
+        int w = y % x;
+        int z = x % y;
     }
 
 }

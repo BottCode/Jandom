@@ -35,45 +35,48 @@ public class TestBox {
     }
 
     public static void remainder() {
-	       int x = 10;
-	       int y = 0;
-	       while (x < 15) {
-           x++;
-           y++;
-         }
-         int w = x % y;
+	      int x = 10;
+	      int y = 0;
+	      while (x < 15) {
+            x++;
+            y++;
+        }
+        int w = x % y;
     }
 
-    public static void Test1(){
+    public static void test1(){
         int i = 0;
         while(i < 10) {
             i++;
         }
     }
 
-    public static void Test3(){
+    public static void test2() {
+        int x = 7;
+        while (x >= -10) {
+            x = x - 2;
+        }
+    }
+
+    public static void test3(){
         int i = 1;
         while(i < 10) {
             i = i * 11;
         }
     }
 
-    public static void Test33(){
-        int i = 1;
-        while(i < 10) {
-            i = i * 11;
+    public static void test4() {
+        int x = 0;
+        int y = -20;
+        int w = x + y;
+        if (w - x != -5) {
+            y = y * w;
+        } else {
+            w = x % y;
         }
     }
 
-    public static void Test7(){
-        int k = Integer.MAX_VALUE;
-        int i = 0;
-        while(i < k){
-            i++;
-        }
-    }
-
-    public static void Test8(){
+    public static void test5(){
         int i = 0;
         int x = 2;
         int z = 0;
@@ -87,6 +90,44 @@ public class TestBox {
         }
 
     }
-    
 
+    public static void test6() {
+        int x = 0;
+        int y = 15;
+        while (x != 5) {
+            x = x * y;
+        }
+    }
+
+    public static void test7(){
+        int k = Integer.MAX_VALUE;
+        int i = 0;
+        while(i < k){
+            i++;
+        }
+    }
+
+    public static void test8() {
+        int x = -5;
+        int y = 15;
+        while (x <= 5) {
+            y = x * y;
+            x++;
+        }
+        if (x >= 6) {
+            x = x - 10;
+        } else {
+            x = x + 10;
+        }
+    }
+
+    public static void test9() {
+        int x = 0;
+        int y = 7;
+        while (x <= 5) {
+            x++;
+        }
+        int w = y % x;
+        int z = x % y;
+    }
 }

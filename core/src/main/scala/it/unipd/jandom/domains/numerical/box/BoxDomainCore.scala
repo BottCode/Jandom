@@ -56,7 +56,7 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     x match {
       case IntervalBottom => IntervalBottom
       case IntervalTop => IntervalTop
-      case Interval(low,high) => Interval(high.inverse(),low.inverse()) // TODO, bruttino
+      case Interval(low,high) => Interval(high.inverse(),low.inverse())
     }
   }
 
@@ -81,8 +81,6 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
 
   def check(x : Interval) : Box = {
     x match {
-      /*case Interval(Undetermined(), _) => IntervalTop
-      case Interval(_, Undetermined()) => IntervalTop*/
       case Interval(NegativeInfinity(), NegativeInfinity()) => Interval(NegativeInfinity(),IntNumber(Int.MinValue))
       case Interval(PositiveInfinity(), PositiveInfinity()) => Interval(IntNumber(Int.MaxValue), PositiveInfinity())
       case Interval(NegativeInfinity(), PositiveInfinity()) => IntervalTop

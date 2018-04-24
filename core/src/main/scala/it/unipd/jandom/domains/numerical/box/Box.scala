@@ -19,7 +19,7 @@ package it.unipd.jandom.domains.numerical.box
 import it.unipd.jandom.domains.InfInt
 
 /**
-  * The elements of the constant domain.
+  * The elements of the Interval domain.
   * It is a flat domain composed of Interval, top and bottom.
   * This domain is useful for the Interval propagation analysis.
   *

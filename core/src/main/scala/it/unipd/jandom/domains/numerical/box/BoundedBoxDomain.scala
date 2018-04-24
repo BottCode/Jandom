@@ -23,7 +23,7 @@ import it.unipd.jandom.domains.numerical.box.Box._
 import it.unipd.jandom.domains.numerical.box.BoundedBoxDomainCore._
 import it.unipd.jandom.domains.{InfInt, PositiveInfinity, NegativeInfinity, IntNumber}
 
-/** TODO
+/**
   *
   * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>
   * @author Mauro Carlin <mauro.carlin@studenti.unipd.it>
@@ -40,20 +40,19 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
     * @inheritdoc
     */
   override def createProperty(boxes: Array[Box], unreachable: Boolean): Property = {
-    //boxes.map(normalizeBound)
     new Property(boxes, unreachable)
   }
 
   /**
-    * Numerical property that tells whether the variables in a certain point of the CFG are constant or not.
+    *
     * @param boxes array of the variables' boxes status
     * @param unreachable tells if a given program point is unreachable
     */
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
     /**
-      * @param x is an Interval
-      * @return the lower bound.
+      * @param box is an Interval
+      * @return the lower bound of the interval.
       */
     private def projectLow (box : Box) : InfInt = {
 
@@ -66,7 +65,7 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
 
 
     /**
-      * @param x is an Interval
+      * @param box is an Interval
       * @return the upper bound.
       */
     private def projectHigh (box : Box) : InfInt = {
@@ -79,7 +78,7 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
     }
 
 	  def apply(boxes: Array[Box], unreachable: Boolean) : Property = new Property(boxes, unreachable)
-    // x != 0
+
     /**
       * @inheritdoc
       */
@@ -104,7 +103,6 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
       val known = IntNumber(lf.known.toInt)
       val lfMin = projectLow(linearEvaluation(lf))
       val lfArgmin = linearArgmin(lf);
-      //print(lowresult)
       if (lfMin > IntNumber(0))
         return bottom
       else {
@@ -112,6 +110,7 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
         val infinities = (homcoeffs.indices) filter { i => lfArgmin(i).isInfinity && homcoeffs(i) != 0 }
 
         infinities.size match {
+
           case 0 => {
             for (i <- homcoeffs.indices) {
               if (homcoeffs(i) < 0) newboxes(i) = Interval(projectLow(boxes(i)) max (lfArgmin(i) - (lfMin / IntNumber(homcoeffs(i)))), projectHigh(newboxes(i)))
@@ -120,14 +119,15 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
           }
           case 1 => {
             val posinf = infinities.head
-            if (homcoeffs(posinf) < 0)
-                newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
-              else
-                newboxes(posinf) = Interval(projectLow(boxes(posinf)), projectHigh(boxes(posinf)) min ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))))
+            if (homcoeffs(posinf) < 0) {
+              newboxes(posinf) = Interval(projectLow(boxes(posinf)) max ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))), projectHigh(newboxes(posinf)))
+            } else {
+              newboxes(posinf) = Interval(projectLow(boxes(posinf)), projectHigh(boxes(posinf)) min ((dotprod(homcoeffs, lfArgmin, posinf).inverse() - known) / IntNumber(homcoeffs(posinf))))
+            }
           }
           case _ =>
         }
-        new Property(newboxes.map(BoundedBoxDomainCore.norm),false)
+        new Property(newboxes,false)
       }
     }
 

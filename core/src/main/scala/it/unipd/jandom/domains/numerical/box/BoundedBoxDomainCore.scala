@@ -35,7 +35,6 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
 
   override def sum(x : Box, y : Box) : Box = {
     val result = super.sum(x,y)
-    //// println("sum i bound sono"+ m + " " +n)
     normalizeBound(result)
   }
 
@@ -47,6 +46,9 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
     normalizeBound(result)
   }
 
+  /**
+    * @inheritdoc
+    */
   override def mult(x : Box, y : Box) : Box = {
     val result = super.mult(x,y)
     normalizeBound(result)
@@ -60,6 +62,9 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
     normalizeBound(result)
   }
 
+  /**
+    * @inheritdoc
+    */
   override def remainder(x : Box, y : Box) : Box = {
     val result = super.remainder(x,y)
     normalizeBound(result)
@@ -124,7 +129,6 @@ object BoundedBoxDomainCore {
   def updateData(x: InfInt, y: InfInt) = {
     D.m = x
     D.n = y
-    // println("DATA ARE UPDATED " + D.m + " and " + D.n)
   }
 
   def norm(x : Box) : Box = {

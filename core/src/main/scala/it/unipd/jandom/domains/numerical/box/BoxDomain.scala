@@ -48,6 +48,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
   class Property (boxes : Array[Box], unreachable: Boolean) extends BaseProperty(boxes, unreachable) {
 
     /**
+      * Returning the lower bound of an interval.
       * @param box is an Interval
       * @return the lower bound.
       */
@@ -61,6 +62,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
 
 
     /**
+      * Returning the upper bound of an interval.
       * @param box is an Interval
       * @return the upper bound.
       */
@@ -125,12 +127,23 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
       }
     }
 
+    /**
+     * Compute the corner of the box which minimizes a linear form.
+     * @param coeff the homogeneous coefficients.
+     * @return the coordinates of the point which minimizes the linear form.
+     */
     private def linearArgmin(lf: LinearForm): Seq[InfInt] = {
       (lf.homcoeffs.zipWithIndex) map {
         case (c, i) => if (c > 0) projectLow(boxes(i)) else projectHigh(boxes(i))
       }
     }
 
+    /**
+     * Return the dot product of `x` and `y`.
+     * If element `x(i)` is zero, then `x(i)*y(i)` is `0` independently from the value of `y(i)`.
+     * If `remove` is a valid index in `x` and `y`, the factor `x(remove) * y(remove)` is
+     * removed from the dot product.
+     */
     private def dotprod(x: Seq[Int], y: Seq[InfInt], remove: Int): InfInt = {
       var sum: InfInt = IntNumber(0)
       for (i <- x.indices; if i != remove && x(i) != 0)
@@ -140,7 +153,7 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
 
     /**
       * Implementing the widening strategy described in
-      * https://hal.archives-ouvertes.fr/hal-01657536 (Tutorial on Static Inference of Numeric Invariants by Abstract Interpretation), page 221
+      * [[https://hal.archives-ouvertes.fr/hal-01657536]] (Tutorial on Static Inference of Numeric Invariants by Abstract Interpretation), page 221
       *
       * @param that the abstract object to be widened with `this`. `that` IS assumed to be smaller than `this`.
       * @return the widening of the two abstract properties.
@@ -172,7 +185,8 @@ class BoxDomain extends BaseNumericalDomain[Box, BoxDomainCore](BoxDomainCore())
 	  }
 
     /**
-      * Implementing the narrowing strategy
+      * Implementing the narrowing strategy described in
+      * [[https://hal.archives-ouvertes.fr/hal-01657536]] (Tutorial on Static Inference of Numeric Invariants by Abstract Interpretation), page 230
       *
       * @param that the abstract object to be narrowed with `this`. `that` IS assumed to be smaller than `this`.
       * @return the narrowing of the two abstract properties.

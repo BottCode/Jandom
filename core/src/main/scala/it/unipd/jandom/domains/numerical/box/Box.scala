@@ -20,7 +20,6 @@ import it.unipd.jandom.domains.InfInt
 
 /**
   * The elements of the Interval domain.
-  * It is a flat domain composed of Interval, top and bottom.
   * This domain is useful for the Interval propagation analysis.
   *
   * @author Mattia Bottaro <mattia.bottaro@studenti.unipd.it>

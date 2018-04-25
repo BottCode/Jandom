@@ -30,15 +30,15 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   with IntOperator[Box] with Abstraction[Int,Box]{
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def alpha(num : Int) : Box = {
     return Interval(IntNumber(num),IntNumber(num))
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def sum(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
@@ -49,9 +49,9 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     }
   }
 
-   /**
-    * @inheritdoc
-    */
+  /**
+   * @inheritdoc
+   */
   def inverse(x : Box) : Box = {
     x match {
       case IntervalBottom => IntervalBottom
@@ -60,9 +60,9 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     }
   }
 
-   /**
-    * @inheritdoc
-    */
+  /**
+   * @inheritdoc
+   */
   def mult(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
@@ -79,6 +79,13 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
     }
   }
 
+  /**
+   * Check if an interval is in the form [-Inf, -Inf], [+Inf, +Inf] or [-Inf, +Inf] to return a sound approsimation in order to avoid
+   * a sum with +Inf and -Inf.
+   *
+   * @param x an interval.
+   * @return a sound approsimation of the interval.
+   */
   def check(x : Interval) : Box = {
     x match {
       case Interval(NegativeInfinity(), NegativeInfinity()) => Interval(NegativeInfinity(),IntNumber(Int.MinValue))
@@ -89,8 +96,8 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def division(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
@@ -121,8 +128,8 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def remainder(x : Box, y : Box) : Box = {
     (x,y) match {
       case (IntervalBottom, _) => IntervalBottom
@@ -141,8 +148,8 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def lub(x : Box, y : Box) : Box = {
     (x, y) match {
       case (IntervalTop, _) => return IntervalTop
@@ -157,8 +164,8 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def glb(x : Box, y : Box) : Box = {
     (x, y) match {
       case (IntervalTop, _) => return y
@@ -176,8 +183,8 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   def compare(x : Box, y : Box) : Option[Int] = {
     (x, y) match {
       case (IntervalBottom, IntervalBottom) => return Option(0)
@@ -199,20 +206,20 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def top: Box = IntervalTop
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def bottom: Box = IntervalBottom
 
 }
 
 object BoxDomainCore {
   /**
-    * Factory method of BoxDomainCore
-    */
+   * @inheritdoc
+   */
   def apply() = new BoxDomainCore
 } // end of BoxDomainCore companion object

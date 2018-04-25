@@ -33,59 +33,70 @@ class BoundedBoxDomainCore(bound_m : InfInt, bound_n : InfInt) extends BoxDomain
   var m: InfInt = bound_m
   var n: InfInt = bound_n
 
+  /**
+   * @inheritdoc
+   */
   override def sum(x : Box, y : Box) : Box = {
     val result = super.sum(x,y)
     normalizeBound(result)
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def inverse(x : Box) : Box = {
     val result = super.inverse(x)
     normalizeBound(result)
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def mult(x : Box, y : Box) : Box = {
     val result = super.mult(x,y)
     normalizeBound(result)
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def division(x : Box, y : Box) : Box = {
     val result = super.division(x,y)
     normalizeBound(result)
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def remainder(x : Box, y : Box) : Box = {
     val result = super.remainder(x,y)
     normalizeBound(result)
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def lub(x : Box, y : Box) : Box = {
     val result = super.lub(x,y)
     normalizeBound(result)
   }
 
   /**
-    * @inheritdoc
-    */
+   * @inheritdoc
+   */
   override def glb(x : Box, y : Box) : Box = {
     val result = super.glb(x,y)
     normalizeBound(result)
   }
 
+  /**
+   * Normalize an interval in order to respect the bound m and n.
+   * If m >= n the domain become the Constant domain.
+   * If m is -Inf and n +Inf it become the Interval domain.
+   *
+   * @param x an Interval
+   * @return the interval bounded with m and n
+   */
   def normalizeBound(x : Box) : Box = {
     x match {
       case Interval(low,high) => {

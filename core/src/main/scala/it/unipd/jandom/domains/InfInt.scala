@@ -48,8 +48,23 @@ trait InfInt {
     */
   def /(x: InfInt): InfInt
 
+  /**
+    * Perform the mathematical multiplication between the object that invoke this method and the param
+    * @param x is the factor
+    * @return the mathematical multiplication between the object that invoke this method and x.
+    */
   def *(x: InfInt): InfInt
+
+  /**
+    * @param x is the element to compare
+    * @return true if the object that invoke this method is greater then x, false otherwise.
+    */
   def >(x: InfInt): Boolean
+
+  /**
+    * @param x is the element to compare
+    * @return true if the object that invoke this method is greater or equal then x, false otherwise.
+    */
   def >=(x: InfInt): Boolean
 
   /**
@@ -58,7 +73,16 @@ trait InfInt {
     */
   def max(x: InfInt): InfInt
 
+  /**
+    * @param x is the second argument of min operator
+    * @return the min element between the object that invoke this method and x.
+    */
   def min(x: InfInt): InfInt
+
+  /**
+    * @param x is the element to compare
+    * @return true if the object that invoke this method is equal to x, false otherwise.
+    */
   def ==(x: InfInt): Boolean
 
   /**
@@ -100,7 +124,10 @@ trait InfInt {
     !(this >= x)
   }
 
-  // similar to <
+  /**
+    * @param x is the element to compare
+    * @return true if the object that invoke this method is smaller or equal then x, false otherwise.
+    */
   def <=(x: InfInt): Boolean = {
     !(this > x)
   }

@@ -151,7 +151,6 @@ object NumericExpression {
       input.linearInequality(lf)
 
     override def ltZero[Property <: NumericalProperty[Property]](input: Property): Property = {
-      println("INPUT"+input)
       input.linearInequality(lf)
     }
     override def neqZero[Property <: NumericalProperty[Property]](input: Property): Property =

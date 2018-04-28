@@ -79,7 +79,6 @@ public class TestBox {
     public static void test5(){
         int i = 0;
         int x = 2;
-        int z = 0;
         while(i < 10){
             i++;
             if(i % 2 == 0){
@@ -114,7 +113,7 @@ public class TestBox {
             y = x * y;
             x++;
         }
-        if (x >= 6) {
+        if (x >= 7) {
             x = x - 10;
         } else {
             x = x + 10;

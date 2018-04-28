@@ -127,7 +127,7 @@ class BoundedBoxDomain(m : InfInt, n : InfInt) extends BaseNumericalDomain[Box, 
           }
           case _ =>
         }
-        new Property(newboxes,false)
+        new Property(newboxes.map(BoundedBoxDomainCore.norm),false)
       }
     }
 

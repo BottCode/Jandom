@@ -152,10 +152,10 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
    */
   def lub(x : Box, y : Box) : Box = {
     (x, y) match {
-      case (IntervalTop, _) => return IntervalTop
-      case (_, IntervalTop) => return IntervalTop
-      case (IntervalBottom, _) => return y
-      case (_, IntervalBottom) => return x
+      case (IntervalTop, _) => IntervalTop
+      case (_, IntervalTop) => IntervalTop
+      case (IntervalBottom, _) => y
+      case (_, IntervalBottom) => x
       case (Interval (low1, high1), Interval (low2, high2)) =>
         val new_low = low1 min low2
         val new_high = high1 max high2
@@ -168,10 +168,10 @@ class BoxDomainCore extends CompleteLatticeOperator[Box]
    */
   def glb(x : Box, y : Box) : Box = {
     (x, y) match {
-      case (IntervalTop, _) => return y
-      case (_, IntervalTop) => return x
-      case (IntervalBottom, _) => return IntervalBottom
-      case (_, IntervalBottom) => return IntervalBottom
+      case (IntervalTop, _) => y
+      case (_, IntervalTop) => x
+      case (IntervalBottom, _) => IntervalBottom
+      case (_, IntervalBottom) => IntervalBottom
       case (Interval (low1, high1), Interval (low2, high2)) =>
         val new_low = low1 max low2
         val new_high = high1 min high2

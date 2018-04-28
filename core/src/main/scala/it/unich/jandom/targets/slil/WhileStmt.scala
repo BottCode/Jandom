@@ -88,7 +88,6 @@ case class WhileStmt(condition: NumericCondition, body: SLILStmt) extends SLILSt
         invariant = newinvariant
         params.wideningScope match {
           case Random =>
-            print("CONDITION ANALYZE" + condition.analyze(invariant))
             bodyResult = body.analyzeStmt(params)(condition.analyze(invariant), currentPhase, ann)
             newinvariant = widening(invariant, bodyResult)
           case BackEdges =>

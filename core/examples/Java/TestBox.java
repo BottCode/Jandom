@@ -76,20 +76,6 @@ public class TestBox {
         }
     }
 
-    public static void test5(){
-        int i = 0;
-        int x = 2;
-        while(i < 10){
-            i++;
-            if(i % 2 == 0){
-                x = x * 2;
-            }else{
-                x = x* (-2);
-            }
-        }
-
-    }
-
     public static void test6() {
         int x = 0;
         int y = 15;

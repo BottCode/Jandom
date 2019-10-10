@@ -28,7 +28,6 @@ package it.unich.jandom.domains.numerical
 
 class SumGenericDomain[D1 <: NumericalDomain, D2 <: NumericalDomain](val dom1: D1, val dom2: D2) extends SumDomain[D1,D2] {
   type Property = SumGeneric
-  
   class SumGeneric(val p1: dom1.Property, val p2: dom2.Property) extends Sum
   
   def apply(p1: dom1.Property, p2: dom2.Property) = new SumGeneric(p1, p2)

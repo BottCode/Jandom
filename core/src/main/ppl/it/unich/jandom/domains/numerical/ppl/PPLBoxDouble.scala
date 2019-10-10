@@ -1,5 +1,5 @@
 /**
- * Copyright 2013, 2016 Gianluca Amato
+ * Copyright 2013, 2016 Gianluca Amato <gianluca.amato@unich.it>
  *
  * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
  * JANDOM is free software: you can redistribute it and/or modify
@@ -17,6 +17,8 @@
  */
 
 package it.unich.jandom.domains.numerical.ppl
+
+import scala.collection.JavaConverters._
 
 import it.unich.jandom.domains.numerical.LinearForm
 import it.unich.jandom.domains.numerical.NumericalProperty
@@ -57,13 +59,13 @@ final class PPLBoxDouble(val pplbox: Double_Box) extends NumericalProperty[PPLBo
 
   def narrowing(that: PPLBoxDouble): PPLBoxDouble = {
     val newpplbox = new Double_Box(that.pplbox)
+    newpplbox.intersection_assign(this.pplbox)
     newpplbox.CC76_narrowing_assign(pplbox)
     new PPLBoxDouble(newpplbox)
   }
 
   def union(that: PPLBoxDouble): PPLBoxDouble = {
     val newpplbox = new Double_Box(pplbox)
-    val x = new Double_Box(pplbox.space_dimension(), Degenerate_Element.EMPTY)
     newpplbox.upper_bound_assign(that.pplbox)
     new PPLBoxDouble(newpplbox)
   }
@@ -129,7 +131,7 @@ final class PPLBoxDouble(val pplbox: Double_Box) extends NumericalProperty[PPLBo
 
   def maximize(lf: LinearForm) = {
     if (isEmpty) {
-      if (lf.homcoeffs.forall(_ == 0.0))
+      if (lf.homcoeffs.forall(_ == Rational.zero))
         RationalExt(lf.known)
       else
         RationalExt.NegativeInfinity
@@ -148,7 +150,7 @@ final class PPLBoxDouble(val pplbox: Double_Box) extends NumericalProperty[PPLBo
 
   def frequency(lf: LinearForm) = {
     if (isEmpty) {
-      if (lf.homcoeffs.forall(_ == 0.0))
+      if (lf.homcoeffs.forall(_ == Rational.zero))
         Option(lf.known)
       else
         Option.empty
@@ -167,16 +169,13 @@ final class PPLBoxDouble(val pplbox: Double_Box) extends NumericalProperty[PPLBo
   }
 
   def constraints = {
-    import scala.collection.JavaConversions._
-
     val cs = pplbox.constraints()
-    cs flatMap PPLUtils.fromPPLConstraint
+    cs.asScala flatMap PPLUtils.fromPPLConstraint
   }
 
   def isPolyhedral = {
-    import scala.collection.JavaConversions._
     val cs = pplbox.constraints()
-    cs forall PPLUtils.isRepresentableAsLinearForms
+    cs.asScala forall PPLUtils.isRepresentableAsLinearForms
   }
 
   def addVariable: PPLBoxDouble = {

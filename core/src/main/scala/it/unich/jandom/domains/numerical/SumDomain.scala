@@ -1,5 +1,5 @@
 /**
- * Copyright 2014, 2016 Gianluca Amato, Francesca Scozzari, Simone Di Nardo Di Maio
+ * Copyright 2014, 2016 Jandom Team
  *
  * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
  * JANDOM is free software: you can redistribute it and/or modify
@@ -76,19 +76,16 @@ abstract class SumDomain[D1 <: NumericalDomain, D2 <: NumericalDomain] extends N
 
     def narrowing(that: Property): Property = {
       require(dimension == that.dimension)
-      SumDomain.this(p1 narrowing that.p1, p2 narrowing that.p2)
+      // we can apply component-wise narrowing only when both components in this w.r.t. those in that
+      if (that.p1 < p1 && that.p2 < p2)
+        SumDomain.this(p1 narrowing that.p1, p2 narrowing that.p2)
+      else
+        this
     }
 
     def intersection(that: Property): Property = {
       require(dimension == that.dimension)
-      if (isEmpty)
-        this
-      else if (that.isEmpty)
-        that
-      else if (that.isTop)
-        this
-      else
-        that
+      if (this < that) this else that
     }
 
     def nonDeterministicAssignment(n: Int): Property = {
@@ -106,8 +103,8 @@ abstract class SumDomain[D1 <: NumericalDomain, D2 <: NumericalDomain] extends N
       // we divide the known coefficient evenly between the two domains
       // a better choice could be performed by knowing some info on the two domains
       val newlf = new DenseLinearForm(lf.known / 2 +: lf.homcoeffs)
-      var q1 = p1.linearAssignment(n, newlf)
-      var q2 = p2.linearAssignment(n, newlf)
+      val q1 = p1.linearAssignment(n, newlf)
+      val q2 = p2.linearAssignment(n, newlf)
       SumDomain.this(q1, q2)
     }
 
@@ -115,8 +112,8 @@ abstract class SumDomain[D1 <: NumericalDomain, D2 <: NumericalDomain] extends N
       if (p1.isEmpty || p2.isEmpty)
         this
       else {
-        var w1 = p1.minimize(lf)
-        var w2 = p2.minimize(lf)
+        val w1 = p1.minimize(lf)
+        val w2 = p2.minimize(lf)
         if (!w1.isInfinity && !w2.isInfinity) {
           val lf_k1 = new DenseLinearForm(w2.value +: lf.homcoeffs)
           val lf_k2 = new DenseLinearForm(w1.value +: lf.homcoeffs)

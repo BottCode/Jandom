@@ -1,3 +1,20 @@
+/**
+ * Copyright 2017 Mirko Bez, Stefano Munari, Sebastiano Valle
+ *
+ * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
+ * JANDOM is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JANDOM is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of a
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You shosuld have received a copy of the GNU General Public License
+ * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package it.unipd.jandom.domains.numerical.congruence
 
 import it.unipd.jandom.domains.numerical.utils.{MathLibrary => M}
@@ -46,7 +63,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(a1, b1)) =>
         val a = M.gcd(a0, a1)
         val b = b0 + b1
-        alpha(a,b)
+        alpha(a, b)
     }
   }
 
@@ -108,7 +125,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (Mod(a0, b0), Mod(a1, b1)) =>
         val a = M.gcd(a0,M.gcd(a1, Some(b1)))
         val b = b0
-        alpha(a,b)
+        alpha(a, b)
     }
   }
 
@@ -128,7 +145,7 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
         }
         val a = M.gcd(a0, M.gcd(a1, btmp))
         val b = Math.min(b0,b1)
-        alpha(a,b)
+        alpha(a, b)
     }
   }
 
@@ -202,12 +219,9 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
       case (_, CongruenceBottom) => Option(1)
 
       case (Mod(a0, b0), Mod(a1, b1)) =>
-        var cleqd = false
-        var dleqc = false
-        if(M.isDivisor(a1, a0) && M.isCongruent(b0,b1,a1))
-          cleqd = true
-        if(M.isDivisor(a0,a1) && M.isCongruent(b1, b0, a0))
-          dleqc = true
+        val cleqd = M.isDivisor(a1, a0) && M.isCongruent(b0, b1, a1)
+        val dleqc = M.isDivisor(a0, a1) && M.isCongruent(b1, b0, a0)
+
 
         if(cleqd && dleqc)
           Option(0)
@@ -235,13 +249,15 @@ class CongruenceDomainCore extends CompleteLatticeOperator[Congruence]
   /**
     * Reduce the congruence abstract domain by removing redundant elements.
     * All the congruences are converted in the form:
-    * aZ+b with a > 0 and 0<= b < a
+    * aZ+b with a > 0 and 0 <= b < a
     */
   private def standardForm(c : Congruence) : Congruence = {
     c match {
       case CongruenceBottom => CongruenceBottom
       case Mod(None, _) => c
-      case Mod(Some(a), b) => Mod(Some(a), ((b % a) + a) % a)
+      case Mod(Some(a), b) =>
+        val a1 = Math.abs(a)
+        Mod(Some(a1), ((b % a1) + a1) % a1)
     }
   }
 

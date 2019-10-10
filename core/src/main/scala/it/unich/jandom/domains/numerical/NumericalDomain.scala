@@ -31,5 +31,7 @@ abstract class NumericalDomain extends DimensionFiberedDomain {
    * @inheritdoc
    * For numerical domains, properties needs to be instances of [[it.unich.jandom.domains.NumericalProperty]].
    */
+  //type T <: Any // @TODO: Make this method more type-generic
+  def updateData(x: Double, y: Double): Unit = x * 1
   type Property <: NumericalProperty[Property]
 }

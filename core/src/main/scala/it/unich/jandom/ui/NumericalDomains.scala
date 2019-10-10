@@ -26,15 +26,22 @@ import it.unipd.jandom.domains.numerical.parity.ParityDomain
 import it.unipd.jandom.domains.numerical.constant.ConstantDomain
 import it.unipd.jandom.domains.numerical.mod.ModKDomain
 import it.unipd.jandom.domains.numerical.sign.{ESeqDomain, ExtendedSigns01Domain, SignDomain}
+import it.unipd.jandom.domains.numerical.box.BoxDomain
+import it.unipd.jandom.domains.numerical.box.BoundedBoxDomain
+import it.unipd.jandom.domains.IntNumber
 
 /**
  * The ParameterEnumeration for numerical domains.
  */
+
+
 object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
   val name = "Domain"
   val description = "The numerical domain to use for the analysis."
 
   val values: Buffer[ParameterValue[NumericalDomain]] = Buffer(
+    ParameterValue(BoundedBoxDomain(IntNumber(0),IntNumber(0)), "Bounded Box", "This is a native Scala implementation of the Bounded Box (that is Interval) integer domain. You must provide lower and upper bound which bound the interval analysis."),
+    ParameterValue(BoxDomain(), "Box (Interval) Domain", "This is a native Scala implementation of the Box (that is Interval) integer domain"),
     ParameterValue(SignDomain(), "Sign Domain", "This is a native Scala implementation of the simple sign domain " +
       "(<0, =0, >0)"),
     ParameterValue(ParityDomain(), "Parity Domain", "This is a native Scala implementation of even/odd domain."),
@@ -58,12 +65,19 @@ object NumericalDomains extends ParameterEnumeration[NumericalDomain] {
     ParameterValue(SumSignModKDomain(2), "Sign + Parity", "Sum of signs and parity domains."),
     ParameterValue(BoxDoubleDomain(overReals=true), "BoxDouble over Reals", "This is a native Scala implementation of boxes. It is safe " +
       "w.r.t. reals."),
-    ParameterValue(ParallelotopeDomain(), "Parallelotope", "This is a native Scala implementation of parallelotopes. It is " +
-      "not safe and should not be used."),
-    ParameterValue(SumIntParallelotopeDomain(), "BoxDouble + Parallelotope", "Sum of boxes and parallelotopes."),
-    ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers.")
+    ParameterValue(ParallelotopeRationalDomain(), "Parallelotope over Rationals", "This is a native Scala implementation of parallelotopes using rational numbers."),
+    ParameterValue(SumBoxDoubleParallelotopeRationDomain(), "BoxDouble + ParallelotopeRational", "Sum of boxes and parallelotopes.")
   )
   val default = values.last
+
+  def setBound(m: Int,n: Int) = {
+    for (d <- values) {
+      if (d.value.isInstanceOf[BoundedBoxDomain]) {
+        // println("te chiamo qui" + m + " - " + n)
+        d.value.updateData(m,n)
+      }
+    }
+  }
 
   // Load objects PPLUIInitializer and PPLMacroUIInitializer if available
   Try ( Class.forName ("it.unich.jandom.ui.PPLUIInitializer$") )

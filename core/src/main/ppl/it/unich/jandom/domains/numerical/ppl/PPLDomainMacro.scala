@@ -79,7 +79,6 @@ object PPLDomainMacro {
 
     val outputTree = q"""
       import it.unich.jandom.domains.DomainTransformation
-      import parma_polyhedra_library._
 
       object PPLtoPPL extends DomainTransformation[PPLDomainMacro[$PPLSourceTypeTag], PPLDomainMacro[$PPLDestTypeTag]] {
         def apply(src: PPLDomainMacro[$PPLSourceTypeTag], dst: PPLDomainMacro[$PPLDestTypeTag]): src.Property => dst.Property = { (x) =>
@@ -121,7 +120,8 @@ object PPLDomainMacro {
     val narrowing = if (supportsCC76Narrowing)
       q"""
           def narrowing(that: ThisProperty): ThisProperty = {
-            val newpplobject = new $PPLTypeTag(pplobject)
+            val newpplobject = new $PPLTypeTag(that.pplobject)
+            newpplobject.intersection_assign(pplobject)
             newpplobject.CC76_narrowing_assign(pplobject)
             new ThisProperty(newpplobject)
           }
@@ -134,6 +134,7 @@ object PPLDomainMacro {
       """
 
     val outputTree = q"""
+      import collection.JavaConverters._
       import it.unich.jandom.domains.WideningDescription
       import it.unich.jandom.domains.numerical.LinearForm
       import it.unich.jandom.domains.numerical.ppl._
@@ -159,7 +160,6 @@ object PPLDomainMacro {
 
         def union(that: ThisProperty): ThisProperty = {
           val newpplobject = new $PPLTypeTag(pplobject)
-          val x = new $PPLTypeTag(pplobject.space_dimension(), Degenerate_Element.EMPTY)
           newpplobject.upper_bound_assign(that.pplobject)
           new ThisProperty(newpplobject)
         }
@@ -184,14 +184,14 @@ object PPLDomainMacro {
         }
 
         def linearInequality(lf: LinearForm): ThisProperty = {
-          val (le, den) = PPLUtils.toPPLLinearExpression(lf)
+          val (le, _) = PPLUtils.toPPLLinearExpression(lf)
           val newpplobject = new $PPLTypeTag(pplobject)
           newpplobject.refine_with_constraint(new Constraint(le, Relation_Symbol.LESS_OR_EQUAL, new Linear_Expression_Coefficient(new Coefficient(0))))
           new ThisProperty(newpplobject)
         }
 
         def linearDisequality(lf: LinearForm): ThisProperty = {
-          val (le, den) = PPLUtils.toPPLLinearExpression(lf)
+          val (le, _) = PPLUtils.toPPLLinearExpression(lf)
           val newpplobject1 = new $PPLTypeTag(pplobject)
           val newpplobject2 = new $PPLTypeTag(pplobject)
           newpplobject1.refine_with_constraint(new Constraint(le, Relation_Symbol.LESS_THAN, new Linear_Expression_Coefficient(new Coefficient(0))))
@@ -201,27 +201,35 @@ object PPLDomainMacro {
         }
 
         def minimize(lf: LinearForm) = {
-          val (le, den) = PPLUtils.toPPLLinearExpression(lf)
-          val exact = new By_Reference[java.lang.Boolean](false)
-          val val_n = new Coefficient(0)
-          val val_d = new Coefficient(0)
-          val result = pplobject.minimize(le, val_n, val_d, exact)
-          if (!result)
-            RationalExt.NegativeInfinity
-          else
-            RationalExt(val_n.getBigInteger(), val_d.getBigInteger().multiply(den.getBigInteger()))
+          if (pplobject.is_empty())
+            RationalExt.PositiveInfinity
+          else {
+            val (le, den) = PPLUtils.toPPLLinearExpression(lf)
+            val exact = new By_Reference[java.lang.Boolean](false)
+            val val_n = new Coefficient(0)
+            val val_d = new Coefficient(0)
+            val result = pplobject.minimize(le, val_n, val_d, exact)
+            if (!result)
+              RationalExt.NegativeInfinity
+            else
+              RationalExt(val_n.getBigInteger(), val_d.getBigInteger().multiply(den.getBigInteger()))
+          }
         }
 
         def maximize(lf: LinearForm) = {
-          val (le, den) = PPLUtils.toPPLLinearExpression(lf)
-          val exact = new By_Reference[java.lang.Boolean](false)
-          val val_n = new Coefficient(0)
-          val val_d = new Coefficient(0)
-          val result = pplobject.maximize(le, val_n, val_d, exact)
-          if (!result)
-            RationalExt.PositiveInfinity
-          else
-            RationalExt(val_n.getBigInteger(), val_d.getBigInteger().multiply(den.getBigInteger()))
+          if (pplobject.is_empty())
+            RationalExt.NegativeInfinity
+          else {
+            val (le, den) = PPLUtils.toPPLLinearExpression(lf)
+            val exact = new By_Reference[java.lang.Boolean](false)
+            val val_n = new Coefficient(0)
+            val val_d = new Coefficient(0)
+            val result = pplobject.maximize(le, val_n, val_d, exact)
+            if (!result)
+              RationalExt.PositiveInfinity
+            else
+              RationalExt(val_n.getBigInteger(), val_d.getBigInteger().multiply(den.getBigInteger()))
+          }
         }
 
         def frequency(lf: LinearForm) = {
@@ -238,15 +246,12 @@ object PPLDomainMacro {
         }
 
         def constraints = {
-          import collection.JavaConversions._
-
-          val cs = pplobject.minimized_constraints()
+          val cs = pplobject.minimized_constraints().asScala
           cs flatMap PPLUtils.fromPPLConstraint
         }
 
         def isPolyhedral = {
-          import collection.JavaConversions._
-          val cs = pplobject.minimized_constraints()
+          val cs = pplobject.minimized_constraints().asScala
           (cs forall PPLUtils.isRepresentableAsLinearForms) && pplobject.minimized_congruences().isEmpty()
         }
 
@@ -320,7 +325,7 @@ object PPLDomainMacro {
 
         def apply(x: $PPLTypeTag): ThisProperty = new ThisProperty(x)
 
-        val widenings = Seq(..$widenings)
+        val widenings = WideningDescription.default[Property] +: Seq(..$widenings)
       }
 
       ThisDomain

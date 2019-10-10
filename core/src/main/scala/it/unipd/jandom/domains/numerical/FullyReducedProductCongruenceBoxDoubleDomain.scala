@@ -1,10 +1,27 @@
+/**
+ * Copyright 2017 Mirko Bez, Stefano Munari, Sebastiano Valle
+ *
+ * This file is part of JANDOM: JVM-based Analyzer for Numerical DOMains
+ * JANDOM is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * JANDOM is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of a
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You shosuld have received a copy of the GNU General Public License
+ * along with JANDOM.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package it.unipd.jandom.domains.numerical
 
 import it.unich.jandom.domains.DomainTransformation
 import it.unich.jandom.domains.numerical.ProductDomain
 import it.unich.jandom.domains.numerical.BoxDoubleDomain
 import it.unipd.jandom.domains.numerical.congruence.Congruence.{Congruence, CongruenceBottom}
-import it.unipd.jandom.domains.numerical.congruence.{Congruence, CongruenceDomain, CongruenceDomainCore}
+import it.unipd.jandom.domains.numerical.congruence.{Congruence, CongruenceDomain}
 import it.unipd.jandom.domains.numerical.utils.MathLibrary
 
 /**
@@ -19,7 +36,7 @@ import it.unipd.jandom.domains.numerical.utils.MathLibrary
 class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : CongruenceDomain, override val dom2 : BoxDoubleDomain) extends ProductDomain[CongruenceDomain, BoxDoubleDomain](dom1, dom2) {
   override val dom1Todom2 = DomainTransformation.CongruenceToBoxDouble
   override val dom2Todom1 = DomainTransformation.BoxDoubleToCongruence
-
+ 
   override def top(n: Int) =
     new FullyReducedProductCongruenceBoxDouble(dom1.top(n), dom2.top(n))
 
@@ -43,9 +60,8 @@ class FullyReducedProductCongruenceBoxDoubleDomain(override val dom1 : Congruenc
         /* Calculate the point-wise fully-reduct product of an array of cogruence and low- and upperbound of box double */
         val res : Array[(Congruence, Double, Double)] = (x1.elements, x2.low, x2.high).zipped.map(
           (congruence,_low, _high) => {
-            var low: Int = _low.toInt
-
-            var high: Int = _high.toInt
+            val low: Int = _low.toInt
+            val high: Int = _high.toInt
             congruence match {
               case Congruence.Mod(a, b) =>
                 val (a1, b1) = transform(low, high, a, b)

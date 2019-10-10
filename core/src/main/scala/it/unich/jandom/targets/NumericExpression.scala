@@ -150,9 +150,9 @@ object NumericExpression {
     override def lteZero[Property <: NumericalProperty[Property]](input: Property): Property =
       input.linearInequality(lf)
 
-    override def ltZero[Property <: NumericalProperty[Property]](input: Property): Property =
+    override def ltZero[Property <: NumericalProperty[Property]](input: Property): Property = {
       input.linearInequality(lf)
-
+    }
     override def neqZero[Property <: NumericalProperty[Property]](input: Property): Property =
       input.linearDisequality(lf)
 
